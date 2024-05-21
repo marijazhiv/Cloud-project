@@ -1,1 +1,114 @@
-<p>pwqopewfporgofe!</p>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content=
+            "width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+</head>
+
+<body>
+<nav>
+    <div class="heading">Home</div>
+    <span class="sideMenuButton"
+          onclick="openNavbar()">
+        </span>
+
+    <div class="navbar">
+        <ul>
+            <li><a href="#Home">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Sign Up</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="sideNavigationBar"
+     id="sideNavigationBar">
+    <a href="#" class="closeButton"
+       onclick="closeNavbar()">
+    </a>
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Sign Up</a>
+</div>
+
+<div class="line" id="Home">
+    <div class="side1">
+        <h1>Cinemate</h1>
+        <hr>
+    </div>
+
+
+</div>
+
+<section class="about" id="My Projects">
+    <div class="content">
+        <div class="title">
+            <span>Movies</span>
+        </div>
+        <div class="boxes">
+            <div class="box">
+                <div class="image-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/0/0d/Civil_War_2024_film_poster.jpeg">
+                </div>
+                <div class="topic">
+                    <a href="#" target="_blank">
+                        Civil War
+                    </a>
+                </div>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </p>
+                <button class="download-button">Download</button>
+            </div>
+
+            <div class="box">
+                <div class="image-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/0/0d/Civil_War_2024_film_poster.jpeg">
+                </div>
+                <div class="topic">
+                    <a href="#" target="_blank">
+                        Dune 2
+                    </a>
+                </div>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </p>
+                <button class="download-button">Download</button>
+            </div>
+
+            <div class="box">
+                <div class="image-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/0/0d/Civil_War_2024_film_poster.jpeg">
+                </div>
+                <div class="topic">
+                    <a href="#" target="_blank">
+                        Kung Fu Panda 4
+                    </a>
+                </div>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </p>
+                <button class="download-button">Download</button>
+            </div>
+        </div>
+    </div>
+</section>
+<br> <br>
+<hr id="divider">
+<section class="contact" id="contact">
+    <div class="content">
+        <div class="title"><span>Upload New Movie</span></div>
+    </div>
+    <div class="upload">
+        <div class="upload-content">
+                <app-add-movie></app-add-movie>
+        </div>
+    </div>
+
+
+</section>
+<footer>
+    <div class="footer">
+    </div>
+</footer>
