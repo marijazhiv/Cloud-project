@@ -61,7 +61,7 @@ p {
 }
 .fa-download:before {
     content: "\f019";
-    color: #cc865d;
+    color: #868BCF;
 }
 .uploader label {
     float: left;
@@ -78,11 +78,12 @@ p {
 
 
 .uploader label:hover {
-    border-color: #d7aa8d;
+    border-color: #868BCF
+;
 }
 
 .uploader label.hover {
-    border: 3px dashed #d7aa8d;
+    border: 3px dashed #868BCF;
     box-shadow: inset 0 0 0 6px #eee;
 }
 
@@ -185,31 +186,39 @@ div {
     color: #5f6982;
 }
 .btn {
-    display: inline-block;
+    display: block;
     clear: both;
     font-family: inherit;
     font-weight: 700;
     font-size: 14px;
     text-decoration: none;
     text-transform: initial;
-    border: none;
     border-radius: .2rem;
     outline: none;
     padding: 0 1rem;
     height: 36px;
-    margin-left: 36%;
-    margin-top: 20px;
+    margin-left: 38%;
+    margin-top: 10%;
+    border: none;
     line-height: 36px;
     color: #fff;
     transition: all 0.2s ease-in-out;
     box-sizing: border-box;
-    background: #964c40;
-    border-color: #964c40;
+    background: #868BCF;
+    border-color:#868BCF;
     cursor: pointer;
+    width: 25%;
 }
-.btnd{
+
+.btnd {
     align-items: center;
+    text-align: center;
 }
+
+.btn:hover {
+    background-color: #444BAC;
+}
+
 .form-container {
     display: flex;
     justify-content: center;
