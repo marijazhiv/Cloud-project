@@ -227,3 +227,12 @@ input {
   height: 40px;
   width: 40px;
 }
+
+.form-container.sign-up-container label {
+  color: gray;
+  font-size: 12px;
+  text-align: left;
+  margin-right: 78%;
+}
+
+
