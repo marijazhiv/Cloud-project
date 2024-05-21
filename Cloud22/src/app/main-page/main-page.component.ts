@@ -1,12 +1,9 @@
 import { Component } from '@angular/core';
 import {ReactiveFormsModule} from "@angular/forms";
+import {RouterOutlet} from "@angular/router";
 
 @Component({
   selector: 'app-main-page',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule
-  ],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.css'
 })

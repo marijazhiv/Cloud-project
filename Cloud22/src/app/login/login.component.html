@@ -9,7 +9,7 @@
       <input placeholder="Registration code" *ngIf="!isCreated" formControlName="registration_code"/>
       <input placeholder="Verification code" *ngIf="isCreated" formControlName="code"/>
 
-      <button *ngIf="!isCreated" (click)="signUp()" >Sign Up</button>
+      <button *ngIf="!isCreated" (click)="signUp()" routerLink="/main-page" >Sign Up</button>
       <button *ngIf="isCreated" (click)="verify()">Verify</button>
     </form>
   </div>
