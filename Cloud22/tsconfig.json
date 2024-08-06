@@ -23,6 +23,10 @@
       "dom"
     ]
   },
+  "include": [
+    "src/**/*.ts",
+    "src/polyfills.ts" // dodajte ako nije već naveden
+  ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
