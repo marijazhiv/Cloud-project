@@ -2,7 +2,13 @@ import { Component } from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {Router, RouterLink, RouterOutlet} from "@angular/router";
 import {environment} from "../../environment/environment";
-import {CognitoUserAttribute, CognitoUserPool} from "amazon-cognito-identity-js";
+import {
+  AuthenticationDetails,
+  CognitoUser,
+  CognitoUserAttribute,
+  CognitoUserPool,
+  CognitoUserSession
+} from "amazon-cognito-identity-js";
 
 // @Component({
 //   selector: 'app-root',
@@ -28,6 +34,9 @@ export class LoginComponent {
   registerEmail: string = '';
   registerPassword: string = '';
   registerBirthDate: string = '';
+
+  loginUsername: string = '';
+  loginPassword: string = '';
 
   constructor(private router: Router) {
   }
@@ -103,12 +112,34 @@ export class LoginComponent {
     })
   }
 
-  verify() {
-
-  }
-
   signIn() {
+    const authData = {
+      Username: this.loginUsername,
+      Password: this.loginPassword
+    }
 
+    const authDetails = new AuthenticationDetails(authData);
+
+    const user = {
+      Username: this.loginUsername,
+      Pool: this.userPool
+    }
+
+    const cognitoUser = new CognitoUser(user);
+
+    cognitoUser.authenticateUser(authDetails, {
+      onSuccess: (session: CognitoUserSession) => {
+        console.log("YEY... Login successful!");
+        console.log("SESSION: ", session);
+        console.log("USER DATA>>");
+        console.log(cognitoUser);
+        this.router.navigate(['main-page']);
+      },
+      onFailure: (err) => {
+        console.log("UPS... Login failed!");
+        console.log("ERROR: ", err);
+      }
+    });
   }
 }
 
