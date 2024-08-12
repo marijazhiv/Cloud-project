@@ -10,7 +10,7 @@
       <label> Date Of Birth</label>
       <input type="date" formControlName="date_of_birth" placeholder="Date of birth" [(ngModel)]="registerBirthDate">
 
-      <button *ngIf="!isCreated" (click)="signUp()" routerLink="/main-page" >Sign Up</button>
+      <button *ngIf="!isCreated" (click)="signUp()" >Sign Up</button>
       <button *ngIf="isCreated" (click)="verify()">Verify</button>
     </form>
   </div>

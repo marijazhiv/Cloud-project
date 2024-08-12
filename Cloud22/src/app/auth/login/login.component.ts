@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {RouterLink, RouterOutlet} from "@angular/router";
-import {environment} from "../environment/environment";
+import {Router, RouterLink, RouterOutlet} from "@angular/router";
+import {environment} from "../../environment/environment";
 import {CognitoUserAttribute, CognitoUserPool} from "amazon-cognito-identity-js";
 
 // @Component({
@@ -28,6 +28,9 @@ export class LoginComponent {
   registerEmail: string = '';
   registerPassword: string = '';
   registerBirthDate: string = '';
+
+  constructor(private router: Router) {
+  }
 
   private userPoolData = {
     UserPoolId: environment.cognito.userPoolId,
@@ -95,6 +98,8 @@ export class LoginComponent {
 
       console.log('YEY... Registration successful!');
       console.log("RESULT: ", result);
+      this.router.navigate(['/confirm-email/'+this.registerUsername]);
+
     })
   }
 

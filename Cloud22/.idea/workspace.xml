@@ -5,50 +5,43 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4bdc08b8-7008-45c2-9b0a-c1d8d78564c8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/app/environment/environment.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/polyfills.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/Cloud22/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/Cloud22/.tsbuildinfo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_common.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_common.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_common.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_common.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_common_http.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_common_http.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_common_http.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_common_http.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_core.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_core.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_core.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_core.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_forms.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_forms.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_forms.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_forms.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_platform-browser.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_platform-browser.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_platform-browser.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_platform-browser.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_router.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_router.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_router.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_router.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/_metadata.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-C6P4HLFX.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-C6P4HLFX.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-IIXUBVVP.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-IIXUBVVP.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-O5QTEVWQ.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-O5QTEVWQ.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-UTLVR4YW.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-UTLVR4YW.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_common.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_common.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_common_http.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_common_http.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_core.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_core.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_forms.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_forms.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_platform-browser.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_platform-browser.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_router.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_router.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/_metadata.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/amazon-cognito-identity-js.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/amazon-cognito-identity-js.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-BVM7UM4U.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-BVM7UM4U.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-DHGEUMTX.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-DHGEUMTX.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-EMRIQLQ3.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-EMRIQLQ3.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-FUBD4VAC.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-FUBD4VAC.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-RM45IPHL.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-RM45IPHL.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/zone__js.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/zone__js.js.map" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/angular.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/buffer/AUTHORS.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/buffer/AUTHORS.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/buffer/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/buffer/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/buffer/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/buffer/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/buffer/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/buffer/index.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/buffer/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/buffer/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/buffer/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/buffer/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/app-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-routing.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/app.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app.routes.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/login/login.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/auth/login.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/login/login.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/auth/login.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/login/login.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/auth/login.component.spec.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/login/login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/auth/login.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/auth/login.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/auth/login/login.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/auth/login.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/auth/login/login.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/auth/login.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/auth/login/login.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/auth/login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/auth/login/login.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,25 +69,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "feature/signup",
-    "last_opened_file_path": "D:/FAKULTET_TRECA_GODINA/Predmeti/Letnji_semestar/Racunarstvo u oblaku/Projekat/Cloud-project/Cloud22",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "D:\\FAKULTET_TRECA_GODINA\\Predmeti\\Letnji_semestar\\Racunarstvo u oblaku\\Projekat\\RO\\Cloud-project\\Cloud22\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/signup&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/FAKULTET_TRECA_GODINA/Predmeti/Letnji_semestar/Racunarstvo u oblaku/Projekat/RO/Cloud-project/Cloud22&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;D:\\FAKULTET_TRECA_GODINA\\Predmeti\\Letnji_semestar\\Racunarstvo u oblaku\\Projekat\\RO\\Cloud-project\\Cloud22\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Administrator\Desktop\Cloud-project\Cloud22\src\app" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\FAKULTET_TRECA_GODINA\Predmeti\Letnji_semestar\Racunarstvo u oblaku\Projekat\RO\Cloud-project\Cloud22\src\app\auth" />
+      <recent name="D:\FAKULTET_TRECA_GODINA\Predmeti\Letnji_semestar\Racunarstvo u oblaku\Projekat\RO\Cloud-project\Cloud22\src\app\auth\login" />
     </key>
   </component>
   <component name="RunManager" selected="npm.Angular CLI Server">
@@ -121,7 +118,9 @@
       <option name="presentableId" value="Default" />
       <updated>1716229711031</updated>
       <workItem from="1716229711984" duration="12746000" />
-      <workItem from="1723292014860" duration="5845000" />
+      <workItem from="1723292014860" duration="6146000" />
+      <workItem from="1723316103869" duration="438000" />
+      <workItem from="1723316559182" duration="3643000" />
     </task>
     <servers />
   </component>
