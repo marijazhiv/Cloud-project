@@ -131,8 +131,19 @@ export class LoginComponent {
       onSuccess: (session: CognitoUserSession) => {
         console.log("YEY... Login successful!");
         console.log("SESSION: ", session);
+
+        const idToken = session.getIdToken().getJwtToken();
+        const accessToken = session.getAccessToken().getJwtToken();
+        const refreshToken = session.getRefreshToken().getToken();
+
+        localStorage.setItem("idToken", idToken);
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+
         console.log("USER DATA>>");
         console.log(cognitoUser);
+        localStorage.setItem("user", JSON.stringify(cognitoUser))
+
         this.router.navigate(['main-page']);
       },
       onFailure: (err) => {

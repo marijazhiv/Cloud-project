@@ -9,6 +9,7 @@
 <body>
 <nav>
     <div class="heading">Home</div>
+    <div class="usarname" *ngIf="user">Hi {{user.username}}</div>
     <span class="sideMenuButton"
           onclick="openNavbar()">
         </span>
@@ -17,7 +18,8 @@
         <ul>
             <li><a href="#Home">Home</a></li>
             <li><a href="#">About</a></li>
-            <li><a href="#">Sign Up</a></li>
+            <li *ngIf="!user"><a href="#">Sign Up</a></li>
+            <li *ngIf="user"><a href="#" (click)="logOut()">LogOut</a></li>
         </ul>
     </div>
 </nav>
