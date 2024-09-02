@@ -9,6 +9,7 @@ import {
   CognitoUserPool,
   CognitoUserSession
 } from "amazon-cognito-identity-js";
+import {AuthService} from "../services/auth.service";
 
 // @Component({
 //   selector: 'app-root',
@@ -38,7 +39,8 @@ export class LoginComponent {
   loginUsername: string = '';
   loginPassword: string = '';
 
-  constructor(private router: Router) {
+  constructor(private router: Router,
+              private authService: AuthService) {
   }
 
   private userPoolData = {

@@ -3,6 +3,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {Router, RouterOutlet} from "@angular/router";
 import {environment} from "../environment/environment";
 import {CognitoUserPool} from "amazon-cognito-identity-js";
+import {AuthService} from "../auth/services/auth.service";
 
 @Component({
   selector: 'app-main-page',
@@ -12,7 +13,8 @@ import {CognitoUserPool} from "amazon-cognito-identity-js";
 export class MainPageComponent implements OnInit{
   user: any;
 
-  constructor(private router: Router) {
+  constructor(private router: Router,
+              private authService: AuthService) {
   }
 
   private userPoolData = {
@@ -25,6 +27,13 @@ export class MainPageComponent implements OnInit{
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem("user") || '')
     console.log(this.user);
+
+    console.log("CURRENT USER: ")
+    console.log(this.authService.getCurrentUser());
+
+    console.log("CURRENT USER> USERNAME: " + this.authService.getUsername());
+    console.log("CURRENT USER> EMAIL: " + this.authService.getCurrentUserEmail());
+    console.log("CURRENT USER> ROLE: " + this.authService.getCurrentUserRole());
   }
 
   logOut(){
