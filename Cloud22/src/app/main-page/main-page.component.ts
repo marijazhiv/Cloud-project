@@ -12,6 +12,7 @@ import {AuthService} from "../auth/services/auth.service";
 })
 export class MainPageComponent implements OnInit{
   user: any;
+  userRole: any;
 
   constructor(private router: Router,
               private authService: AuthService) {
@@ -34,6 +35,8 @@ export class MainPageComponent implements OnInit{
     console.log("CURRENT USER> USERNAME: " + this.authService.getUsername());
     console.log("CURRENT USER> EMAIL: " + this.authService.getCurrentUserEmail());
     console.log("CURRENT USER> ROLE: " + this.authService.getCurrentUserRole());
+
+    this.userRole = this.authService.getCurrentUserRole();
   }
 
   logOut(){

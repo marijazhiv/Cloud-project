@@ -43,6 +43,19 @@
 
 </div>
 
+<!-- Search Inputs Section -->
+<div *ngIf="user && userRole === 'RegisteredUser'" class="search-section">
+    <form class="search-form">
+        <input type="text" placeholder="Title" class="search-input">
+        <input type="text" placeholder="Description" class="search-input">
+        <input type="text" placeholder="Actors" class="search-input">
+        <input type="text" placeholder="Director" class="search-input">
+        <input type="text" placeholder="Genre" class="search-input">
+        <button type="submit" class="search-button">Search</button>
+    </form>
+</div>
+
+
 <section class="about" id="My Projects">
     <div class="content">
         <div class="title">

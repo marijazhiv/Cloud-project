@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="4bdc08b8-7008-45c2-9b0a-c1d8d78564c8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/auth/login/login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/auth/login/login.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/main-page/main-page.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/main-page/main-page.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/main-page/main-page.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/main-page/main-page.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/main-page/main-page.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/main-page/main-page.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -35,22 +36,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/signup&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/FAKULTET_TRECA_GODINA/Predmeti/Zimski_semestar/Mobilne aplikacije/Projektni_zadatak/IKS/booking-app&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;D:\\FAKULTET_TRECA_GODINA\\Predmeti\\Letnji_semestar\\Racunarstvo u oblaku\\Projekat\\RO\\Cloud-project\\Cloud22\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "feature/signup",
+    "last_opened_file_path": "D:/FAKULTET_TRECA_GODINA/Predmeti/Zimski_semestar/Inzenjerstvo klijentskog sloja/Projekat/IKS/booking-app",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "D:\\FAKULTET_TRECA_GODINA\\Predmeti\\Letnji_semestar\\Racunarstvo u oblaku\\Projekat\\RO\\Cloud-project\\Cloud22\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Administrator\Desktop\Cloud-project\Cloud22\src\app" />
@@ -94,7 +95,8 @@
       <workItem from="1723806993405" duration="15000" />
       <workItem from="1724483260765" duration="6577000" />
       <workItem from="1724506517751" duration="1233000" />
-      <workItem from="1725286823487" duration="6159000" />
+      <workItem from="1725286823487" duration="6230000" />
+      <workItem from="1725365084010" duration="4145000" />
     </task>
     <servers />
   </component>

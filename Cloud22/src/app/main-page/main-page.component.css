@@ -372,3 +372,52 @@ footer .footer span a:hover {
 .download-button:hover {
     background-color: #874329;
 }
+
+.search-section {
+    width: 100%;
+    background-color: #f4f4f4;
+    padding: 20px 5%;
+    display: flex;
+    justify-content: center;
+}
+
+.search-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.search-input {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 200px;
+}
+
+.search-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    background-color: #964c40;
+    color: white;
+    cursor: pointer;
+}
+
+.search-button:hover {
+    background-color: #874329;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 600px) {
+    .search-input {
+        width: 100%;
+    }
+
+    .search-form {
+        flex-direction: column;
+        align-items: center;
+    }
+}
