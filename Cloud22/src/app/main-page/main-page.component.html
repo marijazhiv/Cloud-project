@@ -45,16 +45,30 @@
 
 <!-- Search Inputs Section -->
 <div *ngIf="user && userRole === 'RegisteredUser'" class="search-section">
-    <form class="search-form">
-        <input type="text" placeholder="Title" class="search-input">
-        <input type="text" placeholder="Description" class="search-input">
-        <input type="text" placeholder="Actors" class="search-input">
-        <input type="text" placeholder="Director" class="search-input">
-        <input type="text" placeholder="Genre" class="search-input">
+    <form class="search-form" (ngSubmit)="search()">
+        <input type="text" placeholder="Title" class="search-input" #title>
+        <input type="text" placeholder="Description" class="search-input" #description>
+        <label for="actors">Actors (comma-separated):</label>
+        <input id="actors" name="actors" type="text" placeholder="Actors" class="search-input" #actors>
+        <label for="directors">Directors (comma-separated):</label>
+        <input id="directors" type="text" placeholder="Director" class="search-input" #directors>
+        <label for="genres">Genres (comma-separated):</label>
+        <input id="genres" type="text" placeholder="Genre" class="search-input" #genres>
         <button type="submit" class="search-button">Search</button>
     </form>
 </div>
 
+<div *ngIf="results.length > 0">
+    <h2>Search Results:</h2>
+    <div *ngFor="let result of results" class="result-card">
+        <h3>{{ result.Title }}</h3>
+        <p>{{ result.Description }}</p>
+        <p>Genres: {{ result.Genres.join(', ') }}</p>
+        <p>Actors: {{ result.Actors.join(', ') }}</p>
+        <p>Directors: {{ result.Directors.join(', ') }}</p>
+        <button class="show-button">Show</button>
+    </div>
+</div>
 
 <section class="about" id="My Projects">
     <div class="content">

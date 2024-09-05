@@ -421,3 +421,30 @@ footer .footer span a:hover {
         align-items: center;
     }
 }
+
+.result-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.show-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #964c40; /* Adjust color as needed */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+}
+
+.show-button:hover {
+    background-color: #874329; /* Darker shade for hover effect */
+}
+
