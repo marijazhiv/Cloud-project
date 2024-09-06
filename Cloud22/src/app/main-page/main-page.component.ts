@@ -192,28 +192,50 @@ export class MainPageComponent implements OnInit{
     this.selectedFile = event.target.files[0];
   }
 
+  // async onUpload(): Promise<void> {
+  //   if (this.selectedFile) {
+  //     try {
+  //       const result = await this.s3UploadService.uploadFile(
+  //           this.selectedFile,
+  //           'Movie Title', // Zamenite odgovarajućim vrednostima
+  //           'Movie Description',
+  //           ['Actor1', 'Actor2'],
+  //           ['Director1'],
+  //           ['Genre1', 'Genre2']
+  //       );
+  //       console.log('Upload successful:', result);
+  //     } catch (error) {
+  //       console.error('Upload failed:', error);
+  //     }
+  //   }
+
+
   async onUpload(): Promise<void> {
     if (this.selectedFile) {
       try {
+        // Pretvori unos iz polja u nizove za actors, directors i genres
+        const actorsArray = this.actors1.split(',').map(actor => actor.trim());
+        const directorsArray = this.directors1.split(',').map(director => director.trim());
+        const genresArray = this.genres1.split(',').map(genre => genre.trim());
+
         const result = await this.s3UploadService.uploadFile(
             this.selectedFile,
-            'Movie Title', // Zamenite odgovarajućim vrednostima
-            'Movie Description',
-            ['Actor1', 'Actor2'],
-            ['Director1'],
-            ['Genre1', 'Genre2']
+            this.title1,        // Title koji je unet u formu
+            this.description1,  // Description koji je unet u formu
+            actorsArray,       // Actors kao niz
+            directorsArray,    // Directors kao niz
+            genresArray        // Genres kao niz
         );
         console.log('Upload successful:', result);
       } catch (error) {
         console.error('Upload failed:', error);
       }
+    } else {
+      console.error('No file selected');
     }
   }
 
 
-  uploadFilm() {
-
-  }
 
 
 }
