@@ -372,3 +372,130 @@ footer .footer span a:hover {
 .download-button:hover {
     background-color: #874329;
 }
+
+.search-section {
+    width: 100%;
+    background-color: #f4f4f4;
+    padding: 20px 5%;
+    display: flex;
+    justify-content: center;
+}
+
+.search-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.search-input {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 200px;
+}
+
+.search-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    background-color: #964c40;
+    color: white;
+    cursor: pointer;
+}
+
+.search-button:hover {
+    background-color: #874329;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 600px) {
+    .search-input {
+        width: 100%;
+    }
+
+    .search-form {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+.result-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.show-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #964c40; /* Adjust color as needed */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+}
+
+.show-button:hover {
+    background-color: #874329; /* Darker shade for hover effect */
+}
+/* Upload Film Section */
+.upload-film {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.upload-film h2 {
+    margin-bottom: 20px;
+}
+
+.upload-film .form-group {
+    margin-bottom: 15px;
+}
+
+.upload-film .form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.upload-film .upload-button {
+    background-color: red;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.upload-film .upload-button:hover {
+    background-color: darkred;
+}
+
+/* Other Styles */
+.line {
+    margin: 20px 0;
+}
+
+.box {
+    margin-bottom: 20px;
+}
+
+.box .image-container img {
+    width: 100%;
+}
+.box .topic a {
+    font-size: 1.2em;
+    text-decoration: none;
+}
+

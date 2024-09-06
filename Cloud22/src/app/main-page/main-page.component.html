@@ -9,6 +9,7 @@
 <body>
 <nav>
     <div class="heading">Home</div>
+    <div class="usarname" *ngIf="user">Hi {{user.username}}</div>
     <span class="sideMenuButton"
           onclick="openNavbar()">
         </span>
@@ -17,7 +18,8 @@
         <ul>
             <li><a href="#Home">Home</a></li>
             <li><a href="#">About</a></li>
-            <li><a href="#">Sign Up</a></li>
+            <li *ngIf="!user"><a href="#">Sign Up</a></li>
+            <li *ngIf="user"><a href="#" (click)="logOut()">LogOut</a></li>
         </ul>
     </div>
 </nav>
@@ -41,6 +43,33 @@
 
 </div>
 
+<!-- Search Inputs Section -->
+<div *ngIf="user && userRole === 'RegisteredUser'" class="search-section">
+    <form class="search-form" (ngSubmit)="search()">
+        <input type="text" placeholder="Title" class="search-input" #title>
+        <input type="text" placeholder="Description" class="search-input" #description>
+        <label for="actors">Actors (comma-separated):</label>
+        <input id="actors" name="actors" type="text" placeholder="Actors" class="search-input" #actors>
+        <label for="directors">Directors (comma-separated):</label>
+        <input id="directors" type="text" placeholder="Director" class="search-input" #directors>
+        <label for="genres">Genres (comma-separated):</label>
+        <input id="genres" type="text" placeholder="Genre" class="search-input" #genres>
+        <button type="submit" class="search-button">Search</button>
+    </form>
+</div>
+
+<div *ngIf="results.length > 0">
+    <h2>Search Results:</h2>
+    <div *ngFor="let result of results" class="result-card">
+        <h3>{{ result.Title }}</h3>
+        <p>{{ result.Description }}</p>
+        <p>Genres: {{ result.Genres.join(', ') }}</p>
+        <p>Actors: {{ result.Actors.join(', ') }}</p>
+        <p>Directors: {{ result.Directors.join(', ') }}</p>
+        <button class="show-button">Show</button>
+    </div>
+</div>
+
 <section class="about" id="My Projects">
     <div class="content">
         <div class="title">
@@ -52,14 +81,16 @@
                     <img src="https://upload.wikimedia.org/wikipedia/en/0/0d/Civil_War_2024_film_poster.jpeg">
                 </div>
                 <div class="topic">
-                    <a href="#" target="_blank">
-                        Civil War
-                    </a>
+                    <a href="#" target="_blank">Civil War</a>
                 </div>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 </p>
-                <button class="download-button">Download</button>
+                <!-- Polje za unos key vrednosti -->
+                <input type="text" [(ngModel)]="keyInput" placeholder="Enter the key for the film" />
+
+                <!-- Dugme za preuzimanje -->
+                <button class="download-button" (click)="downloadFilm('bucket-22', keyInput)">Download</button>
             </div>
 
             <div class="box">
@@ -100,11 +131,31 @@
     <div class="content">
         <div class="title"><span>Upload New Movie</span></div>
     </div>
-    <div class="upload">
-        <div class="upload-content">
-                <app-add-movie></app-add-movie>
-        </div>
-    </div>
+    <!-- Upload Film Section -->
+    <section class="upload-film">
+        <form (submit)="onUpload()">
+            <div class="form-group">
+                <input type="file" (change)="onFileSelected($event)" />
+            </div>
+            <div class="form-group">
+                <input type="text" [(ngModel)]="title1" placeholder="Title" name="title" />
+            </div>
+            <div class="form-group">
+                <input type="text" [(ngModel)]="description1" placeholder="Description" name="description" />
+            </div>
+            <div class="form-group">
+                <input type="text" [(ngModel)]="actors1" placeholder="Actors (comma separated)" name="actors" />
+            </div>
+            <div class="form-group">
+                <input type="text" [(ngModel)]="directors1" placeholder="Directors (comma separated)" name="directors" />
+            </div>
+            <div class="form-group">
+                <input type="text" [(ngModel)]="genres1" placeholder="Genres (comma separated)" name="genres" />
+            </div>
+            <button type="submit" class="upload-button">Upload</button>
+        </form>
+    </section>
+
 
 
 </section>

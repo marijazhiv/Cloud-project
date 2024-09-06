@@ -9,6 +9,7 @@ import {
   CognitoUserPool,
   CognitoUserSession
 } from "amazon-cognito-identity-js";
+import {AuthService} from "../services/auth.service";
 
 // @Component({
 //   selector: 'app-root',
@@ -38,7 +39,8 @@ export class LoginComponent {
   loginUsername: string = '';
   loginPassword: string = '';
 
-  constructor(private router: Router) {
+  constructor(private router: Router,
+              private authService: AuthService) {
   }
 
   private userPoolData = {
@@ -98,9 +100,33 @@ export class LoginComponent {
     attributeList.push(new CognitoUserAttribute(userFamilyNameAttribute));
     attributeList.push(new CognitoUserAttribute((userBirthDateAttribute)));
 
-    this.userPool.signUp(this.registerUsername, this.registerPassword, attributeList, [], (err, result) => {
+    this.userPool.signUp(this.registerUsername, this.registerPassword, attributeList, [], (err : any, result) => {
       if(err){
         console.log("UPS... Registration failed!");
+        let errorMessage: string;
+
+        switch (err.code) {
+          case 'UsernameExistsException':
+            errorMessage = "The username already exists.";
+            break;
+          case 'InvalidPasswordException':
+            errorMessage = "The password does not meet the complexity requirements.";
+            break;
+          case 'InvalidParameterException':
+            errorMessage = "Invalid parameters. Please check your inputs.";
+            break;
+          case 'UserLambdaValidationException':
+            errorMessage = "User validation failed. Please try again.";
+            break;
+            // Add more error cases as needed
+          default:
+            errorMessage = "Registration failed. Please try again.";
+        }
+
+        // Display the error message to the user
+        this.showErrorMessage(errorMessage);
+        console.log("ERROR: ", err);
+        return;
         console.log("ERROR: ", err);
         return;
       }
@@ -110,6 +136,14 @@ export class LoginComponent {
       this.router.navigate(['/confirm-email/'+this.registerUsername]);
 
     })
+  }
+
+  showErrorMessage(message: string) {
+    // Implement your logic to display the error message
+    // For example, using a simple alert:
+    alert(message);
+
+    // Or you can display the message in a form control, a toast, or any other UI element.
   }
 
   signIn() {
@@ -131,13 +165,45 @@ export class LoginComponent {
       onSuccess: (session: CognitoUserSession) => {
         console.log("YEY... Login successful!");
         console.log("SESSION: ", session);
+
+        const idToken = session.getIdToken().getJwtToken();
+        const accessToken = session.getAccessToken().getJwtToken();
+        const refreshToken = session.getRefreshToken().getToken();
+
+        localStorage.setItem("idToken", idToken);
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+
         console.log("USER DATA>>");
         console.log(cognitoUser);
+        localStorage.setItem("user", JSON.stringify(cognitoUser))
+
         this.router.navigate(['main-page']);
       },
       onFailure: (err) => {
         console.log("UPS... Login failed!");
         console.log("ERROR: ", err);
+
+        let errorMessage: string;
+
+        switch (err.code) {
+          case 'UserNotFoundException':
+            errorMessage = "The username does not exist.";
+            break;
+          case 'NotAuthorizedException':
+            errorMessage = "Incorrect username or password.";
+            break;
+          case 'UserNotConfirmedException':
+            errorMessage = "Your account is not confirmed. Please check your email.";
+            break;
+          case 'PasswordResetRequiredException':
+            errorMessage = "A password reset is required. Please reset your password.";
+            break;
+          default:
+            errorMessage = "Login failed. Please try again.";
+        }
+
+        this.showErrorMessage(errorMessage); // This function will display the error message
       }
     });
   }

@@ -5,5 +5,8 @@ export const environment = {
         region: 'eu-central-1',
         userPoolId: 'eu-central-1_qvepa1XN6',
         userPoolWebClientId: '5grulmlme5rfo04q0euhds31c2',
-    }
+    },
+    awsRegion: 'eu-central-1',
+    awsAccessKeyId: '',
+    awsSecretAccessKey: ''
 };

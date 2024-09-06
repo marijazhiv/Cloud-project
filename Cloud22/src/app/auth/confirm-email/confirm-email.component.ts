@@ -46,11 +46,11 @@ export class ConfirmEmailComponent implements OnInit{
     const cognitoUser = new CognitoUser(user);
 
     cognitoUser.confirmRegistration(this.validationCode, true, (err, res) => {
-      if(err){
-        console.log("UPS... Confirmation failed!");
-        console.log("ERROR: ", err);
-        return
-      }
+      // if(err){
+      //   console.log("UPS... Confirmation failed!");
+      //   console.log("ERROR: ", err);
+      //   return
+      // }
 
       console.log("YEY... Confirmation successful!");
       console.log("RESULT: ", res);
