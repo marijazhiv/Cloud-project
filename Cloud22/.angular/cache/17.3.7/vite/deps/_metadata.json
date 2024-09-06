@@ -1,79 +1,103 @@
 {
-  "hash": "f7ff6b28",
-  "configHash": "5a1bb8ea",
+  "hash": "6470db18",
+  "configHash": "452e2a75",
   "lockfileHash": "5aeb49d5",
-  "browserHash": "2153385a",
+  "browserHash": "21926e55",
   "optimized": {
     "@angular/common": {
       "src": "../../../../../node_modules/@angular/common/fesm2022/common.mjs",
       "file": "@angular_common.js",
-      "fileHash": "f2e7fb6f",
+      "fileHash": "24c3b4e6",
       "needsInterop": false
     },
     "@angular/common/http": {
       "src": "../../../../../node_modules/@angular/common/fesm2022/http.mjs",
       "file": "@angular_common_http.js",
-      "fileHash": "1a60ba72",
+      "fileHash": "aa0da27a",
       "needsInterop": false
     },
     "@angular/core": {
       "src": "../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "de1c4456",
+      "fileHash": "47436276",
       "needsInterop": false
     },
     "@angular/forms": {
       "src": "../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
       "file": "@angular_forms.js",
-      "fileHash": "7e885704",
+      "fileHash": "c6f44a5e",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "cf1bf4cb",
+      "fileHash": "8f321a9b",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "5bf81449",
+      "fileHash": "cbc16db0",
+      "needsInterop": false
+    },
+    "@aws-sdk/client-lambda": {
+      "src": "../../../../../node_modules/@aws-sdk/client-lambda/dist-es/index.js",
+      "file": "@aws-sdk_client-lambda.js",
+      "fileHash": "cbd6ad1a",
+      "needsInterop": false
+    },
+    "@aws-sdk/client-s3": {
+      "src": "../../../../../../../../../node_modules/@aws-sdk/client-s3/dist-es/index.js",
+      "file": "@aws-sdk_client-s3.js",
+      "fileHash": "579c4501",
+      "needsInterop": false
+    },
+    "@aws-sdk/client-sns": {
+      "src": "../../../../../../../../../node_modules/@aws-sdk/client-sns/dist-es/index.js",
+      "file": "@aws-sdk_client-sns.js",
+      "fileHash": "f3777a89",
       "needsInterop": false
     },
     "amazon-cognito-identity-js": {
       "src": "../../../../../node_modules/amazon-cognito-identity-js/es/index.js",
       "file": "amazon-cognito-identity-js.js",
-      "fileHash": "14eda9db",
+      "fileHash": "cb3758d3",
+      "needsInterop": false
+    },
+    "rxjs": {
+      "src": "../../../../../node_modules/rxjs/dist/esm5/index.js",
+      "file": "rxjs.js",
+      "fileHash": "24bd465c",
       "needsInterop": false
     },
     "zone.js": {
       "src": "../../../../../node_modules/zone.js/fesm2015/zone.js",
       "file": "zone__js.js",
-      "fileHash": "25777773",
+      "fileHash": "f22434b2",
       "needsInterop": true
-    },
-    "@aws-sdk/client-lambda": {
-      "src": "../../../../../node_modules/@aws-sdk/client-lambda/dist-es/index.js",
-      "file": "@aws-sdk_client-lambda.js",
-      "fileHash": "0056af65",
-      "needsInterop": false
     }
   },
   "chunks": {
-    "chunk-HD45WER3": {
-      "file": "chunk-HD45WER3.js"
+    "chunk-LQXYAEHA": {
+      "file": "chunk-LQXYAEHA.js"
     },
-    "chunk-WEU2S47K": {
-      "file": "chunk-WEU2S47K.js"
+    "chunk-DQXRQNGX": {
+      "file": "chunk-DQXRQNGX.js"
     },
-    "chunk-M3ZP3YHJ": {
-      "file": "chunk-M3ZP3YHJ.js"
+    "chunk-WWRL72TW": {
+      "file": "chunk-WWRL72TW.js"
     },
-    "chunk-C2NKMIYK": {
-      "file": "chunk-C2NKMIYK.js"
+    "chunk-WOIL7TVO": {
+      "file": "chunk-WOIL7TVO.js"
+    },
+    "chunk-YDMFPD7G": {
+      "file": "chunk-YDMFPD7G.js"
     },
     "chunk-7VQPY5UX": {
       "file": "chunk-7VQPY5UX.js"
+    },
+    "chunk-QRU5KILM": {
+      "file": "chunk-QRU5KILM.js"
     },
     "chunk-CDW57LCT": {
       "file": "chunk-CDW57LCT.js"

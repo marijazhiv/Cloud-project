@@ -5,6 +5,8 @@ import {environment} from "../environment/environment";
 import {CognitoUserPool} from "amazon-cognito-identity-js";
 import {AuthService} from "../auth/services/auth.service";
 import {LambdaService} from "../movies/movie.service";
+import {S3Service} from "../../services/s3.service";
+import {S3UploadService} from "../../services/s3-upload.service";
 //import {MovieService} from "../movies/movie.service";
 
 @Component({
@@ -22,10 +24,26 @@ export class MainPageComponent implements OnInit{
   // genres: string[] = [];
   results: any[] = [];
 
+  keyInput: string = '';
+  keyInput1: string = '';
+  keyInput2: string = '';
+
+  movies: any[] = [];
+
+  selectedFile: Blob | undefined;
+  title1: string = '';
+  description1: string = '';
+  actors1: string = '';
+  directors1: string = '';
+  genres1: string = '';
+
+  fileUrl: string | null = null;
+
   constructor(private router: Router,
               private authService: AuthService,
               //private movieService: MovieService
-              private lambdaService: LambdaService
+              private lambdaService: LambdaService,
+              private s3Service: S3Service, private s3UploadService: S3UploadService
               ) {
   }
 
@@ -111,6 +129,90 @@ export class MainPageComponent implements OnInit{
     } catch (error) {
       console.error('Error searching content:', error);
     }
+  }
+
+  downloadFilm(bucketName: string, key: string): void {
+    this.s3Service.downloadFile(bucketName, key).subscribe({
+      next: (blob) => {
+        // Kreirajte URL za preuzimanje
+        const url = URL.createObjectURL(blob);
+
+        // Kreirajte privremeni link za preuzimanje
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = key; // Postavite naziv fajla koji želite da preuzmete
+        document.body.appendChild(a);
+        a.click();
+
+        // Očistite URL
+        URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Error downloading file:', err);
+      }
+    });
+  }
+
+
+
+  // onFileSelected(event: any): void {
+  //     const file = event.target.files[0];
+  //     if (file) {
+  //         this.selectedFile = file;
+  //     }
+  // }
+
+  // uploadFilm(): void {
+  //     if (this.selectedFile) {
+  //         const actorsArray = this.actors.split(',').map(actor => actor.trim());
+  //         const directorsArray = this.directors.split(',').map(director => director.trim());
+  //         const genresArray = this.genres.split(',').map(genre => genre.trim());
+  //
+  //         this.s3UploadService.uploadMovie(
+  //             this.selectedFile,
+  //             this.title,
+  //             this.description,
+  //             actorsArray,
+  //             directorsArray,
+  //             genresArray
+  //         ).subscribe({
+  //             next: (response) => {
+  //                 console.log('Successfully uploaded file:', response);
+  //             },
+  //             error: (err) => {
+  //                 console.error('Error uploading file:', err);
+  //             },
+  //         });
+  //     } else {
+  //         console.error('No file selected for upload');
+  //     }
+  // }
+
+  onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0];
+  }
+
+  async onUpload(): Promise<void> {
+    if (this.selectedFile) {
+      try {
+        const result = await this.s3UploadService.uploadFile(
+            this.selectedFile,
+            'Movie Title', // Zamenite odgovarajućim vrednostima
+            'Movie Description',
+            ['Actor1', 'Actor2'],
+            ['Director1'],
+            ['Genre1', 'Genre2']
+        );
+        console.log('Upload successful:', result);
+      } catch (error) {
+        console.error('Upload failed:', error);
+      }
+    }
+  }
+
+
+  uploadFilm() {
+
   }
 
 

@@ -447,4 +447,55 @@ footer .footer span a:hover {
 .show-button:hover {
     background-color: #874329; /* Darker shade for hover effect */
 }
+/* Upload Film Section */
+.upload-film {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.upload-film h2 {
+    margin-bottom: 20px;
+}
+
+.upload-film .form-group {
+    margin-bottom: 15px;
+}
+
+.upload-film .form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.upload-film .upload-button {
+    background-color: red;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.upload-film .upload-button:hover {
+    background-color: darkred;
+}
+
+/* Other Styles */
+.line {
+    margin: 20px 0;
+}
+
+.box {
+    margin-bottom: 20px;
+}
+
+.box .image-container img {
+    width: 100%;
+}
+.box .topic a {
+    font-size: 1.2em;
+    text-decoration: none;
+}
 
