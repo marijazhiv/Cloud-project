@@ -1,4 +1,9 @@
 import {
+  awsEndpointFunctions,
+  getUserAgentPlugin,
+  resolveUserAgentConfig
+} from "./chunk-R62TKQBP.js";
+import {
   AwsSdkSigV4Signer,
   Client,
   Command,
@@ -13,7 +18,6 @@ import {
   SENSITIVE_STRING,
   ServiceException,
   Sha256,
-  awsEndpointFunctions,
   calculateBodyLength,
   collectBody,
   createAggregatedClient,
@@ -40,7 +44,6 @@ import {
   getRetryPlugin,
   getSerdePlugin,
   getSmithyContext,
-  getUserAgentPlugin,
   invalidProvider,
   loadConfigsForDefaultMode,
   normalizeProvider,
@@ -59,12 +62,11 @@ import {
   resolveHttpHandlerRuntimeConfig,
   resolveRegionConfig,
   resolveRetryConfig,
-  resolveUserAgentConfig,
   streamCollector,
   toBase64,
   toUtf8,
   withBaseException
-} from "./chunk-QRU5KILM.js";
+} from "./chunk-6GN2Y7VZ.js";
 import {
   __async,
   __spreadProps,
