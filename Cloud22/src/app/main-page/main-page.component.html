@@ -9,7 +9,7 @@
 <body>
 <nav>
     <div class="heading">Home</div>
-    <div class="usarname" *ngIf="user">Hi {{user.username}}</div>
+    <div class="usarname" *ngIf="user">Welcome to Cinemate, {{user.username}}</div>
     <span class="sideMenuButton"
           onclick="openNavbar()">
         </span>
@@ -126,9 +126,10 @@
     </div>
 </section>
 <br> <br>
-<hr id="divider">
+
 <section class="contact" id="contact">
     <div class="content">
+        <hr> <br>
         <div class="title"><span>Upload New Movie</span></div>
     </div>
     <!-- Upload Film Section -->
@@ -155,6 +156,59 @@
             <button type="submit" class="upload-button">Upload</button>
         </form>
     </section>
+
+    <br>
+    <br> <hr> <br>
+
+    <!-- Flex container for subscription form and list -->
+    <div class="subscription-container">
+        <!-- Subscription Form -->
+        <form (ngSubmit)="onSubmit()" class="subscription-form">
+            <h2>Subscribe to Film Content</h2> <!-- Naziv forme -->
+
+            <label>Hello, {{username}}! <br> This is a form where you can subscribe to content of the type of actor, director or film genre and receive notifications for them. <br>
+            </label>
+<br>
+            <!-- Subscription Type Radio Buttons -->
+            <div>
+                <label>Subscription Type:</label>
+                <div>
+                    <input type="radio" id="actor" name="subscriptionType" value="actor" [(ngModel)]="subscriptionType">
+                    <label for="actor">Actor</label>
+                </div>
+                <div>
+                    <input type="radio" id="director" name="subscriptionType" value="director" [(ngModel)]="subscriptionType">
+                    <label for="director">Director</label>
+                </div>
+                <div>
+                    <input type="radio" id="genre" name="subscriptionType" value="genre" [(ngModel)]="subscriptionType">
+                    <label for="genre">Genre</label>
+                </div>
+            </div>
+            <br>
+
+            <label for="subscriptionValue">Subscription Value:</label>
+            <input type="text" id="subscriptionValue" [(ngModel)]="subscriptionValue" name="subscriptionValue" required>
+
+            <br>
+            <label for="email">Notifications for your subscription will be sent to your email address:</label>
+            <div id="email">{{email}}</div> <!-- Prikazivanje email kao tekst -->
+            <br>
+
+            <button type="submit" class="submit-button">Submit</button>
+        </form>
+    <!-- Subscription List -->
+        <div class="subscription-list">
+            <h2>Subscription List</h2>
+            <ul>
+                <li *ngFor="let subscription of subscriptions">
+                    <strong>{{ subscription.username }}</strong>: {{ subscription.subscriptionType }} - {{ subscription.subscriptionValue }}
+                    <br> Email: {{ subscription.email }}
+                </li>
+            </ul>
+        </div>
+    </div>
+
 
 
 

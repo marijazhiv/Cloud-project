@@ -3113,6 +3113,13 @@ var expectUnion = (value) => {
   }
   return asObject;
 };
+var strictParseDouble = (value) => {
+  if (typeof value == "string") {
+    return expectNumber(parseNumber(value));
+  }
+  return expectNumber(value);
+};
+var strictParseFloat = strictParseDouble;
 var strictParseFloat32 = (value) => {
   if (typeof value == "string") {
     return expectFloat32(parseNumber(value));
@@ -3645,9 +3652,9 @@ var IP_ADDRESS_PATTERN = /(\d+\.){3}\d+/;
 var DOTS_PATTERN = /\.\./;
 var isDnsCompatibleBucketName = (bucketName) => DOMAIN_PATTERN.test(bucketName) && !IP_ADDRESS_PATTERN.test(bucketName) && !DOTS_PATTERN.test(bucketName);
 var isArnBucketName = (bucketName) => {
-  const [arn, partition2, service, , , bucket] = bucketName.split(":");
+  const [arn, partition, service, , , bucket] = bucketName.split(":");
   const isArn = arn === "arn" && bucketName.split(":").length >= 6;
-  const isValidArn = Boolean(isArn && partition2 && service && bucket);
+  const isValidArn = Boolean(isArn && partition && service && bucket);
   if (isArn && !isValidArn) {
     throw new Error(`Invalid ARN: ${bucketName} was an invalid ARN.`);
   }
@@ -4925,795 +4932,6 @@ var RequestBuilder = class {
     return this;
   }
 };
-
-// ../../../../node_modules/@aws-sdk/middleware-user-agent/dist-es/configurations.js
-function resolveUserAgentConfig(input) {
-  return __spreadProps(__spreadValues({}, input), {
-    customUserAgent: typeof input.customUserAgent === "string" ? [[input.customUserAgent]] : input.customUserAgent
-  });
-}
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/isIpAddress.js
-var IP_V4_REGEX = new RegExp(`^(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}$`);
-var isIpAddress = (value) => IP_V4_REGEX.test(value) || value.startsWith("[") && value.endsWith("]");
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/isValidHostLabel.js
-var VALID_HOST_LABEL_REGEX = new RegExp(`^(?!.*-$)(?!-)[a-zA-Z0-9-]{1,63}$`);
-var isValidHostLabel = (value, allowSubDomains = false) => {
-  if (!allowSubDomains) {
-    return VALID_HOST_LABEL_REGEX.test(value);
-  }
-  const labels = value.split(".");
-  for (const label of labels) {
-    if (!isValidHostLabel(label)) {
-      return false;
-    }
-  }
-  return true;
-};
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/customEndpointFunctions.js
-var customEndpointFunctions = {};
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/debug/debugId.js
-var debugId = "endpoints";
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/debug/toDebugString.js
-function toDebugString(input) {
-  if (typeof input !== "object" || input == null) {
-    return input;
-  }
-  if ("ref" in input) {
-    return `$${toDebugString(input.ref)}`;
-  }
-  if ("fn" in input) {
-    return `${input.fn}(${(input.argv || []).map(toDebugString).join(", ")})`;
-  }
-  return JSON.stringify(input, null, 2);
-}
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/types/EndpointError.js
-var EndpointError = class extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "EndpointError";
-  }
-};
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/booleanEquals.js
-var booleanEquals = (value1, value2) => value1 === value2;
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/getAttrPathList.js
-var getAttrPathList = (path) => {
-  const parts = path.split(".");
-  const pathList = [];
-  for (const part of parts) {
-    const squareBracketIndex = part.indexOf("[");
-    if (squareBracketIndex !== -1) {
-      if (part.indexOf("]") !== part.length - 1) {
-        throw new EndpointError(`Path: '${path}' does not end with ']'`);
-      }
-      const arrayIndex = part.slice(squareBracketIndex + 1, -1);
-      if (Number.isNaN(parseInt(arrayIndex))) {
-        throw new EndpointError(`Invalid array index: '${arrayIndex}' in path: '${path}'`);
-      }
-      if (squareBracketIndex !== 0) {
-        pathList.push(part.slice(0, squareBracketIndex));
-      }
-      pathList.push(arrayIndex);
-    } else {
-      pathList.push(part);
-    }
-  }
-  return pathList;
-};
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/getAttr.js
-var getAttr = (value, path) => getAttrPathList(path).reduce((acc, index) => {
-  if (typeof acc !== "object") {
-    throw new EndpointError(`Index '${index}' in '${path}' not found in '${JSON.stringify(value)}'`);
-  } else if (Array.isArray(acc)) {
-    return acc[parseInt(index)];
-  }
-  return acc[index];
-}, value);
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/isSet.js
-var isSet = (value) => value != null;
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/not.js
-var not = (value) => !value;
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/parseURL.js
-var DEFAULT_PORTS = {
-  [EndpointURLScheme.HTTP]: 80,
-  [EndpointURLScheme.HTTPS]: 443
-};
-var parseURL = (value) => {
-  const whatwgURL = (() => {
-    try {
-      if (value instanceof URL) {
-        return value;
-      }
-      if (typeof value === "object" && "hostname" in value) {
-        const { hostname: hostname2, port, protocol: protocol2 = "", path = "", query = {} } = value;
-        const url = new URL(`${protocol2}//${hostname2}${port ? `:${port}` : ""}${path}`);
-        url.search = Object.entries(query).map(([k, v]) => `${k}=${v}`).join("&");
-        return url;
-      }
-      return new URL(value);
-    } catch (error) {
-      return null;
-    }
-  })();
-  if (!whatwgURL) {
-    console.error(`Unable to parse ${JSON.stringify(value)} as a whatwg URL.`);
-    return null;
-  }
-  const urlString = whatwgURL.href;
-  const { host, hostname, pathname, protocol, search } = whatwgURL;
-  if (search) {
-    return null;
-  }
-  const scheme = protocol.slice(0, -1);
-  if (!Object.values(EndpointURLScheme).includes(scheme)) {
-    return null;
-  }
-  const isIp = isIpAddress(hostname);
-  const inputContainsDefaultPort = urlString.includes(`${host}:${DEFAULT_PORTS[scheme]}`) || typeof value === "string" && value.includes(`${host}:${DEFAULT_PORTS[scheme]}`);
-  const authority = `${host}${inputContainsDefaultPort ? `:${DEFAULT_PORTS[scheme]}` : ``}`;
-  return {
-    scheme,
-    authority,
-    path: pathname,
-    normalizedPath: pathname.endsWith("/") ? pathname : `${pathname}/`,
-    isIp
-  };
-};
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/stringEquals.js
-var stringEquals = (value1, value2) => value1 === value2;
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/substring.js
-var substring = (input, start, stop, reverse) => {
-  if (start >= stop || input.length < stop) {
-    return null;
-  }
-  if (!reverse) {
-    return input.substring(start, stop);
-  }
-  return input.substring(input.length - stop, input.length - start);
-};
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/uriEncode.js
-var uriEncode = (value) => encodeURIComponent(value).replace(/[!*'()]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`);
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/endpointFunctions.js
-var endpointFunctions = {
-  booleanEquals,
-  getAttr,
-  isSet,
-  isValidHostLabel,
-  not,
-  parseURL,
-  stringEquals,
-  substring,
-  uriEncode
-};
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/evaluateTemplate.js
-var evaluateTemplate = (template, options) => {
-  const evaluatedTemplateArr = [];
-  const templateContext = __spreadValues(__spreadValues({}, options.endpointParams), options.referenceRecord);
-  let currentIndex = 0;
-  while (currentIndex < template.length) {
-    const openingBraceIndex = template.indexOf("{", currentIndex);
-    if (openingBraceIndex === -1) {
-      evaluatedTemplateArr.push(template.slice(currentIndex));
-      break;
-    }
-    evaluatedTemplateArr.push(template.slice(currentIndex, openingBraceIndex));
-    const closingBraceIndex = template.indexOf("}", openingBraceIndex);
-    if (closingBraceIndex === -1) {
-      evaluatedTemplateArr.push(template.slice(openingBraceIndex));
-      break;
-    }
-    if (template[openingBraceIndex + 1] === "{" && template[closingBraceIndex + 1] === "}") {
-      evaluatedTemplateArr.push(template.slice(openingBraceIndex + 1, closingBraceIndex));
-      currentIndex = closingBraceIndex + 2;
-    }
-    const parameterName = template.substring(openingBraceIndex + 1, closingBraceIndex);
-    if (parameterName.includes("#")) {
-      const [refName, attrName] = parameterName.split("#");
-      evaluatedTemplateArr.push(getAttr(templateContext[refName], attrName));
-    } else {
-      evaluatedTemplateArr.push(templateContext[parameterName]);
-    }
-    currentIndex = closingBraceIndex + 1;
-  }
-  return evaluatedTemplateArr.join("");
-};
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/getReferenceValue.js
-var getReferenceValue = ({ ref }, options) => {
-  const referenceRecord = __spreadValues(__spreadValues({}, options.endpointParams), options.referenceRecord);
-  return referenceRecord[ref];
-};
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/evaluateExpression.js
-var evaluateExpression = (obj, keyName, options) => {
-  if (typeof obj === "string") {
-    return evaluateTemplate(obj, options);
-  } else if (obj["fn"]) {
-    return callFunction(obj, options);
-  } else if (obj["ref"]) {
-    return getReferenceValue(obj, options);
-  }
-  throw new EndpointError(`'${keyName}': ${String(obj)} is not a string, function or reference.`);
-};
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/callFunction.js
-var callFunction = ({ fn, argv }, options) => {
-  const evaluatedArgs = argv.map((arg) => ["boolean", "number"].includes(typeof arg) ? arg : evaluateExpression(arg, "arg", options));
-  const fnSegments = fn.split(".");
-  if (fnSegments[0] in customEndpointFunctions && fnSegments[1] != null) {
-    return customEndpointFunctions[fnSegments[0]][fnSegments[1]](...evaluatedArgs);
-  }
-  return endpointFunctions[fn](...evaluatedArgs);
-};
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/evaluateCondition.js
-var evaluateCondition = (_a, options) => {
-  var _b = _a, { assign } = _b, fnArgs = __objRest(_b, ["assign"]);
-  if (assign && assign in options.referenceRecord) {
-    throw new EndpointError(`'${assign}' is already defined in Reference Record.`);
-  }
-  const value = callFunction(fnArgs, options);
-  options.logger?.debug?.(`${debugId} evaluateCondition: ${toDebugString(fnArgs)} = ${toDebugString(value)}`);
-  return __spreadValues({
-    result: value === "" ? true : !!value
-  }, assign != null && { toAssign: { name: assign, value } });
-};
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/evaluateConditions.js
-var evaluateConditions = (conditions = [], options) => {
-  const conditionsReferenceRecord = {};
-  for (const condition of conditions) {
-    const { result, toAssign } = evaluateCondition(condition, __spreadProps(__spreadValues({}, options), {
-      referenceRecord: __spreadValues(__spreadValues({}, options.referenceRecord), conditionsReferenceRecord)
-    }));
-    if (!result) {
-      return { result };
-    }
-    if (toAssign) {
-      conditionsReferenceRecord[toAssign.name] = toAssign.value;
-      options.logger?.debug?.(`${debugId} assign: ${toAssign.name} := ${toDebugString(toAssign.value)}`);
-    }
-  }
-  return { result: true, referenceRecord: conditionsReferenceRecord };
-};
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/getEndpointHeaders.js
-var getEndpointHeaders = (headers, options) => Object.entries(headers).reduce((acc, [headerKey, headerVal]) => __spreadProps(__spreadValues({}, acc), {
-  [headerKey]: headerVal.map((headerValEntry) => {
-    const processedExpr = evaluateExpression(headerValEntry, "Header value entry", options);
-    if (typeof processedExpr !== "string") {
-      throw new EndpointError(`Header '${headerKey}' value '${processedExpr}' is not a string`);
-    }
-    return processedExpr;
-  })
-}), {});
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/getEndpointProperty.js
-var getEndpointProperty = (property, options) => {
-  if (Array.isArray(property)) {
-    return property.map((propertyEntry) => getEndpointProperty(propertyEntry, options));
-  }
-  switch (typeof property) {
-    case "string":
-      return evaluateTemplate(property, options);
-    case "object":
-      if (property === null) {
-        throw new EndpointError(`Unexpected endpoint property: ${property}`);
-      }
-      return getEndpointProperties(property, options);
-    case "boolean":
-      return property;
-    default:
-      throw new EndpointError(`Unexpected endpoint property type: ${typeof property}`);
-  }
-};
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/getEndpointProperties.js
-var getEndpointProperties = (properties, options) => Object.entries(properties).reduce((acc, [propertyKey, propertyVal]) => __spreadProps(__spreadValues({}, acc), {
-  [propertyKey]: getEndpointProperty(propertyVal, options)
-}), {});
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/getEndpointUrl.js
-var getEndpointUrl = (endpointUrl, options) => {
-  const expression = evaluateExpression(endpointUrl, "Endpoint URL", options);
-  if (typeof expression === "string") {
-    try {
-      return new URL(expression);
-    } catch (error) {
-      console.error(`Failed to construct URL with ${expression}`, error);
-      throw error;
-    }
-  }
-  throw new EndpointError(`Endpoint URL must be a string, got ${typeof expression}`);
-};
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/evaluateEndpointRule.js
-var evaluateEndpointRule = (endpointRule, options) => {
-  const { conditions, endpoint } = endpointRule;
-  const { result, referenceRecord } = evaluateConditions(conditions, options);
-  if (!result) {
-    return;
-  }
-  const endpointRuleOptions = __spreadProps(__spreadValues({}, options), {
-    referenceRecord: __spreadValues(__spreadValues({}, options.referenceRecord), referenceRecord)
-  });
-  const { url, properties, headers } = endpoint;
-  options.logger?.debug?.(`${debugId} Resolving endpoint from template: ${toDebugString(endpoint)}`);
-  return __spreadProps(__spreadValues(__spreadValues({}, headers != void 0 && {
-    headers: getEndpointHeaders(headers, endpointRuleOptions)
-  }), properties != void 0 && {
-    properties: getEndpointProperties(properties, endpointRuleOptions)
-  }), {
-    url: getEndpointUrl(url, endpointRuleOptions)
-  });
-};
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/evaluateErrorRule.js
-var evaluateErrorRule = (errorRule, options) => {
-  const { conditions, error } = errorRule;
-  const { result, referenceRecord } = evaluateConditions(conditions, options);
-  if (!result) {
-    return;
-  }
-  throw new EndpointError(evaluateExpression(error, "Error", __spreadProps(__spreadValues({}, options), {
-    referenceRecord: __spreadValues(__spreadValues({}, options.referenceRecord), referenceRecord)
-  })));
-};
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/evaluateTreeRule.js
-var evaluateTreeRule = (treeRule, options) => {
-  const { conditions, rules } = treeRule;
-  const { result, referenceRecord } = evaluateConditions(conditions, options);
-  if (!result) {
-    return;
-  }
-  return evaluateRules(rules, __spreadProps(__spreadValues({}, options), {
-    referenceRecord: __spreadValues(__spreadValues({}, options.referenceRecord), referenceRecord)
-  }));
-};
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/evaluateRules.js
-var evaluateRules = (rules, options) => {
-  for (const rule of rules) {
-    if (rule.type === "endpoint") {
-      const endpointOrUndefined = evaluateEndpointRule(rule, options);
-      if (endpointOrUndefined) {
-        return endpointOrUndefined;
-      }
-    } else if (rule.type === "error") {
-      evaluateErrorRule(rule, options);
-    } else if (rule.type === "tree") {
-      const endpointOrUndefined = evaluateTreeRule(rule, options);
-      if (endpointOrUndefined) {
-        return endpointOrUndefined;
-      }
-    } else {
-      throw new EndpointError(`Unknown endpoint rule: ${rule}`);
-    }
-  }
-  throw new EndpointError(`Rules evaluation failed`);
-};
-
-// ../../../../node_modules/@smithy/util-endpoints/dist-es/resolveEndpoint.js
-var resolveEndpoint = (ruleSetObject, options) => {
-  const { endpointParams, logger: logger2 } = options;
-  const { parameters, rules } = ruleSetObject;
-  options.logger?.debug?.(`${debugId} Initial EndpointParams: ${toDebugString(endpointParams)}`);
-  const paramsWithDefault = Object.entries(parameters).filter(([, v]) => v.default != null).map(([k, v]) => [k, v.default]);
-  if (paramsWithDefault.length > 0) {
-    for (const [paramKey, paramDefaultValue] of paramsWithDefault) {
-      endpointParams[paramKey] = endpointParams[paramKey] ?? paramDefaultValue;
-    }
-  }
-  const requiredParams = Object.entries(parameters).filter(([, v]) => v.required).map(([k]) => k);
-  for (const requiredParam of requiredParams) {
-    if (endpointParams[requiredParam] == null) {
-      throw new EndpointError(`Missing required parameter: '${requiredParam}'`);
-    }
-  }
-  const endpoint = evaluateRules(rules, { endpointParams, logger: logger2, referenceRecord: {} });
-  if (options.endpointParams?.Endpoint) {
-    try {
-      const givenEndpoint = new URL(options.endpointParams.Endpoint);
-      const { protocol, port } = givenEndpoint;
-      endpoint.url.protocol = protocol;
-      endpoint.url.port = port;
-    } catch (e) {
-    }
-  }
-  options.logger?.debug?.(`${debugId} Resolved endpoint: ${toDebugString(endpoint)}`);
-  return endpoint;
-};
-
-// ../../../../node_modules/@aws-sdk/util-endpoints/dist-es/lib/aws/isVirtualHostableS3Bucket.js
-var isVirtualHostableS3Bucket = (value, allowSubDomains = false) => {
-  if (allowSubDomains) {
-    for (const label of value.split(".")) {
-      if (!isVirtualHostableS3Bucket(label)) {
-        return false;
-      }
-    }
-    return true;
-  }
-  if (!isValidHostLabel(value)) {
-    return false;
-  }
-  if (value.length < 3 || value.length > 63) {
-    return false;
-  }
-  if (value !== value.toLowerCase()) {
-    return false;
-  }
-  if (isIpAddress(value)) {
-    return false;
-  }
-  return true;
-};
-
-// ../../../../node_modules/@aws-sdk/util-endpoints/dist-es/lib/aws/parseArn.js
-var ARN_DELIMITER = ":";
-var RESOURCE_DELIMITER = "/";
-var parseArn = (value) => {
-  const segments = value.split(ARN_DELIMITER);
-  if (segments.length < 6)
-    return null;
-  const [arn, partition2, service, region, accountId, ...resourcePath] = segments;
-  if (arn !== "arn" || partition2 === "" || service === "" || resourcePath.join(ARN_DELIMITER) === "")
-    return null;
-  const resourceId = resourcePath.map((resource) => resource.split(RESOURCE_DELIMITER)).flat();
-  return {
-    partition: partition2,
-    service,
-    region,
-    accountId,
-    resourceId
-  };
-};
-
-// ../../../../node_modules/@aws-sdk/util-endpoints/dist-es/lib/aws/partitions.json
-var partitions_default = {
-  partitions: [{
-    id: "aws",
-    outputs: {
-      dnsSuffix: "amazonaws.com",
-      dualStackDnsSuffix: "api.aws",
-      implicitGlobalRegion: "us-east-1",
-      name: "aws",
-      supportsDualStack: true,
-      supportsFIPS: true
-    },
-    regionRegex: "^(us|eu|ap|sa|ca|me|af|il)\\-\\w+\\-\\d+$",
-    regions: {
-      "af-south-1": {
-        description: "Africa (Cape Town)"
-      },
-      "ap-east-1": {
-        description: "Asia Pacific (Hong Kong)"
-      },
-      "ap-northeast-1": {
-        description: "Asia Pacific (Tokyo)"
-      },
-      "ap-northeast-2": {
-        description: "Asia Pacific (Seoul)"
-      },
-      "ap-northeast-3": {
-        description: "Asia Pacific (Osaka)"
-      },
-      "ap-south-1": {
-        description: "Asia Pacific (Mumbai)"
-      },
-      "ap-south-2": {
-        description: "Asia Pacific (Hyderabad)"
-      },
-      "ap-southeast-1": {
-        description: "Asia Pacific (Singapore)"
-      },
-      "ap-southeast-2": {
-        description: "Asia Pacific (Sydney)"
-      },
-      "ap-southeast-3": {
-        description: "Asia Pacific (Jakarta)"
-      },
-      "ap-southeast-4": {
-        description: "Asia Pacific (Melbourne)"
-      },
-      "ap-southeast-5": {
-        description: "Asia Pacific (Malaysia)"
-      },
-      "aws-global": {
-        description: "AWS Standard global region"
-      },
-      "ca-central-1": {
-        description: "Canada (Central)"
-      },
-      "ca-west-1": {
-        description: "Canada West (Calgary)"
-      },
-      "eu-central-1": {
-        description: "Europe (Frankfurt)"
-      },
-      "eu-central-2": {
-        description: "Europe (Zurich)"
-      },
-      "eu-north-1": {
-        description: "Europe (Stockholm)"
-      },
-      "eu-south-1": {
-        description: "Europe (Milan)"
-      },
-      "eu-south-2": {
-        description: "Europe (Spain)"
-      },
-      "eu-west-1": {
-        description: "Europe (Ireland)"
-      },
-      "eu-west-2": {
-        description: "Europe (London)"
-      },
-      "eu-west-3": {
-        description: "Europe (Paris)"
-      },
-      "il-central-1": {
-        description: "Israel (Tel Aviv)"
-      },
-      "me-central-1": {
-        description: "Middle East (UAE)"
-      },
-      "me-south-1": {
-        description: "Middle East (Bahrain)"
-      },
-      "sa-east-1": {
-        description: "South America (Sao Paulo)"
-      },
-      "us-east-1": {
-        description: "US East (N. Virginia)"
-      },
-      "us-east-2": {
-        description: "US East (Ohio)"
-      },
-      "us-west-1": {
-        description: "US West (N. California)"
-      },
-      "us-west-2": {
-        description: "US West (Oregon)"
-      }
-    }
-  }, {
-    id: "aws-cn",
-    outputs: {
-      dnsSuffix: "amazonaws.com.cn",
-      dualStackDnsSuffix: "api.amazonwebservices.com.cn",
-      implicitGlobalRegion: "cn-northwest-1",
-      name: "aws-cn",
-      supportsDualStack: true,
-      supportsFIPS: true
-    },
-    regionRegex: "^cn\\-\\w+\\-\\d+$",
-    regions: {
-      "aws-cn-global": {
-        description: "AWS China global region"
-      },
-      "cn-north-1": {
-        description: "China (Beijing)"
-      },
-      "cn-northwest-1": {
-        description: "China (Ningxia)"
-      }
-    }
-  }, {
-    id: "aws-us-gov",
-    outputs: {
-      dnsSuffix: "amazonaws.com",
-      dualStackDnsSuffix: "api.aws",
-      implicitGlobalRegion: "us-gov-west-1",
-      name: "aws-us-gov",
-      supportsDualStack: true,
-      supportsFIPS: true
-    },
-    regionRegex: "^us\\-gov\\-\\w+\\-\\d+$",
-    regions: {
-      "aws-us-gov-global": {
-        description: "AWS GovCloud (US) global region"
-      },
-      "us-gov-east-1": {
-        description: "AWS GovCloud (US-East)"
-      },
-      "us-gov-west-1": {
-        description: "AWS GovCloud (US-West)"
-      }
-    }
-  }, {
-    id: "aws-iso",
-    outputs: {
-      dnsSuffix: "c2s.ic.gov",
-      dualStackDnsSuffix: "c2s.ic.gov",
-      implicitGlobalRegion: "us-iso-east-1",
-      name: "aws-iso",
-      supportsDualStack: false,
-      supportsFIPS: true
-    },
-    regionRegex: "^us\\-iso\\-\\w+\\-\\d+$",
-    regions: {
-      "aws-iso-global": {
-        description: "AWS ISO (US) global region"
-      },
-      "us-iso-east-1": {
-        description: "US ISO East"
-      },
-      "us-iso-west-1": {
-        description: "US ISO WEST"
-      }
-    }
-  }, {
-    id: "aws-iso-b",
-    outputs: {
-      dnsSuffix: "sc2s.sgov.gov",
-      dualStackDnsSuffix: "sc2s.sgov.gov",
-      implicitGlobalRegion: "us-isob-east-1",
-      name: "aws-iso-b",
-      supportsDualStack: false,
-      supportsFIPS: true
-    },
-    regionRegex: "^us\\-isob\\-\\w+\\-\\d+$",
-    regions: {
-      "aws-iso-b-global": {
-        description: "AWS ISOB (US) global region"
-      },
-      "us-isob-east-1": {
-        description: "US ISOB East (Ohio)"
-      }
-    }
-  }, {
-    id: "aws-iso-e",
-    outputs: {
-      dnsSuffix: "cloud.adc-e.uk",
-      dualStackDnsSuffix: "cloud.adc-e.uk",
-      implicitGlobalRegion: "eu-isoe-west-1",
-      name: "aws-iso-e",
-      supportsDualStack: false,
-      supportsFIPS: true
-    },
-    regionRegex: "^eu\\-isoe\\-\\w+\\-\\d+$",
-    regions: {
-      "eu-isoe-west-1": {
-        description: "EU ISOE West"
-      }
-    }
-  }, {
-    id: "aws-iso-f",
-    outputs: {
-      dnsSuffix: "csp.hci.ic.gov",
-      dualStackDnsSuffix: "csp.hci.ic.gov",
-      implicitGlobalRegion: "us-isof-south-1",
-      name: "aws-iso-f",
-      supportsDualStack: false,
-      supportsFIPS: true
-    },
-    regionRegex: "^us\\-isof\\-\\w+\\-\\d+$",
-    regions: {}
-  }],
-  version: "1.1"
-};
-
-// ../../../../node_modules/@aws-sdk/util-endpoints/dist-es/lib/aws/partition.js
-var selectedPartitionsInfo = partitions_default;
-var selectedUserAgentPrefix = "";
-var partition = (value) => {
-  const { partitions } = selectedPartitionsInfo;
-  for (const partition2 of partitions) {
-    const { regions, outputs } = partition2;
-    for (const [region, regionData] of Object.entries(regions)) {
-      if (region === value) {
-        return __spreadValues(__spreadValues({}, outputs), regionData);
-      }
-    }
-  }
-  for (const partition2 of partitions) {
-    const { regionRegex, outputs } = partition2;
-    if (new RegExp(regionRegex).test(value)) {
-      return __spreadValues({}, outputs);
-    }
-  }
-  const DEFAULT_PARTITION = partitions.find((partition2) => partition2.id === "aws");
-  if (!DEFAULT_PARTITION) {
-    throw new Error("Provided region was not found in the partition array or regex, and default partition with id 'aws' doesn't exist.");
-  }
-  return __spreadValues({}, DEFAULT_PARTITION.outputs);
-};
-var getUserAgentPrefix = () => selectedUserAgentPrefix;
-
-// ../../../../node_modules/@aws-sdk/util-endpoints/dist-es/aws.js
-var awsEndpointFunctions = {
-  isVirtualHostableS3Bucket,
-  parseArn,
-  partition
-};
-customEndpointFunctions.aws = awsEndpointFunctions;
-
-// ../../../../node_modules/@aws-sdk/middleware-user-agent/dist-es/constants.js
-var USER_AGENT = "user-agent";
-var X_AMZ_USER_AGENT = "x-amz-user-agent";
-var SPACE = " ";
-var UA_NAME_SEPARATOR = "/";
-var UA_NAME_ESCAPE_REGEX = /[^\!\$\%\&\'\*\+\-\.\^\_\`\|\~\d\w]/g;
-var UA_VALUE_ESCAPE_REGEX = /[^\!\$\%\&\'\*\+\-\.\^\_\`\|\~\d\w\#]/g;
-var UA_ESCAPE_CHAR = "-";
-
-// ../../../../node_modules/@aws-sdk/middleware-user-agent/dist-es/user-agent-middleware.js
-var userAgentMiddleware = (options) => (next, context) => (args) => __async(void 0, null, function* () {
-  const { request } = args;
-  if (!HttpRequest.isInstance(request))
-    return next(args);
-  const { headers } = request;
-  const userAgent = context?.userAgent?.map(escapeUserAgent) || [];
-  const defaultUserAgent2 = (yield options.defaultUserAgentProvider()).map(escapeUserAgent);
-  const customUserAgent = options?.customUserAgent?.map(escapeUserAgent) || [];
-  const prefix = getUserAgentPrefix();
-  const sdkUserAgentValue = (prefix ? [prefix] : []).concat([...defaultUserAgent2, ...userAgent, ...customUserAgent]).join(SPACE);
-  const normalUAValue = [
-    ...defaultUserAgent2.filter((section) => section.startsWith("aws-sdk-")),
-    ...customUserAgent
-  ].join(SPACE);
-  if (options.runtime !== "browser") {
-    if (normalUAValue) {
-      headers[X_AMZ_USER_AGENT] = headers[X_AMZ_USER_AGENT] ? `${headers[USER_AGENT]} ${normalUAValue}` : normalUAValue;
-    }
-    headers[USER_AGENT] = sdkUserAgentValue;
-  } else {
-    headers[X_AMZ_USER_AGENT] = sdkUserAgentValue;
-  }
-  return next(__spreadProps(__spreadValues({}, args), {
-    request
-  }));
-});
-var escapeUserAgent = (userAgentPair) => {
-  const name = userAgentPair[0].split(UA_NAME_SEPARATOR).map((part) => part.replace(UA_NAME_ESCAPE_REGEX, UA_ESCAPE_CHAR)).join(UA_NAME_SEPARATOR);
-  const version = userAgentPair[1]?.replace(UA_VALUE_ESCAPE_REGEX, UA_ESCAPE_CHAR);
-  const prefixSeparatorIndex = name.indexOf(UA_NAME_SEPARATOR);
-  const prefix = name.substring(0, prefixSeparatorIndex);
-  let uaName = name.substring(prefixSeparatorIndex + 1);
-  if (prefix === "api") {
-    uaName = uaName.toLowerCase();
-  }
-  return [prefix, uaName, version].filter((item) => item && item.length > 0).reduce((acc, item, index) => {
-    switch (index) {
-      case 0:
-        return item;
-      case 1:
-        return `${acc}/${item}`;
-      default:
-        return `${acc}#${item}`;
-    }
-  }, "");
-};
-var getUserAgentMiddlewareOptions = {
-  name: "getUserAgentMiddleware",
-  step: "build",
-  priority: "low",
-  tags: ["SET_USER_AGENT", "USER_AGENT"],
-  override: true
-};
-var getUserAgentPlugin = (config) => ({
-  applyToStack: (clientStack) => {
-    clientStack.add(userAgentMiddleware(config), getUserAgentMiddlewareOptions);
-  }
-});
 
 // ../../../../node_modules/@smithy/config-resolver/dist-es/regionConfig/isFipsRegion.js
 var isFipsRegion = (region) => typeof region === "string" && (region.startsWith("fips-") || region.endsWith("-fips"));
@@ -9213,6 +8431,414 @@ var resolveAwsRegionExtensionConfiguration = (awsRegionExtensionConfiguration) =
   };
 };
 
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/isIpAddress.js
+var IP_V4_REGEX = new RegExp(`^(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}$`);
+var isIpAddress = (value) => IP_V4_REGEX.test(value) || value.startsWith("[") && value.endsWith("]");
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/customEndpointFunctions.js
+var customEndpointFunctions = {};
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/types/EndpointError.js
+var EndpointError = class extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "EndpointError";
+  }
+};
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/debug/debugId.js
+var debugId = "endpoints";
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/debug/toDebugString.js
+function toDebugString(input) {
+  if (typeof input !== "object" || input == null) {
+    return input;
+  }
+  if ("ref" in input) {
+    return `$${toDebugString(input.ref)}`;
+  }
+  if ("fn" in input) {
+    return `${input.fn}(${(input.argv || []).map(toDebugString).join(", ")})`;
+  }
+  return JSON.stringify(input, null, 2);
+}
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/booleanEquals.js
+var booleanEquals = (value1, value2) => value1 === value2;
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/getAttrPathList.js
+var getAttrPathList = (path) => {
+  const parts = path.split(".");
+  const pathList = [];
+  for (const part of parts) {
+    const squareBracketIndex = part.indexOf("[");
+    if (squareBracketIndex !== -1) {
+      if (part.indexOf("]") !== part.length - 1) {
+        throw new EndpointError(`Path: '${path}' does not end with ']'`);
+      }
+      const arrayIndex = part.slice(squareBracketIndex + 1, -1);
+      if (Number.isNaN(parseInt(arrayIndex))) {
+        throw new EndpointError(`Invalid array index: '${arrayIndex}' in path: '${path}'`);
+      }
+      if (squareBracketIndex !== 0) {
+        pathList.push(part.slice(0, squareBracketIndex));
+      }
+      pathList.push(arrayIndex);
+    } else {
+      pathList.push(part);
+    }
+  }
+  return pathList;
+};
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/getAttr.js
+var getAttr = (value, path) => getAttrPathList(path).reduce((acc, index) => {
+  if (typeof acc !== "object") {
+    throw new EndpointError(`Index '${index}' in '${path}' not found in '${JSON.stringify(value)}'`);
+  } else if (Array.isArray(acc)) {
+    return acc[parseInt(index)];
+  }
+  return acc[index];
+}, value);
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/isSet.js
+var isSet = (value) => value != null;
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/isValidHostLabel.js
+var VALID_HOST_LABEL_REGEX = new RegExp(`^(?!.*-$)(?!-)[a-zA-Z0-9-]{1,63}$`);
+var isValidHostLabel = (value, allowSubDomains = false) => {
+  if (!allowSubDomains) {
+    return VALID_HOST_LABEL_REGEX.test(value);
+  }
+  const labels = value.split(".");
+  for (const label of labels) {
+    if (!isValidHostLabel(label)) {
+      return false;
+    }
+  }
+  return true;
+};
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/not.js
+var not = (value) => !value;
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/parseURL.js
+var DEFAULT_PORTS = {
+  [EndpointURLScheme.HTTP]: 80,
+  [EndpointURLScheme.HTTPS]: 443
+};
+var parseURL = (value) => {
+  const whatwgURL = (() => {
+    try {
+      if (value instanceof URL) {
+        return value;
+      }
+      if (typeof value === "object" && "hostname" in value) {
+        const { hostname: hostname2, port, protocol: protocol2 = "", path = "", query = {} } = value;
+        const url = new URL(`${protocol2}//${hostname2}${port ? `:${port}` : ""}${path}`);
+        url.search = Object.entries(query).map(([k, v]) => `${k}=${v}`).join("&");
+        return url;
+      }
+      return new URL(value);
+    } catch (error) {
+      return null;
+    }
+  })();
+  if (!whatwgURL) {
+    console.error(`Unable to parse ${JSON.stringify(value)} as a whatwg URL.`);
+    return null;
+  }
+  const urlString = whatwgURL.href;
+  const { host, hostname, pathname, protocol, search } = whatwgURL;
+  if (search) {
+    return null;
+  }
+  const scheme = protocol.slice(0, -1);
+  if (!Object.values(EndpointURLScheme).includes(scheme)) {
+    return null;
+  }
+  const isIp = isIpAddress(hostname);
+  const inputContainsDefaultPort = urlString.includes(`${host}:${DEFAULT_PORTS[scheme]}`) || typeof value === "string" && value.includes(`${host}:${DEFAULT_PORTS[scheme]}`);
+  const authority = `${host}${inputContainsDefaultPort ? `:${DEFAULT_PORTS[scheme]}` : ``}`;
+  return {
+    scheme,
+    authority,
+    path: pathname,
+    normalizedPath: pathname.endsWith("/") ? pathname : `${pathname}/`,
+    isIp
+  };
+};
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/stringEquals.js
+var stringEquals = (value1, value2) => value1 === value2;
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/substring.js
+var substring = (input, start, stop, reverse) => {
+  if (start >= stop || input.length < stop) {
+    return null;
+  }
+  if (!reverse) {
+    return input.substring(start, stop);
+  }
+  return input.substring(input.length - stop, input.length - start);
+};
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/lib/uriEncode.js
+var uriEncode = (value) => encodeURIComponent(value).replace(/[!*'()]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`);
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/endpointFunctions.js
+var endpointFunctions = {
+  booleanEquals,
+  getAttr,
+  isSet,
+  isValidHostLabel,
+  not,
+  parseURL,
+  stringEquals,
+  substring,
+  uriEncode
+};
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/evaluateTemplate.js
+var evaluateTemplate = (template, options) => {
+  const evaluatedTemplateArr = [];
+  const templateContext = __spreadValues(__spreadValues({}, options.endpointParams), options.referenceRecord);
+  let currentIndex = 0;
+  while (currentIndex < template.length) {
+    const openingBraceIndex = template.indexOf("{", currentIndex);
+    if (openingBraceIndex === -1) {
+      evaluatedTemplateArr.push(template.slice(currentIndex));
+      break;
+    }
+    evaluatedTemplateArr.push(template.slice(currentIndex, openingBraceIndex));
+    const closingBraceIndex = template.indexOf("}", openingBraceIndex);
+    if (closingBraceIndex === -1) {
+      evaluatedTemplateArr.push(template.slice(openingBraceIndex));
+      break;
+    }
+    if (template[openingBraceIndex + 1] === "{" && template[closingBraceIndex + 1] === "}") {
+      evaluatedTemplateArr.push(template.slice(openingBraceIndex + 1, closingBraceIndex));
+      currentIndex = closingBraceIndex + 2;
+    }
+    const parameterName = template.substring(openingBraceIndex + 1, closingBraceIndex);
+    if (parameterName.includes("#")) {
+      const [refName, attrName] = parameterName.split("#");
+      evaluatedTemplateArr.push(getAttr(templateContext[refName], attrName));
+    } else {
+      evaluatedTemplateArr.push(templateContext[parameterName]);
+    }
+    currentIndex = closingBraceIndex + 1;
+  }
+  return evaluatedTemplateArr.join("");
+};
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/getReferenceValue.js
+var getReferenceValue = ({ ref }, options) => {
+  const referenceRecord = __spreadValues(__spreadValues({}, options.endpointParams), options.referenceRecord);
+  return referenceRecord[ref];
+};
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/evaluateExpression.js
+var evaluateExpression = (obj, keyName, options) => {
+  if (typeof obj === "string") {
+    return evaluateTemplate(obj, options);
+  } else if (obj["fn"]) {
+    return callFunction(obj, options);
+  } else if (obj["ref"]) {
+    return getReferenceValue(obj, options);
+  }
+  throw new EndpointError(`'${keyName}': ${String(obj)} is not a string, function or reference.`);
+};
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/callFunction.js
+var callFunction = ({ fn, argv }, options) => {
+  const evaluatedArgs = argv.map((arg) => ["boolean", "number"].includes(typeof arg) ? arg : evaluateExpression(arg, "arg", options));
+  const fnSegments = fn.split(".");
+  if (fnSegments[0] in customEndpointFunctions && fnSegments[1] != null) {
+    return customEndpointFunctions[fnSegments[0]][fnSegments[1]](...evaluatedArgs);
+  }
+  return endpointFunctions[fn](...evaluatedArgs);
+};
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/evaluateCondition.js
+var evaluateCondition = (_a, options) => {
+  var _b = _a, { assign } = _b, fnArgs = __objRest(_b, ["assign"]);
+  if (assign && assign in options.referenceRecord) {
+    throw new EndpointError(`'${assign}' is already defined in Reference Record.`);
+  }
+  const value = callFunction(fnArgs, options);
+  options.logger?.debug?.(`${debugId} evaluateCondition: ${toDebugString(fnArgs)} = ${toDebugString(value)}`);
+  return __spreadValues({
+    result: value === "" ? true : !!value
+  }, assign != null && { toAssign: { name: assign, value } });
+};
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/evaluateConditions.js
+var evaluateConditions = (conditions = [], options) => {
+  const conditionsReferenceRecord = {};
+  for (const condition of conditions) {
+    const { result, toAssign } = evaluateCondition(condition, __spreadProps(__spreadValues({}, options), {
+      referenceRecord: __spreadValues(__spreadValues({}, options.referenceRecord), conditionsReferenceRecord)
+    }));
+    if (!result) {
+      return { result };
+    }
+    if (toAssign) {
+      conditionsReferenceRecord[toAssign.name] = toAssign.value;
+      options.logger?.debug?.(`${debugId} assign: ${toAssign.name} := ${toDebugString(toAssign.value)}`);
+    }
+  }
+  return { result: true, referenceRecord: conditionsReferenceRecord };
+};
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/getEndpointHeaders.js
+var getEndpointHeaders = (headers, options) => Object.entries(headers).reduce((acc, [headerKey, headerVal]) => __spreadProps(__spreadValues({}, acc), {
+  [headerKey]: headerVal.map((headerValEntry) => {
+    const processedExpr = evaluateExpression(headerValEntry, "Header value entry", options);
+    if (typeof processedExpr !== "string") {
+      throw new EndpointError(`Header '${headerKey}' value '${processedExpr}' is not a string`);
+    }
+    return processedExpr;
+  })
+}), {});
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/getEndpointProperty.js
+var getEndpointProperty = (property, options) => {
+  if (Array.isArray(property)) {
+    return property.map((propertyEntry) => getEndpointProperty(propertyEntry, options));
+  }
+  switch (typeof property) {
+    case "string":
+      return evaluateTemplate(property, options);
+    case "object":
+      if (property === null) {
+        throw new EndpointError(`Unexpected endpoint property: ${property}`);
+      }
+      return getEndpointProperties(property, options);
+    case "boolean":
+      return property;
+    default:
+      throw new EndpointError(`Unexpected endpoint property type: ${typeof property}`);
+  }
+};
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/getEndpointProperties.js
+var getEndpointProperties = (properties, options) => Object.entries(properties).reduce((acc, [propertyKey, propertyVal]) => __spreadProps(__spreadValues({}, acc), {
+  [propertyKey]: getEndpointProperty(propertyVal, options)
+}), {});
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/getEndpointUrl.js
+var getEndpointUrl = (endpointUrl, options) => {
+  const expression = evaluateExpression(endpointUrl, "Endpoint URL", options);
+  if (typeof expression === "string") {
+    try {
+      return new URL(expression);
+    } catch (error) {
+      console.error(`Failed to construct URL with ${expression}`, error);
+      throw error;
+    }
+  }
+  throw new EndpointError(`Endpoint URL must be a string, got ${typeof expression}`);
+};
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/evaluateEndpointRule.js
+var evaluateEndpointRule = (endpointRule, options) => {
+  const { conditions, endpoint } = endpointRule;
+  const { result, referenceRecord } = evaluateConditions(conditions, options);
+  if (!result) {
+    return;
+  }
+  const endpointRuleOptions = __spreadProps(__spreadValues({}, options), {
+    referenceRecord: __spreadValues(__spreadValues({}, options.referenceRecord), referenceRecord)
+  });
+  const { url, properties, headers } = endpoint;
+  options.logger?.debug?.(`${debugId} Resolving endpoint from template: ${toDebugString(endpoint)}`);
+  return __spreadProps(__spreadValues(__spreadValues({}, headers != void 0 && {
+    headers: getEndpointHeaders(headers, endpointRuleOptions)
+  }), properties != void 0 && {
+    properties: getEndpointProperties(properties, endpointRuleOptions)
+  }), {
+    url: getEndpointUrl(url, endpointRuleOptions)
+  });
+};
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/evaluateErrorRule.js
+var evaluateErrorRule = (errorRule, options) => {
+  const { conditions, error } = errorRule;
+  const { result, referenceRecord } = evaluateConditions(conditions, options);
+  if (!result) {
+    return;
+  }
+  throw new EndpointError(evaluateExpression(error, "Error", __spreadProps(__spreadValues({}, options), {
+    referenceRecord: __spreadValues(__spreadValues({}, options.referenceRecord), referenceRecord)
+  })));
+};
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/evaluateTreeRule.js
+var evaluateTreeRule = (treeRule, options) => {
+  const { conditions, rules } = treeRule;
+  const { result, referenceRecord } = evaluateConditions(conditions, options);
+  if (!result) {
+    return;
+  }
+  return evaluateRules(rules, __spreadProps(__spreadValues({}, options), {
+    referenceRecord: __spreadValues(__spreadValues({}, options.referenceRecord), referenceRecord)
+  }));
+};
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/utils/evaluateRules.js
+var evaluateRules = (rules, options) => {
+  for (const rule of rules) {
+    if (rule.type === "endpoint") {
+      const endpointOrUndefined = evaluateEndpointRule(rule, options);
+      if (endpointOrUndefined) {
+        return endpointOrUndefined;
+      }
+    } else if (rule.type === "error") {
+      evaluateErrorRule(rule, options);
+    } else if (rule.type === "tree") {
+      const endpointOrUndefined = evaluateTreeRule(rule, options);
+      if (endpointOrUndefined) {
+        return endpointOrUndefined;
+      }
+    } else {
+      throw new EndpointError(`Unknown endpoint rule: ${rule}`);
+    }
+  }
+  throw new EndpointError(`Rules evaluation failed`);
+};
+
+// ../../../../node_modules/@smithy/util-endpoints/dist-es/resolveEndpoint.js
+var resolveEndpoint = (ruleSetObject, options) => {
+  const { endpointParams, logger: logger2 } = options;
+  const { parameters, rules } = ruleSetObject;
+  options.logger?.debug?.(`${debugId} Initial EndpointParams: ${toDebugString(endpointParams)}`);
+  const paramsWithDefault = Object.entries(parameters).filter(([, v]) => v.default != null).map(([k, v]) => [k, v.default]);
+  if (paramsWithDefault.length > 0) {
+    for (const [paramKey, paramDefaultValue] of paramsWithDefault) {
+      endpointParams[paramKey] = endpointParams[paramKey] ?? paramDefaultValue;
+    }
+  }
+  const requiredParams = Object.entries(parameters).filter(([, v]) => v.required).map(([k]) => k);
+  for (const requiredParam of requiredParams) {
+    if (endpointParams[requiredParam] == null) {
+      throw new EndpointError(`Missing required parameter: '${requiredParam}'`);
+    }
+  }
+  const endpoint = evaluateRules(rules, { endpointParams, logger: logger2, referenceRecord: {} });
+  if (options.endpointParams?.Endpoint) {
+    try {
+      const givenEndpoint = new URL(options.endpointParams.Endpoint);
+      const { protocol, port } = givenEndpoint;
+      endpoint.url.protocol = protocol;
+      endpoint.url.port = port;
+    } catch (e) {
+    }
+  }
+  options.logger?.debug?.(`${debugId} Resolved endpoint: ${toDebugString(endpoint)}`);
+  return endpoint;
+};
+
 export {
   getHttpHandlerExtensionConfiguration,
   resolveHttpHandlerRuntimeConfig,
@@ -9247,6 +8873,7 @@ export {
   expectObject,
   expectString,
   expectUnion,
+  strictParseFloat,
   strictParseLong,
   strictParseInt32,
   dateToUtcString,
@@ -9281,11 +8908,10 @@ export {
   DefaultIdentityProviderConfig,
   requestBuilder,
   createPaginator,
-  resolveUserAgentConfig,
+  isIpAddress,
+  isValidHostLabel,
   customEndpointFunctions,
   resolveEndpoint,
-  awsEndpointFunctions,
-  getUserAgentPlugin,
   DEFAULT_USE_DUALSTACK_ENDPOINT,
   DEFAULT_USE_FIPS_ENDPOINT,
   resolveRegionConfig,
@@ -9324,4 +8950,4 @@ bowser/src/bowser.js:
    * MIT License | (c) Denis Demchenko 2015-2019
    *)
 */
-//# sourceMappingURL=chunk-QRU5KILM.js.map
+//# sourceMappingURL=chunk-6GN2Y7VZ.js.map

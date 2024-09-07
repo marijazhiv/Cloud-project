@@ -7,6 +7,7 @@ import {AuthService} from "../auth/services/auth.service";
 import {LambdaService} from "../movies/movie.service";
 import {S3Service} from "../../services/s3.service";
 import {S3UploadService} from "../../services/s3-upload.service";
+import {SubscriptionService} from "../../services/subscription.service";
 //import {MovieService} from "../movies/movie.service";
 
 @Component({
@@ -30,6 +31,14 @@ export class MainPageComponent implements OnInit{
 
   movies: any[] = [];
 
+  #username = '';
+  subscriptionType = '';
+  subscriptionValue = '';
+  #email = '';
+
+  username:any
+  email:any
+
   selectedFile: Blob | undefined;
   title1: string = '';
   description1: string = '';
@@ -43,7 +52,8 @@ export class MainPageComponent implements OnInit{
               private authService: AuthService,
               //private movieService: MovieService
               private lambdaService: LambdaService,
-              private s3Service: S3Service, private s3UploadService: S3UploadService
+              private s3Service: S3Service, private s3UploadService: S3UploadService,
+              private subscriptionService: SubscriptionService
               ) {
   }
 
@@ -71,7 +81,10 @@ export class MainPageComponent implements OnInit{
     console.log("CURRENT USER> EMAIL: " + this.authService.getCurrentUserEmail());
     console.log("CURRENT USER> ROLE: " + this.authService.getCurrentUserRole());
 
+
     this.userRole = this.authService.getCurrentUserRole();
+    this.username=this.authService.getUsername();
+    this.email=this.authService.getCurrentUserEmail();
   }
 
   logOut(){
@@ -233,6 +246,33 @@ export class MainPageComponent implements OnInit{
     } else {
       console.error('No file selected');
     }
+  }
+
+  // Funkcija koja se poziva prilikom submit-a forme
+  subscriptions: any;
+  onSubmit() {
+    // Prvo šaljemo podatke u DynamoDB
+    this.subscriptionService.saveSubscription(this.username, this.subscriptionType, this.subscriptionValue, this.email)
+        .subscribe(
+            response => {
+              console.log('Subscription saved:', response);
+              // Nakon uspešnog čuvanja, šaljemo email za verifikaciju
+              this.subscriptionService.sendVerificationEmail(this.email).subscribe(
+                  emailResponse => {
+                    console.log('Verification email sent:', emailResponse);
+                    alert('Uspešno ste se pretplatili. Verifikacioni email je poslat.');
+                  },
+                  emailError => {
+                    console.error('Error sending verification email:', emailError);
+                    alert('Došlo je do greške pri slanju verifikacionog emaila.');
+                  }
+              );
+            },
+            error => {
+              console.error('Error saving subscription:', error);
+              alert('Došlo je do greške pri čuvanju pretplate.');
+            }
+        );
   }
 
 
