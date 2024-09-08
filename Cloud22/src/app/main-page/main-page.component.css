@@ -603,3 +603,53 @@ footer .footer span a:hover {
 .subscription-form label {
     margin-right: 19px; /* Razmak između labele i radio dugmadi */
 }
+
+/* General styles for the delete movie section */
+.delete-movie {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 400px;
+    margin: 20px auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.delete-movie h2 {
+    font-size: 24px;
+    color: darkred;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.delete-movie label {
+    font-size: 18px;
+    color: #333;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.delete-movie input[type="text"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    display: block;
+    margin: 0 auto;
+}
+
+.delete-movie button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: none;
+    background-color: darkred;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.delete-movie button:hover {
+    background-color: red;
+}

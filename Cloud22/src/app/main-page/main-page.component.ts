@@ -48,6 +48,8 @@ export class MainPageComponent implements OnInit{
 
   fileUrl: string | null = null;
 
+  deleteId: any;
+
   constructor(private router: Router,
               private authService: AuthService,
               //private movieService: MovieService
@@ -70,6 +72,7 @@ export class MainPageComponent implements OnInit{
 
   private userPool = new CognitoUserPool(this.userPoolData);
 
+  subscriptions: any;
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem("user") || '')
     console.log(this.user);
@@ -85,6 +88,8 @@ export class MainPageComponent implements OnInit{
     this.userRole = this.authService.getCurrentUserRole();
     this.username=this.authService.getUsername();
     this.email=this.authService.getCurrentUserEmail();
+
+    this.getSubs();
   }
 
   logOut(){
@@ -141,6 +146,36 @@ export class MainPageComponent implements OnInit{
       this.results = responseBody;
     } catch (error) {
       console.error('Error searching content:', error);
+    }
+  }
+
+  async getSubs() {
+    try {
+
+      const results = await this.lambdaService.getSubscriptions(this.username);
+      const responseBody = JSON.parse(results.body);
+
+      console.log("SUCCESSFULY");
+      console.log(results);
+      console.log(responseBody);
+      this.subscriptions = responseBody.subscriptions;
+      console.log(this.subscriptions);
+    } catch (error) {
+      console.error('Error searching content:', error);
+    }
+  }
+
+  async deleteMovie(){
+    try {
+      // Poziv metode deleteContent iz LambdaService
+      const result = await this.lambdaService.deleteContent(this.deleteId);
+
+      // Obrada odgovora
+      console.log('Film je uspešno obrisan:', result);
+      // Opciono: Dodaj logiku za obaveštavanje korisnika o uspešnom brisanju ili osvežavanje liste
+    } catch (error) {
+      // Obrada greške
+      console.error('Došlo je do greške pri brisanju filma:', error);
     }
   }
 
@@ -249,7 +284,6 @@ export class MainPageComponent implements OnInit{
   }
 
   // Funkcija koja se poziva prilikom submit-a forme
-  subscriptions: any;
   onSubmit() {
     // Prvo šaljemo podatke u DynamoDB
     this.subscriptionService.saveSubscription(this.username, this.subscriptionType, this.subscriptionValue, this.email)

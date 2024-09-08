@@ -2,7 +2,7 @@ import {
   WaiterState,
   checkExceptions,
   createWaiter
-} from "./chunk-CW4OIEAU.js";
+} from "./chunk-2FE76ZDM.js";
 import {
   AwsSdkSigV4Signer,
   Client,
@@ -17,6 +17,7 @@ import {
   NoOpLogger,
   ServiceException,
   Sha256,
+  awsEndpointFunctions,
   calculateBodyLength,
   collectBody,
   createAggregatedClient,
@@ -43,9 +44,8 @@ import {
   getRetryPlugin,
   getSerdePlugin,
   getSmithyContext,
+  getUserAgentPlugin,
   invalidProvider,
-  isIpAddress,
-  isValidHostLabel,
   loadConfigsForDefaultMode,
   normalizeProvider,
   parseBoolean,
@@ -63,6 +63,7 @@ import {
   resolveHttpHandlerRuntimeConfig,
   resolveRegionConfig,
   resolveRetryConfig,
+  resolveUserAgentConfig,
   serializeDateTime,
   streamCollector,
   strictParseFloat,
@@ -70,395 +71,15 @@ import {
   toBase64,
   toUtf8,
   withBaseException
-} from "./chunk-6GN2Y7VZ.js";
+} from "./chunk-TC2ZGZ7K.js";
+import "./chunk-7VQPY5UX.js";
 import {
   __async,
   __spreadProps,
   __spreadValues
 } from "./chunk-CDW57LCT.js";
 
-// ../../../../node_modules/@aws-sdk/client-ses/node_modules/@aws-sdk/middleware-user-agent/dist-es/configurations.js
-function resolveUserAgentConfig(input) {
-  return __spreadProps(__spreadValues({}, input), {
-    customUserAgent: typeof input.customUserAgent === "string" ? [[input.customUserAgent]] : input.customUserAgent
-  });
-}
-
-// ../../../../node_modules/@aws-sdk/client-ses/node_modules/@aws-sdk/util-endpoints/dist-es/lib/aws/isVirtualHostableS3Bucket.js
-var isVirtualHostableS3Bucket = (value, allowSubDomains = false) => {
-  if (allowSubDomains) {
-    for (const label of value.split(".")) {
-      if (!isVirtualHostableS3Bucket(label)) {
-        return false;
-      }
-    }
-    return true;
-  }
-  if (!isValidHostLabel(value)) {
-    return false;
-  }
-  if (value.length < 3 || value.length > 63) {
-    return false;
-  }
-  if (value !== value.toLowerCase()) {
-    return false;
-  }
-  if (isIpAddress(value)) {
-    return false;
-  }
-  return true;
-};
-
-// ../../../../node_modules/@aws-sdk/client-ses/node_modules/@aws-sdk/util-endpoints/dist-es/lib/aws/parseArn.js
-var ARN_DELIMITER = ":";
-var RESOURCE_DELIMITER = "/";
-var parseArn = (value) => {
-  const segments = value.split(ARN_DELIMITER);
-  if (segments.length < 6)
-    return null;
-  const [arn, partition2, service, region, accountId, ...resourcePath] = segments;
-  if (arn !== "arn" || partition2 === "" || service === "" || resourcePath.join(ARN_DELIMITER) === "")
-    return null;
-  const resourceId = resourcePath.map((resource) => resource.split(RESOURCE_DELIMITER)).flat();
-  return {
-    partition: partition2,
-    service,
-    region,
-    accountId,
-    resourceId
-  };
-};
-
-// ../../../../node_modules/@aws-sdk/client-ses/node_modules/@aws-sdk/util-endpoints/dist-es/lib/aws/partitions.json
-var partitions_default = {
-  partitions: [{
-    id: "aws",
-    outputs: {
-      dnsSuffix: "amazonaws.com",
-      dualStackDnsSuffix: "api.aws",
-      implicitGlobalRegion: "us-east-1",
-      name: "aws",
-      supportsDualStack: true,
-      supportsFIPS: true
-    },
-    regionRegex: "^(us|eu|ap|sa|ca|me|af|il|mx)\\-\\w+\\-\\d+$",
-    regions: {
-      "af-south-1": {
-        description: "Africa (Cape Town)"
-      },
-      "ap-east-1": {
-        description: "Asia Pacific (Hong Kong)"
-      },
-      "ap-northeast-1": {
-        description: "Asia Pacific (Tokyo)"
-      },
-      "ap-northeast-2": {
-        description: "Asia Pacific (Seoul)"
-      },
-      "ap-northeast-3": {
-        description: "Asia Pacific (Osaka)"
-      },
-      "ap-south-1": {
-        description: "Asia Pacific (Mumbai)"
-      },
-      "ap-south-2": {
-        description: "Asia Pacific (Hyderabad)"
-      },
-      "ap-southeast-1": {
-        description: "Asia Pacific (Singapore)"
-      },
-      "ap-southeast-2": {
-        description: "Asia Pacific (Sydney)"
-      },
-      "ap-southeast-3": {
-        description: "Asia Pacific (Jakarta)"
-      },
-      "ap-southeast-4": {
-        description: "Asia Pacific (Melbourne)"
-      },
-      "ap-southeast-5": {
-        description: "Asia Pacific (Malaysia)"
-      },
-      "aws-global": {
-        description: "AWS Standard global region"
-      },
-      "ca-central-1": {
-        description: "Canada (Central)"
-      },
-      "ca-west-1": {
-        description: "Canada West (Calgary)"
-      },
-      "eu-central-1": {
-        description: "Europe (Frankfurt)"
-      },
-      "eu-central-2": {
-        description: "Europe (Zurich)"
-      },
-      "eu-north-1": {
-        description: "Europe (Stockholm)"
-      },
-      "eu-south-1": {
-        description: "Europe (Milan)"
-      },
-      "eu-south-2": {
-        description: "Europe (Spain)"
-      },
-      "eu-west-1": {
-        description: "Europe (Ireland)"
-      },
-      "eu-west-2": {
-        description: "Europe (London)"
-      },
-      "eu-west-3": {
-        description: "Europe (Paris)"
-      },
-      "il-central-1": {
-        description: "Israel (Tel Aviv)"
-      },
-      "me-central-1": {
-        description: "Middle East (UAE)"
-      },
-      "me-south-1": {
-        description: "Middle East (Bahrain)"
-      },
-      "sa-east-1": {
-        description: "South America (Sao Paulo)"
-      },
-      "us-east-1": {
-        description: "US East (N. Virginia)"
-      },
-      "us-east-2": {
-        description: "US East (Ohio)"
-      },
-      "us-west-1": {
-        description: "US West (N. California)"
-      },
-      "us-west-2": {
-        description: "US West (Oregon)"
-      }
-    }
-  }, {
-    id: "aws-cn",
-    outputs: {
-      dnsSuffix: "amazonaws.com.cn",
-      dualStackDnsSuffix: "api.amazonwebservices.com.cn",
-      implicitGlobalRegion: "cn-northwest-1",
-      name: "aws-cn",
-      supportsDualStack: true,
-      supportsFIPS: true
-    },
-    regionRegex: "^cn\\-\\w+\\-\\d+$",
-    regions: {
-      "aws-cn-global": {
-        description: "AWS China global region"
-      },
-      "cn-north-1": {
-        description: "China (Beijing)"
-      },
-      "cn-northwest-1": {
-        description: "China (Ningxia)"
-      }
-    }
-  }, {
-    id: "aws-us-gov",
-    outputs: {
-      dnsSuffix: "amazonaws.com",
-      dualStackDnsSuffix: "api.aws",
-      implicitGlobalRegion: "us-gov-west-1",
-      name: "aws-us-gov",
-      supportsDualStack: true,
-      supportsFIPS: true
-    },
-    regionRegex: "^us\\-gov\\-\\w+\\-\\d+$",
-    regions: {
-      "aws-us-gov-global": {
-        description: "AWS GovCloud (US) global region"
-      },
-      "us-gov-east-1": {
-        description: "AWS GovCloud (US-East)"
-      },
-      "us-gov-west-1": {
-        description: "AWS GovCloud (US-West)"
-      }
-    }
-  }, {
-    id: "aws-iso",
-    outputs: {
-      dnsSuffix: "c2s.ic.gov",
-      dualStackDnsSuffix: "c2s.ic.gov",
-      implicitGlobalRegion: "us-iso-east-1",
-      name: "aws-iso",
-      supportsDualStack: false,
-      supportsFIPS: true
-    },
-    regionRegex: "^us\\-iso\\-\\w+\\-\\d+$",
-    regions: {
-      "aws-iso-global": {
-        description: "AWS ISO (US) global region"
-      },
-      "us-iso-east-1": {
-        description: "US ISO East"
-      },
-      "us-iso-west-1": {
-        description: "US ISO WEST"
-      }
-    }
-  }, {
-    id: "aws-iso-b",
-    outputs: {
-      dnsSuffix: "sc2s.sgov.gov",
-      dualStackDnsSuffix: "sc2s.sgov.gov",
-      implicitGlobalRegion: "us-isob-east-1",
-      name: "aws-iso-b",
-      supportsDualStack: false,
-      supportsFIPS: true
-    },
-    regionRegex: "^us\\-isob\\-\\w+\\-\\d+$",
-    regions: {
-      "aws-iso-b-global": {
-        description: "AWS ISOB (US) global region"
-      },
-      "us-isob-east-1": {
-        description: "US ISOB East (Ohio)"
-      }
-    }
-  }, {
-    id: "aws-iso-e",
-    outputs: {
-      dnsSuffix: "cloud.adc-e.uk",
-      dualStackDnsSuffix: "cloud.adc-e.uk",
-      implicitGlobalRegion: "eu-isoe-west-1",
-      name: "aws-iso-e",
-      supportsDualStack: false,
-      supportsFIPS: true
-    },
-    regionRegex: "^eu\\-isoe\\-\\w+\\-\\d+$",
-    regions: {
-      "eu-isoe-west-1": {
-        description: "EU ISOE West"
-      }
-    }
-  }, {
-    id: "aws-iso-f",
-    outputs: {
-      dnsSuffix: "csp.hci.ic.gov",
-      dualStackDnsSuffix: "csp.hci.ic.gov",
-      implicitGlobalRegion: "us-isof-south-1",
-      name: "aws-iso-f",
-      supportsDualStack: false,
-      supportsFIPS: true
-    },
-    regionRegex: "^us\\-isof\\-\\w+\\-\\d+$",
-    regions: {}
-  }],
-  version: "1.1"
-};
-
-// ../../../../node_modules/@aws-sdk/client-ses/node_modules/@aws-sdk/util-endpoints/dist-es/lib/aws/partition.js
-var selectedPartitionsInfo = partitions_default;
-var selectedUserAgentPrefix = "";
-var partition = (value) => {
-  const { partitions } = selectedPartitionsInfo;
-  for (const partition2 of partitions) {
-    const { regions, outputs } = partition2;
-    for (const [region, regionData] of Object.entries(regions)) {
-      if (region === value) {
-        return __spreadValues(__spreadValues({}, outputs), regionData);
-      }
-    }
-  }
-  for (const partition2 of partitions) {
-    const { regionRegex, outputs } = partition2;
-    if (new RegExp(regionRegex).test(value)) {
-      return __spreadValues({}, outputs);
-    }
-  }
-  const DEFAULT_PARTITION = partitions.find((partition2) => partition2.id === "aws");
-  if (!DEFAULT_PARTITION) {
-    throw new Error("Provided region was not found in the partition array or regex, and default partition with id 'aws' doesn't exist.");
-  }
-  return __spreadValues({}, DEFAULT_PARTITION.outputs);
-};
-var getUserAgentPrefix = () => selectedUserAgentPrefix;
-
-// ../../../../node_modules/@aws-sdk/client-ses/node_modules/@aws-sdk/util-endpoints/dist-es/aws.js
-var awsEndpointFunctions = {
-  isVirtualHostableS3Bucket,
-  parseArn,
-  partition
-};
-customEndpointFunctions.aws = awsEndpointFunctions;
-
-// ../../../../node_modules/@aws-sdk/client-ses/node_modules/@aws-sdk/middleware-user-agent/dist-es/constants.js
-var USER_AGENT = "user-agent";
-var X_AMZ_USER_AGENT = "x-amz-user-agent";
-var SPACE = " ";
-var UA_NAME_SEPARATOR = "/";
-var UA_NAME_ESCAPE_REGEX = /[^\!\$\%\&\'\*\+\-\.\^\_\`\|\~\d\w]/g;
-var UA_VALUE_ESCAPE_REGEX = /[^\!\$\%\&\'\*\+\-\.\^\_\`\|\~\d\w\#]/g;
-var UA_ESCAPE_CHAR = "-";
-
-// ../../../../node_modules/@aws-sdk/client-ses/node_modules/@aws-sdk/middleware-user-agent/dist-es/user-agent-middleware.js
-var userAgentMiddleware = (options) => (next, context) => (args) => __async(void 0, null, function* () {
-  const { request } = args;
-  if (!HttpRequest.isInstance(request))
-    return next(args);
-  const { headers } = request;
-  const userAgent = context?.userAgent?.map(escapeUserAgent) || [];
-  const defaultUserAgent2 = (yield options.defaultUserAgentProvider()).map(escapeUserAgent);
-  const customUserAgent = options?.customUserAgent?.map(escapeUserAgent) || [];
-  const prefix = getUserAgentPrefix();
-  const sdkUserAgentValue = (prefix ? [prefix] : []).concat([...defaultUserAgent2, ...userAgent, ...customUserAgent]).join(SPACE);
-  const normalUAValue = [
-    ...defaultUserAgent2.filter((section) => section.startsWith("aws-sdk-")),
-    ...customUserAgent
-  ].join(SPACE);
-  if (options.runtime !== "browser") {
-    if (normalUAValue) {
-      headers[X_AMZ_USER_AGENT] = headers[X_AMZ_USER_AGENT] ? `${headers[USER_AGENT]} ${normalUAValue}` : normalUAValue;
-    }
-    headers[USER_AGENT] = sdkUserAgentValue;
-  } else {
-    headers[X_AMZ_USER_AGENT] = sdkUserAgentValue;
-  }
-  return next(__spreadProps(__spreadValues({}, args), {
-    request
-  }));
-});
-var escapeUserAgent = (userAgentPair) => {
-  const name = userAgentPair[0].split(UA_NAME_SEPARATOR).map((part) => part.replace(UA_NAME_ESCAPE_REGEX, UA_ESCAPE_CHAR)).join(UA_NAME_SEPARATOR);
-  const version = userAgentPair[1]?.replace(UA_VALUE_ESCAPE_REGEX, UA_ESCAPE_CHAR);
-  const prefixSeparatorIndex = name.indexOf(UA_NAME_SEPARATOR);
-  const prefix = name.substring(0, prefixSeparatorIndex);
-  let uaName = name.substring(prefixSeparatorIndex + 1);
-  if (prefix === "api") {
-    uaName = uaName.toLowerCase();
-  }
-  return [prefix, uaName, version].filter((item) => item && item.length > 0).reduce((acc, item, index) => {
-    switch (index) {
-      case 0:
-        return item;
-      case 1:
-        return `${acc}/${item}`;
-      default:
-        return `${acc}#${item}`;
-    }
-  }, "");
-};
-var getUserAgentMiddlewareOptions = {
-  name: "getUserAgentMiddleware",
-  step: "build",
-  priority: "low",
-  tags: ["SET_USER_AGENT", "USER_AGENT"],
-  override: true
-};
-var getUserAgentPlugin = (config) => ({
-  applyToStack: (clientStack) => {
-    clientStack.add(userAgentMiddleware(config), getUserAgentMiddlewareOptions);
-  }
-});
-
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/auth/httpAuthSchemeProvider.js
+// node_modules/@aws-sdk/client-ses/dist-es/auth/httpAuthSchemeProvider.js
 var defaultSESHttpAuthSchemeParametersProvider = (config, context, input) => __async(void 0, null, function* () {
   return {
     operation: getSmithyContext(context).operation,
@@ -496,7 +117,7 @@ var resolveHttpAuthSchemeConfig = (config) => {
   return __spreadValues({}, config_0);
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/endpoint/EndpointParameters.js
+// node_modules/@aws-sdk/client-ses/dist-es/endpoint/EndpointParameters.js
 var resolveClientEndpointParameters = (options) => {
   return __spreadProps(__spreadValues({}, options), {
     useDualstackEndpoint: options.useDualstackEndpoint ?? false,
@@ -511,7 +132,7 @@ var commonParams = {
   UseDualStack: { type: "builtInParams", name: "useDualstackEndpoint" }
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/package.json
+// node_modules/@aws-sdk/client-ses/package.json
 var package_default = {
   name: "@aws-sdk/client-ses",
   description: "AWS SDK for JavaScript Ses Client for Node.js, Browser and React Native",
@@ -615,7 +236,7 @@ var package_default = {
   }
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/endpoint/ruleset.js
+// node_modules/@aws-sdk/client-ses/dist-es/endpoint/ruleset.js
 var s = "required";
 var t = "fn";
 var u = "argv";
@@ -641,7 +262,7 @@ var r = [{ [v]: "Region" }];
 var _data = { version: "1.0", parameters: { Region: h, UseDualStack: i, UseFIPS: i, Endpoint: h }, rules: [{ conditions: [{ [t]: b, [u]: [j] }], rules: [{ conditions: p, error: "Invalid Configuration: FIPS and custom endpoint are not supported", type: d }, { conditions: q, error: "Invalid Configuration: Dualstack and custom endpoint are not supported", type: d }, { endpoint: { url: j, properties: m, headers: m }, type: e }], type: f }, { conditions: [{ [t]: b, [u]: r }], rules: [{ conditions: [{ [t]: "aws.partition", [u]: r, assign: g }], rules: [{ conditions: [k, l], rules: [{ conditions: [{ [t]: c, [u]: [a, n] }, o], rules: [{ endpoint: { url: "https://email-fips.{Region}.{PartitionResult#dualStackDnsSuffix}", properties: m, headers: m }, type: e }], type: f }, { error: "FIPS and DualStack are enabled, but this partition does not support one or both", type: d }], type: f }, { conditions: p, rules: [{ conditions: [{ [t]: c, [u]: [n, a] }], rules: [{ endpoint: { url: "https://email-fips.{Region}.{PartitionResult#dnsSuffix}", properties: m, headers: m }, type: e }], type: f }, { error: "FIPS is enabled but this partition does not support FIPS", type: d }], type: f }, { conditions: q, rules: [{ conditions: [o], rules: [{ endpoint: { url: "https://email.{Region}.{PartitionResult#dualStackDnsSuffix}", properties: m, headers: m }, type: e }], type: f }, { error: "DualStack is enabled but this partition does not support DualStack", type: d }], type: f }, { endpoint: { url: "https://email.{Region}.{PartitionResult#dnsSuffix}", properties: m, headers: m }, type: e }], type: f }], type: f }, { error: "Invalid Configuration: Missing Region", type: d }] };
 var ruleSet = _data;
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/endpoint/endpointResolver.js
+// node_modules/@aws-sdk/client-ses/dist-es/endpoint/endpointResolver.js
 var defaultEndpointResolver = (endpointParams, context = {}) => {
   return resolveEndpoint(ruleSet, {
     endpointParams,
@@ -650,7 +271,7 @@ var defaultEndpointResolver = (endpointParams, context = {}) => {
 };
 customEndpointFunctions.aws = awsEndpointFunctions;
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/runtimeConfig.shared.js
+// node_modules/@aws-sdk/client-ses/dist-es/runtimeConfig.shared.js
 var getRuntimeConfig = (config) => {
   return {
     apiVersion: "2010-12-01",
@@ -675,7 +296,7 @@ var getRuntimeConfig = (config) => {
   };
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/runtimeConfig.browser.js
+// node_modules/@aws-sdk/client-ses/dist-es/runtimeConfig.browser.js
 var getRuntimeConfig2 = (config) => {
   const defaultsMode = resolveDefaultsModeConfig(config);
   const defaultConfigProvider = () => defaultsMode().then(loadConfigsForDefaultMode);
@@ -699,7 +320,7 @@ var getRuntimeConfig2 = (config) => {
   });
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/auth/httpAuthExtensionConfiguration.js
+// node_modules/@aws-sdk/client-ses/dist-es/auth/httpAuthExtensionConfiguration.js
 var getHttpAuthExtensionConfiguration = (runtimeConfig) => {
   const _httpAuthSchemes = runtimeConfig.httpAuthSchemes;
   let _httpAuthSchemeProvider = runtimeConfig.httpAuthSchemeProvider;
@@ -738,7 +359,7 @@ var resolveHttpAuthRuntimeConfig = (config) => {
   };
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/runtimeExtensions.js
+// node_modules/@aws-sdk/client-ses/dist-es/runtimeExtensions.js
 var asPartial = (t2) => t2;
 var resolveRuntimeExtensions = (runtimeConfig, extensions) => {
   const extensionConfiguration = __spreadValues(__spreadValues(__spreadValues(__spreadValues({}, asPartial(getAwsRegionExtensionConfiguration(runtimeConfig))), asPartial(getDefaultExtensionConfiguration(runtimeConfig))), asPartial(getHttpHandlerExtensionConfiguration(runtimeConfig))), asPartial(getHttpAuthExtensionConfiguration(runtimeConfig)));
@@ -746,7 +367,7 @@ var resolveRuntimeExtensions = (runtimeConfig, extensions) => {
   return __spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues({}, runtimeConfig), resolveAwsRegionExtensionConfiguration(extensionConfiguration)), resolveDefaultRuntimeConfig(extensionConfiguration)), resolveHttpHandlerRuntimeConfig(extensionConfiguration)), resolveHttpAuthRuntimeConfig(extensionConfiguration));
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/SESClient.js
+// node_modules/@aws-sdk/client-ses/dist-es/SESClient.js
 var SESClient = class extends Client {
   constructor(...[configuration]) {
     const _config_0 = getRuntimeConfig2(configuration || {});
@@ -781,7 +402,7 @@ var SESClient = class extends Client {
   }
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/models/SESServiceException.js
+// node_modules/@aws-sdk/client-ses/dist-es/models/SESServiceException.js
 var SESServiceException = class _SESServiceException extends ServiceException {
   constructor(options) {
     super(options);
@@ -789,7 +410,7 @@ var SESServiceException = class _SESServiceException extends ServiceException {
   }
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/models/models_0.js
+// node_modules/@aws-sdk/client-ses/dist-es/models/models_0.js
 var AccountSendingPausedException = class _AccountSendingPausedException extends SESServiceException {
   constructor(opts) {
     super(__spreadValues({
@@ -1291,7 +912,7 @@ var ProductionAccessNotGrantedException = class _ProductionAccessNotGrantedExcep
   }
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/protocols/Aws_query.js
+// node_modules/@aws-sdk/client-ses/dist-es/protocols/Aws_query.js
 var se_CloneReceiptRuleSetCommand = (input, context) => __async(void 0, null, function* () {
   const headers = SHARED_HEADERS;
   let body;
@@ -6355,7 +5976,7 @@ var loadQueryErrorCode = (output, data) => {
   }
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/CloneReceiptRuleSetCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/CloneReceiptRuleSetCommand.js
 var CloneReceiptRuleSetCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6364,7 +5985,7 @@ var CloneReceiptRuleSetCommand = class extends Command.classBuilder().ep(__sprea
 }).s("SimpleEmailService", "CloneReceiptRuleSet", {}).n("SESClient", "CloneReceiptRuleSetCommand").f(void 0, void 0).ser(se_CloneReceiptRuleSetCommand).de(de_CloneReceiptRuleSetCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/CreateConfigurationSetCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/CreateConfigurationSetCommand.js
 var CreateConfigurationSetCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6373,7 +5994,7 @@ var CreateConfigurationSetCommand = class extends Command.classBuilder().ep(__sp
 }).s("SimpleEmailService", "CreateConfigurationSet", {}).n("SESClient", "CreateConfigurationSetCommand").f(void 0, void 0).ser(se_CreateConfigurationSetCommand).de(de_CreateConfigurationSetCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/CreateConfigurationSetEventDestinationCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/CreateConfigurationSetEventDestinationCommand.js
 var CreateConfigurationSetEventDestinationCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6382,7 +6003,7 @@ var CreateConfigurationSetEventDestinationCommand = class extends Command.classB
 }).s("SimpleEmailService", "CreateConfigurationSetEventDestination", {}).n("SESClient", "CreateConfigurationSetEventDestinationCommand").f(void 0, void 0).ser(se_CreateConfigurationSetEventDestinationCommand).de(de_CreateConfigurationSetEventDestinationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/CreateConfigurationSetTrackingOptionsCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/CreateConfigurationSetTrackingOptionsCommand.js
 var CreateConfigurationSetTrackingOptionsCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6391,7 +6012,7 @@ var CreateConfigurationSetTrackingOptionsCommand = class extends Command.classBu
 }).s("SimpleEmailService", "CreateConfigurationSetTrackingOptions", {}).n("SESClient", "CreateConfigurationSetTrackingOptionsCommand").f(void 0, void 0).ser(se_CreateConfigurationSetTrackingOptionsCommand).de(de_CreateConfigurationSetTrackingOptionsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/CreateCustomVerificationEmailTemplateCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/CreateCustomVerificationEmailTemplateCommand.js
 var CreateCustomVerificationEmailTemplateCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6400,7 +6021,7 @@ var CreateCustomVerificationEmailTemplateCommand = class extends Command.classBu
 }).s("SimpleEmailService", "CreateCustomVerificationEmailTemplate", {}).n("SESClient", "CreateCustomVerificationEmailTemplateCommand").f(void 0, void 0).ser(se_CreateCustomVerificationEmailTemplateCommand).de(de_CreateCustomVerificationEmailTemplateCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/CreateReceiptFilterCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/CreateReceiptFilterCommand.js
 var CreateReceiptFilterCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6409,7 +6030,7 @@ var CreateReceiptFilterCommand = class extends Command.classBuilder().ep(__sprea
 }).s("SimpleEmailService", "CreateReceiptFilter", {}).n("SESClient", "CreateReceiptFilterCommand").f(void 0, void 0).ser(se_CreateReceiptFilterCommand).de(de_CreateReceiptFilterCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/CreateReceiptRuleCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/CreateReceiptRuleCommand.js
 var CreateReceiptRuleCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6418,7 +6039,7 @@ var CreateReceiptRuleCommand = class extends Command.classBuilder().ep(__spreadV
 }).s("SimpleEmailService", "CreateReceiptRule", {}).n("SESClient", "CreateReceiptRuleCommand").f(void 0, void 0).ser(se_CreateReceiptRuleCommand).de(de_CreateReceiptRuleCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/CreateReceiptRuleSetCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/CreateReceiptRuleSetCommand.js
 var CreateReceiptRuleSetCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6427,7 +6048,7 @@ var CreateReceiptRuleSetCommand = class extends Command.classBuilder().ep(__spre
 }).s("SimpleEmailService", "CreateReceiptRuleSet", {}).n("SESClient", "CreateReceiptRuleSetCommand").f(void 0, void 0).ser(se_CreateReceiptRuleSetCommand).de(de_CreateReceiptRuleSetCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/CreateTemplateCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/CreateTemplateCommand.js
 var CreateTemplateCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6436,7 +6057,7 @@ var CreateTemplateCommand = class extends Command.classBuilder().ep(__spreadValu
 }).s("SimpleEmailService", "CreateTemplate", {}).n("SESClient", "CreateTemplateCommand").f(void 0, void 0).ser(se_CreateTemplateCommand).de(de_CreateTemplateCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteConfigurationSetCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteConfigurationSetCommand.js
 var DeleteConfigurationSetCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6445,7 +6066,7 @@ var DeleteConfigurationSetCommand = class extends Command.classBuilder().ep(__sp
 }).s("SimpleEmailService", "DeleteConfigurationSet", {}).n("SESClient", "DeleteConfigurationSetCommand").f(void 0, void 0).ser(se_DeleteConfigurationSetCommand).de(de_DeleteConfigurationSetCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteConfigurationSetEventDestinationCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteConfigurationSetEventDestinationCommand.js
 var DeleteConfigurationSetEventDestinationCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6454,7 +6075,7 @@ var DeleteConfigurationSetEventDestinationCommand = class extends Command.classB
 }).s("SimpleEmailService", "DeleteConfigurationSetEventDestination", {}).n("SESClient", "DeleteConfigurationSetEventDestinationCommand").f(void 0, void 0).ser(se_DeleteConfigurationSetEventDestinationCommand).de(de_DeleteConfigurationSetEventDestinationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteConfigurationSetTrackingOptionsCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteConfigurationSetTrackingOptionsCommand.js
 var DeleteConfigurationSetTrackingOptionsCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6463,7 +6084,7 @@ var DeleteConfigurationSetTrackingOptionsCommand = class extends Command.classBu
 }).s("SimpleEmailService", "DeleteConfigurationSetTrackingOptions", {}).n("SESClient", "DeleteConfigurationSetTrackingOptionsCommand").f(void 0, void 0).ser(se_DeleteConfigurationSetTrackingOptionsCommand).de(de_DeleteConfigurationSetTrackingOptionsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteCustomVerificationEmailTemplateCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteCustomVerificationEmailTemplateCommand.js
 var DeleteCustomVerificationEmailTemplateCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6472,7 +6093,7 @@ var DeleteCustomVerificationEmailTemplateCommand = class extends Command.classBu
 }).s("SimpleEmailService", "DeleteCustomVerificationEmailTemplate", {}).n("SESClient", "DeleteCustomVerificationEmailTemplateCommand").f(void 0, void 0).ser(se_DeleteCustomVerificationEmailTemplateCommand).de(de_DeleteCustomVerificationEmailTemplateCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteIdentityCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteIdentityCommand.js
 var DeleteIdentityCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6481,7 +6102,7 @@ var DeleteIdentityCommand = class extends Command.classBuilder().ep(__spreadValu
 }).s("SimpleEmailService", "DeleteIdentity", {}).n("SESClient", "DeleteIdentityCommand").f(void 0, void 0).ser(se_DeleteIdentityCommand).de(de_DeleteIdentityCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteIdentityPolicyCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteIdentityPolicyCommand.js
 var DeleteIdentityPolicyCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6490,7 +6111,7 @@ var DeleteIdentityPolicyCommand = class extends Command.classBuilder().ep(__spre
 }).s("SimpleEmailService", "DeleteIdentityPolicy", {}).n("SESClient", "DeleteIdentityPolicyCommand").f(void 0, void 0).ser(se_DeleteIdentityPolicyCommand).de(de_DeleteIdentityPolicyCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteReceiptFilterCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteReceiptFilterCommand.js
 var DeleteReceiptFilterCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6499,7 +6120,7 @@ var DeleteReceiptFilterCommand = class extends Command.classBuilder().ep(__sprea
 }).s("SimpleEmailService", "DeleteReceiptFilter", {}).n("SESClient", "DeleteReceiptFilterCommand").f(void 0, void 0).ser(se_DeleteReceiptFilterCommand).de(de_DeleteReceiptFilterCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteReceiptRuleCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteReceiptRuleCommand.js
 var DeleteReceiptRuleCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6508,7 +6129,7 @@ var DeleteReceiptRuleCommand = class extends Command.classBuilder().ep(__spreadV
 }).s("SimpleEmailService", "DeleteReceiptRule", {}).n("SESClient", "DeleteReceiptRuleCommand").f(void 0, void 0).ser(se_DeleteReceiptRuleCommand).de(de_DeleteReceiptRuleCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteReceiptRuleSetCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteReceiptRuleSetCommand.js
 var DeleteReceiptRuleSetCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6517,7 +6138,7 @@ var DeleteReceiptRuleSetCommand = class extends Command.classBuilder().ep(__spre
 }).s("SimpleEmailService", "DeleteReceiptRuleSet", {}).n("SESClient", "DeleteReceiptRuleSetCommand").f(void 0, void 0).ser(se_DeleteReceiptRuleSetCommand).de(de_DeleteReceiptRuleSetCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteTemplateCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteTemplateCommand.js
 var DeleteTemplateCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6526,7 +6147,7 @@ var DeleteTemplateCommand = class extends Command.classBuilder().ep(__spreadValu
 }).s("SimpleEmailService", "DeleteTemplate", {}).n("SESClient", "DeleteTemplateCommand").f(void 0, void 0).ser(se_DeleteTemplateCommand).de(de_DeleteTemplateCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteVerifiedEmailAddressCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/DeleteVerifiedEmailAddressCommand.js
 var DeleteVerifiedEmailAddressCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6535,7 +6156,7 @@ var DeleteVerifiedEmailAddressCommand = class extends Command.classBuilder().ep(
 }).s("SimpleEmailService", "DeleteVerifiedEmailAddress", {}).n("SESClient", "DeleteVerifiedEmailAddressCommand").f(void 0, void 0).ser(se_DeleteVerifiedEmailAddressCommand).de(de_DeleteVerifiedEmailAddressCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/DescribeActiveReceiptRuleSetCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/DescribeActiveReceiptRuleSetCommand.js
 var DescribeActiveReceiptRuleSetCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6544,7 +6165,7 @@ var DescribeActiveReceiptRuleSetCommand = class extends Command.classBuilder().e
 }).s("SimpleEmailService", "DescribeActiveReceiptRuleSet", {}).n("SESClient", "DescribeActiveReceiptRuleSetCommand").f(void 0, void 0).ser(se_DescribeActiveReceiptRuleSetCommand).de(de_DescribeActiveReceiptRuleSetCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/DescribeConfigurationSetCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/DescribeConfigurationSetCommand.js
 var DescribeConfigurationSetCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6553,7 +6174,7 @@ var DescribeConfigurationSetCommand = class extends Command.classBuilder().ep(__
 }).s("SimpleEmailService", "DescribeConfigurationSet", {}).n("SESClient", "DescribeConfigurationSetCommand").f(void 0, void 0).ser(se_DescribeConfigurationSetCommand).de(de_DescribeConfigurationSetCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/DescribeReceiptRuleCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/DescribeReceiptRuleCommand.js
 var DescribeReceiptRuleCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6562,7 +6183,7 @@ var DescribeReceiptRuleCommand = class extends Command.classBuilder().ep(__sprea
 }).s("SimpleEmailService", "DescribeReceiptRule", {}).n("SESClient", "DescribeReceiptRuleCommand").f(void 0, void 0).ser(se_DescribeReceiptRuleCommand).de(de_DescribeReceiptRuleCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/DescribeReceiptRuleSetCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/DescribeReceiptRuleSetCommand.js
 var DescribeReceiptRuleSetCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6571,7 +6192,7 @@ var DescribeReceiptRuleSetCommand = class extends Command.classBuilder().ep(__sp
 }).s("SimpleEmailService", "DescribeReceiptRuleSet", {}).n("SESClient", "DescribeReceiptRuleSetCommand").f(void 0, void 0).ser(se_DescribeReceiptRuleSetCommand).de(de_DescribeReceiptRuleSetCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/GetAccountSendingEnabledCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/GetAccountSendingEnabledCommand.js
 var GetAccountSendingEnabledCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6580,7 +6201,7 @@ var GetAccountSendingEnabledCommand = class extends Command.classBuilder().ep(__
 }).s("SimpleEmailService", "GetAccountSendingEnabled", {}).n("SESClient", "GetAccountSendingEnabledCommand").f(void 0, void 0).ser(se_GetAccountSendingEnabledCommand).de(de_GetAccountSendingEnabledCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/GetCustomVerificationEmailTemplateCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/GetCustomVerificationEmailTemplateCommand.js
 var GetCustomVerificationEmailTemplateCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6589,7 +6210,7 @@ var GetCustomVerificationEmailTemplateCommand = class extends Command.classBuild
 }).s("SimpleEmailService", "GetCustomVerificationEmailTemplate", {}).n("SESClient", "GetCustomVerificationEmailTemplateCommand").f(void 0, void 0).ser(se_GetCustomVerificationEmailTemplateCommand).de(de_GetCustomVerificationEmailTemplateCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/GetIdentityDkimAttributesCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/GetIdentityDkimAttributesCommand.js
 var GetIdentityDkimAttributesCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6598,7 +6219,7 @@ var GetIdentityDkimAttributesCommand = class extends Command.classBuilder().ep(_
 }).s("SimpleEmailService", "GetIdentityDkimAttributes", {}).n("SESClient", "GetIdentityDkimAttributesCommand").f(void 0, void 0).ser(se_GetIdentityDkimAttributesCommand).de(de_GetIdentityDkimAttributesCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/GetIdentityMailFromDomainAttributesCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/GetIdentityMailFromDomainAttributesCommand.js
 var GetIdentityMailFromDomainAttributesCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6607,7 +6228,7 @@ var GetIdentityMailFromDomainAttributesCommand = class extends Command.classBuil
 }).s("SimpleEmailService", "GetIdentityMailFromDomainAttributes", {}).n("SESClient", "GetIdentityMailFromDomainAttributesCommand").f(void 0, void 0).ser(se_GetIdentityMailFromDomainAttributesCommand).de(de_GetIdentityMailFromDomainAttributesCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/GetIdentityNotificationAttributesCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/GetIdentityNotificationAttributesCommand.js
 var GetIdentityNotificationAttributesCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6616,7 +6237,7 @@ var GetIdentityNotificationAttributesCommand = class extends Command.classBuilde
 }).s("SimpleEmailService", "GetIdentityNotificationAttributes", {}).n("SESClient", "GetIdentityNotificationAttributesCommand").f(void 0, void 0).ser(se_GetIdentityNotificationAttributesCommand).de(de_GetIdentityNotificationAttributesCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/GetIdentityPoliciesCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/GetIdentityPoliciesCommand.js
 var GetIdentityPoliciesCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6625,7 +6246,7 @@ var GetIdentityPoliciesCommand = class extends Command.classBuilder().ep(__sprea
 }).s("SimpleEmailService", "GetIdentityPolicies", {}).n("SESClient", "GetIdentityPoliciesCommand").f(void 0, void 0).ser(se_GetIdentityPoliciesCommand).de(de_GetIdentityPoliciesCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/GetIdentityVerificationAttributesCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/GetIdentityVerificationAttributesCommand.js
 var GetIdentityVerificationAttributesCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6634,7 +6255,7 @@ var GetIdentityVerificationAttributesCommand = class extends Command.classBuilde
 }).s("SimpleEmailService", "GetIdentityVerificationAttributes", {}).n("SESClient", "GetIdentityVerificationAttributesCommand").f(void 0, void 0).ser(se_GetIdentityVerificationAttributesCommand).de(de_GetIdentityVerificationAttributesCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/GetSendQuotaCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/GetSendQuotaCommand.js
 var GetSendQuotaCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6643,7 +6264,7 @@ var GetSendQuotaCommand = class extends Command.classBuilder().ep(__spreadValues
 }).s("SimpleEmailService", "GetSendQuota", {}).n("SESClient", "GetSendQuotaCommand").f(void 0, void 0).ser(se_GetSendQuotaCommand).de(de_GetSendQuotaCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/GetSendStatisticsCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/GetSendStatisticsCommand.js
 var GetSendStatisticsCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6652,7 +6273,7 @@ var GetSendStatisticsCommand = class extends Command.classBuilder().ep(__spreadV
 }).s("SimpleEmailService", "GetSendStatistics", {}).n("SESClient", "GetSendStatisticsCommand").f(void 0, void 0).ser(se_GetSendStatisticsCommand).de(de_GetSendStatisticsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/GetTemplateCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/GetTemplateCommand.js
 var GetTemplateCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6661,7 +6282,7 @@ var GetTemplateCommand = class extends Command.classBuilder().ep(__spreadValues(
 }).s("SimpleEmailService", "GetTemplate", {}).n("SESClient", "GetTemplateCommand").f(void 0, void 0).ser(se_GetTemplateCommand).de(de_GetTemplateCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/ListConfigurationSetsCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/ListConfigurationSetsCommand.js
 var ListConfigurationSetsCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6670,7 +6291,7 @@ var ListConfigurationSetsCommand = class extends Command.classBuilder().ep(__spr
 }).s("SimpleEmailService", "ListConfigurationSets", {}).n("SESClient", "ListConfigurationSetsCommand").f(void 0, void 0).ser(se_ListConfigurationSetsCommand).de(de_ListConfigurationSetsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/ListCustomVerificationEmailTemplatesCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/ListCustomVerificationEmailTemplatesCommand.js
 var ListCustomVerificationEmailTemplatesCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6679,7 +6300,7 @@ var ListCustomVerificationEmailTemplatesCommand = class extends Command.classBui
 }).s("SimpleEmailService", "ListCustomVerificationEmailTemplates", {}).n("SESClient", "ListCustomVerificationEmailTemplatesCommand").f(void 0, void 0).ser(se_ListCustomVerificationEmailTemplatesCommand).de(de_ListCustomVerificationEmailTemplatesCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/ListIdentitiesCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/ListIdentitiesCommand.js
 var ListIdentitiesCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6688,7 +6309,7 @@ var ListIdentitiesCommand = class extends Command.classBuilder().ep(__spreadValu
 }).s("SimpleEmailService", "ListIdentities", {}).n("SESClient", "ListIdentitiesCommand").f(void 0, void 0).ser(se_ListIdentitiesCommand).de(de_ListIdentitiesCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/ListIdentityPoliciesCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/ListIdentityPoliciesCommand.js
 var ListIdentityPoliciesCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6697,7 +6318,7 @@ var ListIdentityPoliciesCommand = class extends Command.classBuilder().ep(__spre
 }).s("SimpleEmailService", "ListIdentityPolicies", {}).n("SESClient", "ListIdentityPoliciesCommand").f(void 0, void 0).ser(se_ListIdentityPoliciesCommand).de(de_ListIdentityPoliciesCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/ListReceiptFiltersCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/ListReceiptFiltersCommand.js
 var ListReceiptFiltersCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6706,7 +6327,7 @@ var ListReceiptFiltersCommand = class extends Command.classBuilder().ep(__spread
 }).s("SimpleEmailService", "ListReceiptFilters", {}).n("SESClient", "ListReceiptFiltersCommand").f(void 0, void 0).ser(se_ListReceiptFiltersCommand).de(de_ListReceiptFiltersCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/ListReceiptRuleSetsCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/ListReceiptRuleSetsCommand.js
 var ListReceiptRuleSetsCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6715,7 +6336,7 @@ var ListReceiptRuleSetsCommand = class extends Command.classBuilder().ep(__sprea
 }).s("SimpleEmailService", "ListReceiptRuleSets", {}).n("SESClient", "ListReceiptRuleSetsCommand").f(void 0, void 0).ser(se_ListReceiptRuleSetsCommand).de(de_ListReceiptRuleSetsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/ListTemplatesCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/ListTemplatesCommand.js
 var ListTemplatesCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6724,7 +6345,7 @@ var ListTemplatesCommand = class extends Command.classBuilder().ep(__spreadValue
 }).s("SimpleEmailService", "ListTemplates", {}).n("SESClient", "ListTemplatesCommand").f(void 0, void 0).ser(se_ListTemplatesCommand).de(de_ListTemplatesCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/ListVerifiedEmailAddressesCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/ListVerifiedEmailAddressesCommand.js
 var ListVerifiedEmailAddressesCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6733,7 +6354,7 @@ var ListVerifiedEmailAddressesCommand = class extends Command.classBuilder().ep(
 }).s("SimpleEmailService", "ListVerifiedEmailAddresses", {}).n("SESClient", "ListVerifiedEmailAddressesCommand").f(void 0, void 0).ser(se_ListVerifiedEmailAddressesCommand).de(de_ListVerifiedEmailAddressesCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/PutConfigurationSetDeliveryOptionsCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/PutConfigurationSetDeliveryOptionsCommand.js
 var PutConfigurationSetDeliveryOptionsCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6742,7 +6363,7 @@ var PutConfigurationSetDeliveryOptionsCommand = class extends Command.classBuild
 }).s("SimpleEmailService", "PutConfigurationSetDeliveryOptions", {}).n("SESClient", "PutConfigurationSetDeliveryOptionsCommand").f(void 0, void 0).ser(se_PutConfigurationSetDeliveryOptionsCommand).de(de_PutConfigurationSetDeliveryOptionsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/PutIdentityPolicyCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/PutIdentityPolicyCommand.js
 var PutIdentityPolicyCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6751,7 +6372,7 @@ var PutIdentityPolicyCommand = class extends Command.classBuilder().ep(__spreadV
 }).s("SimpleEmailService", "PutIdentityPolicy", {}).n("SESClient", "PutIdentityPolicyCommand").f(void 0, void 0).ser(se_PutIdentityPolicyCommand).de(de_PutIdentityPolicyCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/ReorderReceiptRuleSetCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/ReorderReceiptRuleSetCommand.js
 var ReorderReceiptRuleSetCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6760,7 +6381,7 @@ var ReorderReceiptRuleSetCommand = class extends Command.classBuilder().ep(__spr
 }).s("SimpleEmailService", "ReorderReceiptRuleSet", {}).n("SESClient", "ReorderReceiptRuleSetCommand").f(void 0, void 0).ser(se_ReorderReceiptRuleSetCommand).de(de_ReorderReceiptRuleSetCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/SendBounceCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/SendBounceCommand.js
 var SendBounceCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6769,7 +6390,7 @@ var SendBounceCommand = class extends Command.classBuilder().ep(__spreadValues({
 }).s("SimpleEmailService", "SendBounce", {}).n("SESClient", "SendBounceCommand").f(void 0, void 0).ser(se_SendBounceCommand).de(de_SendBounceCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/SendBulkTemplatedEmailCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/SendBulkTemplatedEmailCommand.js
 var SendBulkTemplatedEmailCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6778,7 +6399,7 @@ var SendBulkTemplatedEmailCommand = class extends Command.classBuilder().ep(__sp
 }).s("SimpleEmailService", "SendBulkTemplatedEmail", {}).n("SESClient", "SendBulkTemplatedEmailCommand").f(void 0, void 0).ser(se_SendBulkTemplatedEmailCommand).de(de_SendBulkTemplatedEmailCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/SendCustomVerificationEmailCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/SendCustomVerificationEmailCommand.js
 var SendCustomVerificationEmailCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6787,7 +6408,7 @@ var SendCustomVerificationEmailCommand = class extends Command.classBuilder().ep
 }).s("SimpleEmailService", "SendCustomVerificationEmail", {}).n("SESClient", "SendCustomVerificationEmailCommand").f(void 0, void 0).ser(se_SendCustomVerificationEmailCommand).de(de_SendCustomVerificationEmailCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/SendEmailCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/SendEmailCommand.js
 var SendEmailCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6796,7 +6417,7 @@ var SendEmailCommand = class extends Command.classBuilder().ep(__spreadValues({}
 }).s("SimpleEmailService", "SendEmail", {}).n("SESClient", "SendEmailCommand").f(void 0, void 0).ser(se_SendEmailCommand).de(de_SendEmailCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/SendRawEmailCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/SendRawEmailCommand.js
 var SendRawEmailCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6805,7 +6426,7 @@ var SendRawEmailCommand = class extends Command.classBuilder().ep(__spreadValues
 }).s("SimpleEmailService", "SendRawEmail", {}).n("SESClient", "SendRawEmailCommand").f(void 0, void 0).ser(se_SendRawEmailCommand).de(de_SendRawEmailCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/SendTemplatedEmailCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/SendTemplatedEmailCommand.js
 var SendTemplatedEmailCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6814,7 +6435,7 @@ var SendTemplatedEmailCommand = class extends Command.classBuilder().ep(__spread
 }).s("SimpleEmailService", "SendTemplatedEmail", {}).n("SESClient", "SendTemplatedEmailCommand").f(void 0, void 0).ser(se_SendTemplatedEmailCommand).de(de_SendTemplatedEmailCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/SetActiveReceiptRuleSetCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/SetActiveReceiptRuleSetCommand.js
 var SetActiveReceiptRuleSetCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6823,7 +6444,7 @@ var SetActiveReceiptRuleSetCommand = class extends Command.classBuilder().ep(__s
 }).s("SimpleEmailService", "SetActiveReceiptRuleSet", {}).n("SESClient", "SetActiveReceiptRuleSetCommand").f(void 0, void 0).ser(se_SetActiveReceiptRuleSetCommand).de(de_SetActiveReceiptRuleSetCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/SetIdentityDkimEnabledCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/SetIdentityDkimEnabledCommand.js
 var SetIdentityDkimEnabledCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6832,7 +6453,7 @@ var SetIdentityDkimEnabledCommand = class extends Command.classBuilder().ep(__sp
 }).s("SimpleEmailService", "SetIdentityDkimEnabled", {}).n("SESClient", "SetIdentityDkimEnabledCommand").f(void 0, void 0).ser(se_SetIdentityDkimEnabledCommand).de(de_SetIdentityDkimEnabledCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/SetIdentityFeedbackForwardingEnabledCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/SetIdentityFeedbackForwardingEnabledCommand.js
 var SetIdentityFeedbackForwardingEnabledCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6841,7 +6462,7 @@ var SetIdentityFeedbackForwardingEnabledCommand = class extends Command.classBui
 }).s("SimpleEmailService", "SetIdentityFeedbackForwardingEnabled", {}).n("SESClient", "SetIdentityFeedbackForwardingEnabledCommand").f(void 0, void 0).ser(se_SetIdentityFeedbackForwardingEnabledCommand).de(de_SetIdentityFeedbackForwardingEnabledCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/SetIdentityHeadersInNotificationsEnabledCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/SetIdentityHeadersInNotificationsEnabledCommand.js
 var SetIdentityHeadersInNotificationsEnabledCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6850,7 +6471,7 @@ var SetIdentityHeadersInNotificationsEnabledCommand = class extends Command.clas
 }).s("SimpleEmailService", "SetIdentityHeadersInNotificationsEnabled", {}).n("SESClient", "SetIdentityHeadersInNotificationsEnabledCommand").f(void 0, void 0).ser(se_SetIdentityHeadersInNotificationsEnabledCommand).de(de_SetIdentityHeadersInNotificationsEnabledCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/SetIdentityMailFromDomainCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/SetIdentityMailFromDomainCommand.js
 var SetIdentityMailFromDomainCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6859,7 +6480,7 @@ var SetIdentityMailFromDomainCommand = class extends Command.classBuilder().ep(_
 }).s("SimpleEmailService", "SetIdentityMailFromDomain", {}).n("SESClient", "SetIdentityMailFromDomainCommand").f(void 0, void 0).ser(se_SetIdentityMailFromDomainCommand).de(de_SetIdentityMailFromDomainCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/SetIdentityNotificationTopicCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/SetIdentityNotificationTopicCommand.js
 var SetIdentityNotificationTopicCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6868,7 +6489,7 @@ var SetIdentityNotificationTopicCommand = class extends Command.classBuilder().e
 }).s("SimpleEmailService", "SetIdentityNotificationTopic", {}).n("SESClient", "SetIdentityNotificationTopicCommand").f(void 0, void 0).ser(se_SetIdentityNotificationTopicCommand).de(de_SetIdentityNotificationTopicCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/SetReceiptRulePositionCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/SetReceiptRulePositionCommand.js
 var SetReceiptRulePositionCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6877,7 +6498,7 @@ var SetReceiptRulePositionCommand = class extends Command.classBuilder().ep(__sp
 }).s("SimpleEmailService", "SetReceiptRulePosition", {}).n("SESClient", "SetReceiptRulePositionCommand").f(void 0, void 0).ser(se_SetReceiptRulePositionCommand).de(de_SetReceiptRulePositionCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/TestRenderTemplateCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/TestRenderTemplateCommand.js
 var TestRenderTemplateCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6886,7 +6507,7 @@ var TestRenderTemplateCommand = class extends Command.classBuilder().ep(__spread
 }).s("SimpleEmailService", "TestRenderTemplate", {}).n("SESClient", "TestRenderTemplateCommand").f(void 0, void 0).ser(se_TestRenderTemplateCommand).de(de_TestRenderTemplateCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/UpdateAccountSendingEnabledCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/UpdateAccountSendingEnabledCommand.js
 var UpdateAccountSendingEnabledCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6895,7 +6516,7 @@ var UpdateAccountSendingEnabledCommand = class extends Command.classBuilder().ep
 }).s("SimpleEmailService", "UpdateAccountSendingEnabled", {}).n("SESClient", "UpdateAccountSendingEnabledCommand").f(void 0, void 0).ser(se_UpdateAccountSendingEnabledCommand).de(de_UpdateAccountSendingEnabledCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/UpdateConfigurationSetEventDestinationCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/UpdateConfigurationSetEventDestinationCommand.js
 var UpdateConfigurationSetEventDestinationCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6904,7 +6525,7 @@ var UpdateConfigurationSetEventDestinationCommand = class extends Command.classB
 }).s("SimpleEmailService", "UpdateConfigurationSetEventDestination", {}).n("SESClient", "UpdateConfigurationSetEventDestinationCommand").f(void 0, void 0).ser(se_UpdateConfigurationSetEventDestinationCommand).de(de_UpdateConfigurationSetEventDestinationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/UpdateConfigurationSetReputationMetricsEnabledCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/UpdateConfigurationSetReputationMetricsEnabledCommand.js
 var UpdateConfigurationSetReputationMetricsEnabledCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6913,7 +6534,7 @@ var UpdateConfigurationSetReputationMetricsEnabledCommand = class extends Comman
 }).s("SimpleEmailService", "UpdateConfigurationSetReputationMetricsEnabled", {}).n("SESClient", "UpdateConfigurationSetReputationMetricsEnabledCommand").f(void 0, void 0).ser(se_UpdateConfigurationSetReputationMetricsEnabledCommand).de(de_UpdateConfigurationSetReputationMetricsEnabledCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/UpdateConfigurationSetSendingEnabledCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/UpdateConfigurationSetSendingEnabledCommand.js
 var UpdateConfigurationSetSendingEnabledCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6922,7 +6543,7 @@ var UpdateConfigurationSetSendingEnabledCommand = class extends Command.classBui
 }).s("SimpleEmailService", "UpdateConfigurationSetSendingEnabled", {}).n("SESClient", "UpdateConfigurationSetSendingEnabledCommand").f(void 0, void 0).ser(se_UpdateConfigurationSetSendingEnabledCommand).de(de_UpdateConfigurationSetSendingEnabledCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/UpdateConfigurationSetTrackingOptionsCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/UpdateConfigurationSetTrackingOptionsCommand.js
 var UpdateConfigurationSetTrackingOptionsCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6931,7 +6552,7 @@ var UpdateConfigurationSetTrackingOptionsCommand = class extends Command.classBu
 }).s("SimpleEmailService", "UpdateConfigurationSetTrackingOptions", {}).n("SESClient", "UpdateConfigurationSetTrackingOptionsCommand").f(void 0, void 0).ser(se_UpdateConfigurationSetTrackingOptionsCommand).de(de_UpdateConfigurationSetTrackingOptionsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/UpdateCustomVerificationEmailTemplateCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/UpdateCustomVerificationEmailTemplateCommand.js
 var UpdateCustomVerificationEmailTemplateCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6940,7 +6561,7 @@ var UpdateCustomVerificationEmailTemplateCommand = class extends Command.classBu
 }).s("SimpleEmailService", "UpdateCustomVerificationEmailTemplate", {}).n("SESClient", "UpdateCustomVerificationEmailTemplateCommand").f(void 0, void 0).ser(se_UpdateCustomVerificationEmailTemplateCommand).de(de_UpdateCustomVerificationEmailTemplateCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/UpdateReceiptRuleCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/UpdateReceiptRuleCommand.js
 var UpdateReceiptRuleCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6949,7 +6570,7 @@ var UpdateReceiptRuleCommand = class extends Command.classBuilder().ep(__spreadV
 }).s("SimpleEmailService", "UpdateReceiptRule", {}).n("SESClient", "UpdateReceiptRuleCommand").f(void 0, void 0).ser(se_UpdateReceiptRuleCommand).de(de_UpdateReceiptRuleCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/UpdateTemplateCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/UpdateTemplateCommand.js
 var UpdateTemplateCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6958,7 +6579,7 @@ var UpdateTemplateCommand = class extends Command.classBuilder().ep(__spreadValu
 }).s("SimpleEmailService", "UpdateTemplate", {}).n("SESClient", "UpdateTemplateCommand").f(void 0, void 0).ser(se_UpdateTemplateCommand).de(de_UpdateTemplateCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/VerifyDomainDkimCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/VerifyDomainDkimCommand.js
 var VerifyDomainDkimCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6967,7 +6588,7 @@ var VerifyDomainDkimCommand = class extends Command.classBuilder().ep(__spreadVa
 }).s("SimpleEmailService", "VerifyDomainDkim", {}).n("SESClient", "VerifyDomainDkimCommand").f(void 0, void 0).ser(se_VerifyDomainDkimCommand).de(de_VerifyDomainDkimCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/VerifyDomainIdentityCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/VerifyDomainIdentityCommand.js
 var VerifyDomainIdentityCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6976,7 +6597,7 @@ var VerifyDomainIdentityCommand = class extends Command.classBuilder().ep(__spre
 }).s("SimpleEmailService", "VerifyDomainIdentity", {}).n("SESClient", "VerifyDomainIdentityCommand").f(void 0, void 0).ser(se_VerifyDomainIdentityCommand).de(de_VerifyDomainIdentityCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/VerifyEmailAddressCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/VerifyEmailAddressCommand.js
 var VerifyEmailAddressCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6985,7 +6606,7 @@ var VerifyEmailAddressCommand = class extends Command.classBuilder().ep(__spread
 }).s("SimpleEmailService", "VerifyEmailAddress", {}).n("SESClient", "VerifyEmailAddressCommand").f(void 0, void 0).ser(se_VerifyEmailAddressCommand).de(de_VerifyEmailAddressCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/commands/VerifyEmailIdentityCommand.js
+// node_modules/@aws-sdk/client-ses/dist-es/commands/VerifyEmailIdentityCommand.js
 var VerifyEmailIdentityCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -6994,7 +6615,7 @@ var VerifyEmailIdentityCommand = class extends Command.classBuilder().ep(__sprea
 }).s("SimpleEmailService", "VerifyEmailIdentity", {}).n("SESClient", "VerifyEmailIdentityCommand").f(void 0, void 0).ser(se_VerifyEmailIdentityCommand).de(de_VerifyEmailIdentityCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/SES.js
+// node_modules/@aws-sdk/client-ses/dist-es/SES.js
 var commands = {
   CloneReceiptRuleSetCommand,
   CreateConfigurationSetCommand,
@@ -7072,13 +6693,13 @@ var SES = class extends SESClient {
 };
 createAggregatedClient(commands, SES);
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/pagination/ListCustomVerificationEmailTemplatesPaginator.js
+// node_modules/@aws-sdk/client-ses/dist-es/pagination/ListCustomVerificationEmailTemplatesPaginator.js
 var paginateListCustomVerificationEmailTemplates = createPaginator(SESClient, ListCustomVerificationEmailTemplatesCommand, "NextToken", "NextToken", "MaxResults");
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/pagination/ListIdentitiesPaginator.js
+// node_modules/@aws-sdk/client-ses/dist-es/pagination/ListIdentitiesPaginator.js
 var paginateListIdentities = createPaginator(SESClient, ListIdentitiesCommand, "NextToken", "NextToken", "MaxItems");
 
-// ../../../../node_modules/@aws-sdk/client-ses/dist-es/waiters/waitForIdentityExists.js
+// node_modules/@aws-sdk/client-ses/dist-es/waiters/waitForIdentityExists.js
 var checkState = (client, input) => __async(void 0, null, function* () {
   let reason;
   try {

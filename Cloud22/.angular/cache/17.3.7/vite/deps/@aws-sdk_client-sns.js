@@ -1,9 +1,4 @@
 import {
-  awsEndpointFunctions,
-  getUserAgentPlugin,
-  resolveUserAgentConfig
-} from "./chunk-R62TKQBP.js";
-import {
   AwsSdkSigV4Signer,
   Client,
   Command,
@@ -18,6 +13,7 @@ import {
   SENSITIVE_STRING,
   ServiceException,
   Sha256,
+  awsEndpointFunctions,
   calculateBodyLength,
   collectBody,
   createAggregatedClient,
@@ -44,6 +40,7 @@ import {
   getRetryPlugin,
   getSerdePlugin,
   getSmithyContext,
+  getUserAgentPlugin,
   invalidProvider,
   loadConfigsForDefaultMode,
   normalizeProvider,
@@ -62,18 +59,20 @@ import {
   resolveHttpHandlerRuntimeConfig,
   resolveRegionConfig,
   resolveRetryConfig,
+  resolveUserAgentConfig,
   streamCollector,
   toBase64,
   toUtf8,
   withBaseException
-} from "./chunk-6GN2Y7VZ.js";
+} from "./chunk-TC2ZGZ7K.js";
+import "./chunk-7VQPY5UX.js";
 import {
   __async,
   __spreadProps,
   __spreadValues
 } from "./chunk-CDW57LCT.js";
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/auth/httpAuthSchemeProvider.js
+// node_modules/@aws-sdk/client-sns/dist-es/auth/httpAuthSchemeProvider.js
 var defaultSNSHttpAuthSchemeParametersProvider = (config, context, input) => __async(void 0, null, function* () {
   return {
     operation: getSmithyContext(context).operation,
@@ -111,7 +110,7 @@ var resolveHttpAuthSchemeConfig = (config) => {
   return __spreadValues({}, config_0);
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/endpoint/EndpointParameters.js
+// node_modules/@aws-sdk/client-sns/dist-es/endpoint/EndpointParameters.js
 var resolveClientEndpointParameters = (options) => {
   return __spreadProps(__spreadValues({}, options), {
     useDualstackEndpoint: options.useDualstackEndpoint ?? false,
@@ -126,11 +125,11 @@ var commonParams = {
   UseDualStack: { type: "builtInParams", name: "useDualstackEndpoint" }
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/package.json
+// node_modules/@aws-sdk/client-sns/package.json
 var package_default = {
   name: "@aws-sdk/client-sns",
   description: "AWS SDK for JavaScript Sns Client for Node.js, Browser and React Native",
-  version: "3.637.0",
+  version: "3.645.0",
   scripts: {
     build: "concurrently 'yarn:build:cjs' 'yarn:build:es' 'yarn:build:types'",
     "build:cjs": "node ../../scripts/compilation/inline client-sns",
@@ -149,17 +148,17 @@ var package_default = {
   dependencies: {
     "@aws-crypto/sha256-browser": "5.2.0",
     "@aws-crypto/sha256-js": "5.2.0",
-    "@aws-sdk/client-sso-oidc": "3.637.0",
-    "@aws-sdk/client-sts": "3.637.0",
+    "@aws-sdk/client-sso-oidc": "3.645.0",
+    "@aws-sdk/client-sts": "3.645.0",
     "@aws-sdk/core": "3.635.0",
-    "@aws-sdk/credential-provider-node": "3.637.0",
+    "@aws-sdk/credential-provider-node": "3.645.0",
     "@aws-sdk/middleware-host-header": "3.620.0",
     "@aws-sdk/middleware-logger": "3.609.0",
     "@aws-sdk/middleware-recursion-detection": "3.620.0",
-    "@aws-sdk/middleware-user-agent": "3.637.0",
+    "@aws-sdk/middleware-user-agent": "3.645.0",
     "@aws-sdk/region-config-resolver": "3.614.0",
     "@aws-sdk/types": "3.609.0",
-    "@aws-sdk/util-endpoints": "3.637.0",
+    "@aws-sdk/util-endpoints": "3.645.0",
     "@aws-sdk/util-user-agent-browser": "3.609.0",
     "@aws-sdk/util-user-agent-node": "3.614.0",
     "@smithy/config-resolver": "^3.0.5",
@@ -229,7 +228,7 @@ var package_default = {
   }
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/endpoint/ruleset.js
+// node_modules/@aws-sdk/client-sns/dist-es/endpoint/ruleset.js
 var u = "required";
 var v = "fn";
 var w = "argv";
@@ -257,7 +256,7 @@ var t = [o];
 var _data = { version: "1.0", parameters: { Region: i, UseDualStack: j, UseFIPS: j, Endpoint: i }, rules: [{ conditions: [{ [v]: b, [w]: [k] }], rules: [{ conditions: r, error: "Invalid Configuration: FIPS and custom endpoint are not supported", type: d }, { conditions: s, error: "Invalid Configuration: Dualstack and custom endpoint are not supported", type: d }, { endpoint: { url: k, properties: n, headers: n }, type: e }], type: f }, { conditions: [{ [v]: b, [w]: t }], rules: [{ conditions: [{ [v]: "aws.partition", [w]: t, assign: g }], rules: [{ conditions: [l, m], rules: [{ conditions: [{ [v]: c, [w]: [a, p] }, q], rules: [{ endpoint: { url: "https://sns-fips.{Region}.{PartitionResult#dualStackDnsSuffix}", properties: n, headers: n }, type: e }], type: f }, { error: "FIPS and DualStack are enabled, but this partition does not support one or both", type: d }], type: f }, { conditions: r, rules: [{ conditions: [{ [v]: c, [w]: [p, a] }], rules: [{ conditions: [{ [v]: h, [w]: [o, "us-gov-east-1"] }], endpoint: { url: "https://sns.us-gov-east-1.amazonaws.com", properties: n, headers: n }, type: e }, { conditions: [{ [v]: h, [w]: [o, "us-gov-west-1"] }], endpoint: { url: "https://sns.us-gov-west-1.amazonaws.com", properties: n, headers: n }, type: e }, { endpoint: { url: "https://sns-fips.{Region}.{PartitionResult#dnsSuffix}", properties: n, headers: n }, type: e }], type: f }, { error: "FIPS is enabled but this partition does not support FIPS", type: d }], type: f }, { conditions: s, rules: [{ conditions: [q], rules: [{ endpoint: { url: "https://sns.{Region}.{PartitionResult#dualStackDnsSuffix}", properties: n, headers: n }, type: e }], type: f }, { error: "DualStack is enabled but this partition does not support DualStack", type: d }], type: f }, { endpoint: { url: "https://sns.{Region}.{PartitionResult#dnsSuffix}", properties: n, headers: n }, type: e }], type: f }], type: f }, { error: "Invalid Configuration: Missing Region", type: d }] };
 var ruleSet = _data;
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/endpoint/endpointResolver.js
+// node_modules/@aws-sdk/client-sns/dist-es/endpoint/endpointResolver.js
 var defaultEndpointResolver = (endpointParams, context = {}) => {
   return resolveEndpoint(ruleSet, {
     endpointParams,
@@ -266,7 +265,7 @@ var defaultEndpointResolver = (endpointParams, context = {}) => {
 };
 customEndpointFunctions.aws = awsEndpointFunctions;
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/runtimeConfig.shared.js
+// node_modules/@aws-sdk/client-sns/dist-es/runtimeConfig.shared.js
 var getRuntimeConfig = (config) => {
   return {
     apiVersion: "2010-03-31",
@@ -291,7 +290,7 @@ var getRuntimeConfig = (config) => {
   };
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/runtimeConfig.browser.js
+// node_modules/@aws-sdk/client-sns/dist-es/runtimeConfig.browser.js
 var getRuntimeConfig2 = (config) => {
   const defaultsMode = resolveDefaultsModeConfig(config);
   const defaultConfigProvider = () => defaultsMode().then(loadConfigsForDefaultMode);
@@ -315,7 +314,7 @@ var getRuntimeConfig2 = (config) => {
   });
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/auth/httpAuthExtensionConfiguration.js
+// node_modules/@aws-sdk/client-sns/dist-es/auth/httpAuthExtensionConfiguration.js
 var getHttpAuthExtensionConfiguration = (runtimeConfig) => {
   const _httpAuthSchemes = runtimeConfig.httpAuthSchemes;
   let _httpAuthSchemeProvider = runtimeConfig.httpAuthSchemeProvider;
@@ -354,7 +353,7 @@ var resolveHttpAuthRuntimeConfig = (config) => {
   };
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/runtimeExtensions.js
+// node_modules/@aws-sdk/client-sns/dist-es/runtimeExtensions.js
 var asPartial = (t2) => t2;
 var resolveRuntimeExtensions = (runtimeConfig, extensions) => {
   const extensionConfiguration = __spreadValues(__spreadValues(__spreadValues(__spreadValues({}, asPartial(getAwsRegionExtensionConfiguration(runtimeConfig))), asPartial(getDefaultExtensionConfiguration(runtimeConfig))), asPartial(getHttpHandlerExtensionConfiguration(runtimeConfig))), asPartial(getHttpAuthExtensionConfiguration(runtimeConfig)));
@@ -362,7 +361,7 @@ var resolveRuntimeExtensions = (runtimeConfig, extensions) => {
   return __spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues({}, runtimeConfig), resolveAwsRegionExtensionConfiguration(extensionConfiguration)), resolveDefaultRuntimeConfig(extensionConfiguration)), resolveHttpHandlerRuntimeConfig(extensionConfiguration)), resolveHttpAuthRuntimeConfig(extensionConfiguration));
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/SNSClient.js
+// node_modules/@aws-sdk/client-sns/dist-es/SNSClient.js
 var SNSClient = class extends Client {
   constructor(...[configuration]) {
     const _config_0 = getRuntimeConfig2(configuration || {});
@@ -397,7 +396,7 @@ var SNSClient = class extends Client {
   }
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/models/SNSServiceException.js
+// node_modules/@aws-sdk/client-sns/dist-es/models/SNSServiceException.js
 var SNSServiceException = class _SNSServiceException extends ServiceException {
   constructor(options) {
     super(options);
@@ -405,7 +404,7 @@ var SNSServiceException = class _SNSServiceException extends ServiceException {
   }
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/models/models_0.js
+// node_modules/@aws-sdk/client-sns/dist-es/models/models_0.js
 var AuthorizationErrorException = class _AuthorizationErrorException extends SNSServiceException {
   constructor(opts) {
     super(__spreadValues({
@@ -828,7 +827,7 @@ var OptInPhoneNumberInputFilterSensitiveLog = (obj) => __spreadValues(__spreadVa
 var PublishInputFilterSensitiveLog = (obj) => __spreadValues(__spreadValues({}, obj), obj.PhoneNumber && { PhoneNumber: SENSITIVE_STRING });
 var VerifySMSSandboxPhoneNumberInputFilterSensitiveLog = (obj) => __spreadValues(__spreadValues({}, obj), obj.PhoneNumber && { PhoneNumber: SENSITIVE_STRING });
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/protocols/Aws_query.js
+// node_modules/@aws-sdk/client-sns/dist-es/protocols/Aws_query.js
 var se_AddPermissionCommand = (input, context) => __async(void 0, null, function* () {
   const headers = SHARED_HEADERS;
   let body;
@@ -3603,7 +3602,7 @@ var loadQueryErrorCode = (output, data) => {
   }
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/AddPermissionCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/AddPermissionCommand.js
 var AddPermissionCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3612,7 +3611,7 @@ var AddPermissionCommand = class extends Command.classBuilder().ep(__spreadValue
 }).s("AmazonSimpleNotificationService", "AddPermission", {}).n("SNSClient", "AddPermissionCommand").f(void 0, void 0).ser(se_AddPermissionCommand).de(de_AddPermissionCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/CheckIfPhoneNumberIsOptedOutCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/CheckIfPhoneNumberIsOptedOutCommand.js
 var CheckIfPhoneNumberIsOptedOutCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3621,7 +3620,7 @@ var CheckIfPhoneNumberIsOptedOutCommand = class extends Command.classBuilder().e
 }).s("AmazonSimpleNotificationService", "CheckIfPhoneNumberIsOptedOut", {}).n("SNSClient", "CheckIfPhoneNumberIsOptedOutCommand").f(CheckIfPhoneNumberIsOptedOutInputFilterSensitiveLog, void 0).ser(se_CheckIfPhoneNumberIsOptedOutCommand).de(de_CheckIfPhoneNumberIsOptedOutCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/ConfirmSubscriptionCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/ConfirmSubscriptionCommand.js
 var ConfirmSubscriptionCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3630,7 +3629,7 @@ var ConfirmSubscriptionCommand = class extends Command.classBuilder().ep(__sprea
 }).s("AmazonSimpleNotificationService", "ConfirmSubscription", {}).n("SNSClient", "ConfirmSubscriptionCommand").f(void 0, void 0).ser(se_ConfirmSubscriptionCommand).de(de_ConfirmSubscriptionCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/CreatePlatformApplicationCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/CreatePlatformApplicationCommand.js
 var CreatePlatformApplicationCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3639,7 +3638,7 @@ var CreatePlatformApplicationCommand = class extends Command.classBuilder().ep(_
 }).s("AmazonSimpleNotificationService", "CreatePlatformApplication", {}).n("SNSClient", "CreatePlatformApplicationCommand").f(void 0, void 0).ser(se_CreatePlatformApplicationCommand).de(de_CreatePlatformApplicationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/CreatePlatformEndpointCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/CreatePlatformEndpointCommand.js
 var CreatePlatformEndpointCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3648,7 +3647,7 @@ var CreatePlatformEndpointCommand = class extends Command.classBuilder().ep(__sp
 }).s("AmazonSimpleNotificationService", "CreatePlatformEndpoint", {}).n("SNSClient", "CreatePlatformEndpointCommand").f(void 0, void 0).ser(se_CreatePlatformEndpointCommand).de(de_CreatePlatformEndpointCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/CreateSMSSandboxPhoneNumberCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/CreateSMSSandboxPhoneNumberCommand.js
 var CreateSMSSandboxPhoneNumberCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3657,7 +3656,7 @@ var CreateSMSSandboxPhoneNumberCommand = class extends Command.classBuilder().ep
 }).s("AmazonSimpleNotificationService", "CreateSMSSandboxPhoneNumber", {}).n("SNSClient", "CreateSMSSandboxPhoneNumberCommand").f(CreateSMSSandboxPhoneNumberInputFilterSensitiveLog, void 0).ser(se_CreateSMSSandboxPhoneNumberCommand).de(de_CreateSMSSandboxPhoneNumberCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/CreateTopicCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/CreateTopicCommand.js
 var CreateTopicCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3666,7 +3665,7 @@ var CreateTopicCommand = class extends Command.classBuilder().ep(__spreadValues(
 }).s("AmazonSimpleNotificationService", "CreateTopic", {}).n("SNSClient", "CreateTopicCommand").f(void 0, void 0).ser(se_CreateTopicCommand).de(de_CreateTopicCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/DeleteEndpointCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/DeleteEndpointCommand.js
 var DeleteEndpointCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3675,7 +3674,7 @@ var DeleteEndpointCommand = class extends Command.classBuilder().ep(__spreadValu
 }).s("AmazonSimpleNotificationService", "DeleteEndpoint", {}).n("SNSClient", "DeleteEndpointCommand").f(void 0, void 0).ser(se_DeleteEndpointCommand).de(de_DeleteEndpointCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/DeletePlatformApplicationCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/DeletePlatformApplicationCommand.js
 var DeletePlatformApplicationCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3684,7 +3683,7 @@ var DeletePlatformApplicationCommand = class extends Command.classBuilder().ep(_
 }).s("AmazonSimpleNotificationService", "DeletePlatformApplication", {}).n("SNSClient", "DeletePlatformApplicationCommand").f(void 0, void 0).ser(se_DeletePlatformApplicationCommand).de(de_DeletePlatformApplicationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/DeleteSMSSandboxPhoneNumberCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/DeleteSMSSandboxPhoneNumberCommand.js
 var DeleteSMSSandboxPhoneNumberCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3693,7 +3692,7 @@ var DeleteSMSSandboxPhoneNumberCommand = class extends Command.classBuilder().ep
 }).s("AmazonSimpleNotificationService", "DeleteSMSSandboxPhoneNumber", {}).n("SNSClient", "DeleteSMSSandboxPhoneNumberCommand").f(DeleteSMSSandboxPhoneNumberInputFilterSensitiveLog, void 0).ser(se_DeleteSMSSandboxPhoneNumberCommand).de(de_DeleteSMSSandboxPhoneNumberCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/DeleteTopicCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/DeleteTopicCommand.js
 var DeleteTopicCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3702,7 +3701,7 @@ var DeleteTopicCommand = class extends Command.classBuilder().ep(__spreadValues(
 }).s("AmazonSimpleNotificationService", "DeleteTopic", {}).n("SNSClient", "DeleteTopicCommand").f(void 0, void 0).ser(se_DeleteTopicCommand).de(de_DeleteTopicCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/GetDataProtectionPolicyCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/GetDataProtectionPolicyCommand.js
 var GetDataProtectionPolicyCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3711,7 +3710,7 @@ var GetDataProtectionPolicyCommand = class extends Command.classBuilder().ep(__s
 }).s("AmazonSimpleNotificationService", "GetDataProtectionPolicy", {}).n("SNSClient", "GetDataProtectionPolicyCommand").f(void 0, void 0).ser(se_GetDataProtectionPolicyCommand).de(de_GetDataProtectionPolicyCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/GetEndpointAttributesCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/GetEndpointAttributesCommand.js
 var GetEndpointAttributesCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3720,7 +3719,7 @@ var GetEndpointAttributesCommand = class extends Command.classBuilder().ep(__spr
 }).s("AmazonSimpleNotificationService", "GetEndpointAttributes", {}).n("SNSClient", "GetEndpointAttributesCommand").f(void 0, void 0).ser(se_GetEndpointAttributesCommand).de(de_GetEndpointAttributesCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/GetPlatformApplicationAttributesCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/GetPlatformApplicationAttributesCommand.js
 var GetPlatformApplicationAttributesCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3729,7 +3728,7 @@ var GetPlatformApplicationAttributesCommand = class extends Command.classBuilder
 }).s("AmazonSimpleNotificationService", "GetPlatformApplicationAttributes", {}).n("SNSClient", "GetPlatformApplicationAttributesCommand").f(void 0, void 0).ser(se_GetPlatformApplicationAttributesCommand).de(de_GetPlatformApplicationAttributesCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/GetSMSAttributesCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/GetSMSAttributesCommand.js
 var GetSMSAttributesCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3738,7 +3737,7 @@ var GetSMSAttributesCommand = class extends Command.classBuilder().ep(__spreadVa
 }).s("AmazonSimpleNotificationService", "GetSMSAttributes", {}).n("SNSClient", "GetSMSAttributesCommand").f(void 0, void 0).ser(se_GetSMSAttributesCommand).de(de_GetSMSAttributesCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/GetSMSSandboxAccountStatusCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/GetSMSSandboxAccountStatusCommand.js
 var GetSMSSandboxAccountStatusCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3747,7 +3746,7 @@ var GetSMSSandboxAccountStatusCommand = class extends Command.classBuilder().ep(
 }).s("AmazonSimpleNotificationService", "GetSMSSandboxAccountStatus", {}).n("SNSClient", "GetSMSSandboxAccountStatusCommand").f(void 0, void 0).ser(se_GetSMSSandboxAccountStatusCommand).de(de_GetSMSSandboxAccountStatusCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/GetSubscriptionAttributesCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/GetSubscriptionAttributesCommand.js
 var GetSubscriptionAttributesCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3756,7 +3755,7 @@ var GetSubscriptionAttributesCommand = class extends Command.classBuilder().ep(_
 }).s("AmazonSimpleNotificationService", "GetSubscriptionAttributes", {}).n("SNSClient", "GetSubscriptionAttributesCommand").f(void 0, void 0).ser(se_GetSubscriptionAttributesCommand).de(de_GetSubscriptionAttributesCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/GetTopicAttributesCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/GetTopicAttributesCommand.js
 var GetTopicAttributesCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3765,7 +3764,7 @@ var GetTopicAttributesCommand = class extends Command.classBuilder().ep(__spread
 }).s("AmazonSimpleNotificationService", "GetTopicAttributes", {}).n("SNSClient", "GetTopicAttributesCommand").f(void 0, void 0).ser(se_GetTopicAttributesCommand).de(de_GetTopicAttributesCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/ListEndpointsByPlatformApplicationCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/ListEndpointsByPlatformApplicationCommand.js
 var ListEndpointsByPlatformApplicationCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3774,7 +3773,7 @@ var ListEndpointsByPlatformApplicationCommand = class extends Command.classBuild
 }).s("AmazonSimpleNotificationService", "ListEndpointsByPlatformApplication", {}).n("SNSClient", "ListEndpointsByPlatformApplicationCommand").f(void 0, void 0).ser(se_ListEndpointsByPlatformApplicationCommand).de(de_ListEndpointsByPlatformApplicationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/ListOriginationNumbersCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/ListOriginationNumbersCommand.js
 var ListOriginationNumbersCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3783,7 +3782,7 @@ var ListOriginationNumbersCommand = class extends Command.classBuilder().ep(__sp
 }).s("AmazonSimpleNotificationService", "ListOriginationNumbers", {}).n("SNSClient", "ListOriginationNumbersCommand").f(void 0, ListOriginationNumbersResultFilterSensitiveLog).ser(se_ListOriginationNumbersCommand).de(de_ListOriginationNumbersCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/ListPhoneNumbersOptedOutCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/ListPhoneNumbersOptedOutCommand.js
 var ListPhoneNumbersOptedOutCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3792,7 +3791,7 @@ var ListPhoneNumbersOptedOutCommand = class extends Command.classBuilder().ep(__
 }).s("AmazonSimpleNotificationService", "ListPhoneNumbersOptedOut", {}).n("SNSClient", "ListPhoneNumbersOptedOutCommand").f(void 0, ListPhoneNumbersOptedOutResponseFilterSensitiveLog).ser(se_ListPhoneNumbersOptedOutCommand).de(de_ListPhoneNumbersOptedOutCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/ListPlatformApplicationsCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/ListPlatformApplicationsCommand.js
 var ListPlatformApplicationsCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3801,7 +3800,7 @@ var ListPlatformApplicationsCommand = class extends Command.classBuilder().ep(__
 }).s("AmazonSimpleNotificationService", "ListPlatformApplications", {}).n("SNSClient", "ListPlatformApplicationsCommand").f(void 0, void 0).ser(se_ListPlatformApplicationsCommand).de(de_ListPlatformApplicationsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/ListSMSSandboxPhoneNumbersCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/ListSMSSandboxPhoneNumbersCommand.js
 var ListSMSSandboxPhoneNumbersCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3810,7 +3809,7 @@ var ListSMSSandboxPhoneNumbersCommand = class extends Command.classBuilder().ep(
 }).s("AmazonSimpleNotificationService", "ListSMSSandboxPhoneNumbers", {}).n("SNSClient", "ListSMSSandboxPhoneNumbersCommand").f(void 0, ListSMSSandboxPhoneNumbersResultFilterSensitiveLog).ser(se_ListSMSSandboxPhoneNumbersCommand).de(de_ListSMSSandboxPhoneNumbersCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/ListSubscriptionsByTopicCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/ListSubscriptionsByTopicCommand.js
 var ListSubscriptionsByTopicCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3819,7 +3818,7 @@ var ListSubscriptionsByTopicCommand = class extends Command.classBuilder().ep(__
 }).s("AmazonSimpleNotificationService", "ListSubscriptionsByTopic", {}).n("SNSClient", "ListSubscriptionsByTopicCommand").f(void 0, void 0).ser(se_ListSubscriptionsByTopicCommand).de(de_ListSubscriptionsByTopicCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/ListSubscriptionsCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/ListSubscriptionsCommand.js
 var ListSubscriptionsCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3828,7 +3827,7 @@ var ListSubscriptionsCommand = class extends Command.classBuilder().ep(__spreadV
 }).s("AmazonSimpleNotificationService", "ListSubscriptions", {}).n("SNSClient", "ListSubscriptionsCommand").f(void 0, void 0).ser(se_ListSubscriptionsCommand).de(de_ListSubscriptionsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/ListTagsForResourceCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/ListTagsForResourceCommand.js
 var ListTagsForResourceCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3837,7 +3836,7 @@ var ListTagsForResourceCommand = class extends Command.classBuilder().ep(__sprea
 }).s("AmazonSimpleNotificationService", "ListTagsForResource", {}).n("SNSClient", "ListTagsForResourceCommand").f(void 0, void 0).ser(se_ListTagsForResourceCommand).de(de_ListTagsForResourceCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/ListTopicsCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/ListTopicsCommand.js
 var ListTopicsCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3846,7 +3845,7 @@ var ListTopicsCommand = class extends Command.classBuilder().ep(__spreadValues({
 }).s("AmazonSimpleNotificationService", "ListTopics", {}).n("SNSClient", "ListTopicsCommand").f(void 0, void 0).ser(se_ListTopicsCommand).de(de_ListTopicsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/OptInPhoneNumberCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/OptInPhoneNumberCommand.js
 var OptInPhoneNumberCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3855,7 +3854,7 @@ var OptInPhoneNumberCommand = class extends Command.classBuilder().ep(__spreadVa
 }).s("AmazonSimpleNotificationService", "OptInPhoneNumber", {}).n("SNSClient", "OptInPhoneNumberCommand").f(OptInPhoneNumberInputFilterSensitiveLog, void 0).ser(se_OptInPhoneNumberCommand).de(de_OptInPhoneNumberCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/PublishBatchCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/PublishBatchCommand.js
 var PublishBatchCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3864,7 +3863,7 @@ var PublishBatchCommand = class extends Command.classBuilder().ep(__spreadValues
 }).s("AmazonSimpleNotificationService", "PublishBatch", {}).n("SNSClient", "PublishBatchCommand").f(void 0, void 0).ser(se_PublishBatchCommand).de(de_PublishBatchCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/PublishCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/PublishCommand.js
 var PublishCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3873,7 +3872,7 @@ var PublishCommand = class extends Command.classBuilder().ep(__spreadValues({}, 
 }).s("AmazonSimpleNotificationService", "Publish", {}).n("SNSClient", "PublishCommand").f(PublishInputFilterSensitiveLog, void 0).ser(se_PublishCommand).de(de_PublishCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/PutDataProtectionPolicyCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/PutDataProtectionPolicyCommand.js
 var PutDataProtectionPolicyCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3882,7 +3881,7 @@ var PutDataProtectionPolicyCommand = class extends Command.classBuilder().ep(__s
 }).s("AmazonSimpleNotificationService", "PutDataProtectionPolicy", {}).n("SNSClient", "PutDataProtectionPolicyCommand").f(void 0, void 0).ser(se_PutDataProtectionPolicyCommand).de(de_PutDataProtectionPolicyCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/RemovePermissionCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/RemovePermissionCommand.js
 var RemovePermissionCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3891,7 +3890,7 @@ var RemovePermissionCommand = class extends Command.classBuilder().ep(__spreadVa
 }).s("AmazonSimpleNotificationService", "RemovePermission", {}).n("SNSClient", "RemovePermissionCommand").f(void 0, void 0).ser(se_RemovePermissionCommand).de(de_RemovePermissionCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/SetEndpointAttributesCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/SetEndpointAttributesCommand.js
 var SetEndpointAttributesCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3900,7 +3899,7 @@ var SetEndpointAttributesCommand = class extends Command.classBuilder().ep(__spr
 }).s("AmazonSimpleNotificationService", "SetEndpointAttributes", {}).n("SNSClient", "SetEndpointAttributesCommand").f(void 0, void 0).ser(se_SetEndpointAttributesCommand).de(de_SetEndpointAttributesCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/SetPlatformApplicationAttributesCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/SetPlatformApplicationAttributesCommand.js
 var SetPlatformApplicationAttributesCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3909,7 +3908,7 @@ var SetPlatformApplicationAttributesCommand = class extends Command.classBuilder
 }).s("AmazonSimpleNotificationService", "SetPlatformApplicationAttributes", {}).n("SNSClient", "SetPlatformApplicationAttributesCommand").f(void 0, void 0).ser(se_SetPlatformApplicationAttributesCommand).de(de_SetPlatformApplicationAttributesCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/SetSMSAttributesCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/SetSMSAttributesCommand.js
 var SetSMSAttributesCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3918,7 +3917,7 @@ var SetSMSAttributesCommand = class extends Command.classBuilder().ep(__spreadVa
 }).s("AmazonSimpleNotificationService", "SetSMSAttributes", {}).n("SNSClient", "SetSMSAttributesCommand").f(void 0, void 0).ser(se_SetSMSAttributesCommand).de(de_SetSMSAttributesCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/SetSubscriptionAttributesCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/SetSubscriptionAttributesCommand.js
 var SetSubscriptionAttributesCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3927,7 +3926,7 @@ var SetSubscriptionAttributesCommand = class extends Command.classBuilder().ep(_
 }).s("AmazonSimpleNotificationService", "SetSubscriptionAttributes", {}).n("SNSClient", "SetSubscriptionAttributesCommand").f(void 0, void 0).ser(se_SetSubscriptionAttributesCommand).de(de_SetSubscriptionAttributesCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/SetTopicAttributesCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/SetTopicAttributesCommand.js
 var SetTopicAttributesCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3936,7 +3935,7 @@ var SetTopicAttributesCommand = class extends Command.classBuilder().ep(__spread
 }).s("AmazonSimpleNotificationService", "SetTopicAttributes", {}).n("SNSClient", "SetTopicAttributesCommand").f(void 0, void 0).ser(se_SetTopicAttributesCommand).de(de_SetTopicAttributesCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/SubscribeCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/SubscribeCommand.js
 var SubscribeCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3945,7 +3944,7 @@ var SubscribeCommand = class extends Command.classBuilder().ep(__spreadValues({}
 }).s("AmazonSimpleNotificationService", "Subscribe", {}).n("SNSClient", "SubscribeCommand").f(void 0, void 0).ser(se_SubscribeCommand).de(de_SubscribeCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/TagResourceCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/TagResourceCommand.js
 var TagResourceCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3954,7 +3953,7 @@ var TagResourceCommand = class extends Command.classBuilder().ep(__spreadValues(
 }).s("AmazonSimpleNotificationService", "TagResource", {}).n("SNSClient", "TagResourceCommand").f(void 0, void 0).ser(se_TagResourceCommand).de(de_TagResourceCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/UnsubscribeCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/UnsubscribeCommand.js
 var UnsubscribeCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3963,7 +3962,7 @@ var UnsubscribeCommand = class extends Command.classBuilder().ep(__spreadValues(
 }).s("AmazonSimpleNotificationService", "Unsubscribe", {}).n("SNSClient", "UnsubscribeCommand").f(void 0, void 0).ser(se_UnsubscribeCommand).de(de_UnsubscribeCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/UntagResourceCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/UntagResourceCommand.js
 var UntagResourceCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3972,7 +3971,7 @@ var UntagResourceCommand = class extends Command.classBuilder().ep(__spreadValue
 }).s("AmazonSimpleNotificationService", "UntagResource", {}).n("SNSClient", "UntagResourceCommand").f(void 0, void 0).ser(se_UntagResourceCommand).de(de_UntagResourceCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/commands/VerifySMSSandboxPhoneNumberCommand.js
+// node_modules/@aws-sdk/client-sns/dist-es/commands/VerifySMSSandboxPhoneNumberCommand.js
 var VerifySMSSandboxPhoneNumberCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -3981,7 +3980,7 @@ var VerifySMSSandboxPhoneNumberCommand = class extends Command.classBuilder().ep
 }).s("AmazonSimpleNotificationService", "VerifySMSSandboxPhoneNumber", {}).n("SNSClient", "VerifySMSSandboxPhoneNumberCommand").f(VerifySMSSandboxPhoneNumberInputFilterSensitiveLog, void 0).ser(se_VerifySMSSandboxPhoneNumberCommand).de(de_VerifySMSSandboxPhoneNumberCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/SNS.js
+// node_modules/@aws-sdk/client-sns/dist-es/SNS.js
 var commands = {
   AddPermissionCommand,
   CheckIfPhoneNumberIsOptedOutCommand,
@@ -4030,28 +4029,28 @@ var SNS = class extends SNSClient {
 };
 createAggregatedClient(commands, SNS);
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/pagination/ListEndpointsByPlatformApplicationPaginator.js
+// node_modules/@aws-sdk/client-sns/dist-es/pagination/ListEndpointsByPlatformApplicationPaginator.js
 var paginateListEndpointsByPlatformApplication = createPaginator(SNSClient, ListEndpointsByPlatformApplicationCommand, "NextToken", "NextToken", "");
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/pagination/ListOriginationNumbersPaginator.js
+// node_modules/@aws-sdk/client-sns/dist-es/pagination/ListOriginationNumbersPaginator.js
 var paginateListOriginationNumbers = createPaginator(SNSClient, ListOriginationNumbersCommand, "NextToken", "NextToken", "MaxResults");
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/pagination/ListPhoneNumbersOptedOutPaginator.js
+// node_modules/@aws-sdk/client-sns/dist-es/pagination/ListPhoneNumbersOptedOutPaginator.js
 var paginateListPhoneNumbersOptedOut = createPaginator(SNSClient, ListPhoneNumbersOptedOutCommand, "nextToken", "nextToken", "");
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/pagination/ListPlatformApplicationsPaginator.js
+// node_modules/@aws-sdk/client-sns/dist-es/pagination/ListPlatformApplicationsPaginator.js
 var paginateListPlatformApplications = createPaginator(SNSClient, ListPlatformApplicationsCommand, "NextToken", "NextToken", "");
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/pagination/ListSMSSandboxPhoneNumbersPaginator.js
+// node_modules/@aws-sdk/client-sns/dist-es/pagination/ListSMSSandboxPhoneNumbersPaginator.js
 var paginateListSMSSandboxPhoneNumbers = createPaginator(SNSClient, ListSMSSandboxPhoneNumbersCommand, "NextToken", "NextToken", "MaxResults");
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/pagination/ListSubscriptionsByTopicPaginator.js
+// node_modules/@aws-sdk/client-sns/dist-es/pagination/ListSubscriptionsByTopicPaginator.js
 var paginateListSubscriptionsByTopic = createPaginator(SNSClient, ListSubscriptionsByTopicCommand, "NextToken", "NextToken", "");
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/pagination/ListSubscriptionsPaginator.js
+// node_modules/@aws-sdk/client-sns/dist-es/pagination/ListSubscriptionsPaginator.js
 var paginateListSubscriptions = createPaginator(SNSClient, ListSubscriptionsCommand, "NextToken", "NextToken", "");
 
-// ../../../../node_modules/@aws-sdk/client-sns/dist-es/pagination/ListTopicsPaginator.js
+// node_modules/@aws-sdk/client-sns/dist-es/pagination/ListTopicsPaginator.js
 var paginateListTopics = createPaginator(SNSClient, ListTopicsCommand, "NextToken", "NextToken", "");
 export {
   Command as $Command,
