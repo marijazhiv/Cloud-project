@@ -10,6 +10,7 @@
       <change beforePath="$PROJECT_DIR$/src/app/main-page/main-page.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/main-page/main-page.component.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/main-page/main-page.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/main-page/main-page.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/main-page/main-page.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/main-page/main-page.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/movies/movie.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/movies/movie.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,14 +48,14 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "feature/signup",
-    "last_opened_file_path": "D:/FAKULTET_TRECA_GODINA/Predmeti/Letnji_semestar/Racunarstvo u oblaku/Projekat/RO_projekat/Cloud-project/Cloud22",
+    "git-widget-placeholder": "feature/delete-movie",
+    "last_opened_file_path": "D:/FAKULTET_TRECA_GODINA/Predmeti/Letnji_semestar/Racunarstvo u oblaku/Projekat/RO_Cloud_projekat/Cloud-project/Cloud22",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "C:\\Users\\Administrator\\Desktop\\cloud-spajanje\\Cloud-project\\Cloud22\\node_modules\\typescript\\lib",
+    "ts.external.directory.path": "D:\\FAKULTET_TRECA_GODINA\\Predmeti\\Letnji_semestar\\Racunarstvo u oblaku\\Projekat\\CloudComputing24\\Cloud-project\\Cloud22\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -107,10 +108,22 @@
       <workItem from="1725460492605" duration="1710000" />
       <workItem from="1725479588928" duration="41000" />
       <workItem from="1725538427118" duration="4743000" />
+      <workItem from="1725800283380" duration="6649000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

@@ -202,13 +202,21 @@
             <h2>Subscription List</h2>
             <ul>
                 <li *ngFor="let subscription of subscriptions">
-                    <strong>{{ subscription.username }}</strong>: {{ subscription.subscriptionType }} - {{ subscription.subscriptionValue }}
+                    <strong>{{ subscription.username }}</strong>: {{ subscription.subscription_type }} - {{ subscription.subscription_value }}
                     <br> Email: {{ subscription.email }}
                 </li>
             </ul>
         </div>
+
     </div>
 
+
+    <div  *ngIf="user && userRole === 'Administrator'" class="delete-movie">
+        <h2>DELETE MOVIE</h2>
+        <label for="movie-id">Enter Movie ID:</label>
+        <input type="text" id="movie-id" name="movie-id" [(ngModel)]="deleteId">
+        <button type="button" (click)="deleteMovie()">Delete</button>
+    </div>
 
 
 

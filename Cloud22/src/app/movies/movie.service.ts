@@ -32,4 +32,34 @@ export class LambdaService {
             throw error;
         }
     }
+
+    async deleteContent(id: number): Promise<any> {
+        try {
+            const command = new InvokeCommand({
+                FunctionName: 'deleteMovie',
+                Payload: JSON.stringify({ id: id }),
+            });
+
+            const response = await this.lambdaClient.send(command);
+            return JSON.parse(new TextDecoder().decode(response.Payload));
+        } catch (error) {
+            console.error('Error invoking delete Lambda function:', error);
+            throw error;
+        }
+    }
+
+    async getSubscriptions(username: string): Promise<any> {
+        try {
+            const command = new InvokeCommand({
+                FunctionName: 'getSubscriptions',
+                Payload: JSON.stringify({ username: username }),
+            });
+
+            const response = await this.lambdaClient.send(command);
+            return JSON.parse(new TextDecoder().decode(response.Payload));
+        } catch (error) {
+            console.error('Error invoking getSubscriptions Lambda function:', error);
+            throw error;
+        }
+    }
 }

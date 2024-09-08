@@ -1,13 +1,13 @@
 import {
+  AwsCrc32,
+  eventStreamSerdeProvider,
+  resolveEventStreamSerdeConfig
+} from "./chunk-NHXG5M2F.js";
+import {
   WaiterState,
   checkExceptions,
   createWaiter
-} from "./chunk-CW4OIEAU.js";
-import {
-  awsEndpointFunctions,
-  getUserAgentPlugin,
-  resolveUserAgentConfig
-} from "./chunk-R62TKQBP.js";
+} from "./chunk-2FE76ZDM.js";
 import {
   AwsSdkSigV4ASigner,
   AwsSdkSigV4Signer,
@@ -26,12 +26,9 @@ import {
   ServiceException,
   Sha256,
   SignatureV4,
-  __awaiter,
-  __generator,
-  __values,
+  awsEndpointFunctions,
   calculateBodyLength,
   collectBody,
-  convertToBuffer,
   createAggregatedClient,
   createPaginator,
   customEndpointFunctions,
@@ -43,7 +40,6 @@ import {
   expectString,
   expectUnion,
   fromBase64,
-  fromHex,
   fromUtf8,
   getArrayIfSingleItem,
   getAwsChunkedEncodingStream,
@@ -60,18 +56,17 @@ import {
   getRetryPlugin,
   getSerdePlugin,
   getSmithyContext,
+  getUserAgentPlugin,
   headStream,
   httpSigningMiddlewareOptions,
   invalidProvider,
   isArrayBuffer,
-  isEmptyData,
   isValidHostname,
   loadConfigsForDefaultMode,
   loadRestXmlErrorCode,
   locateWindow,
   map,
   normalizeProvider,
-  numToUint8,
   parseBoolean,
   parseRfc3339DateTimeWithOffset,
   parseRfc7231DateTime,
@@ -91,6 +86,7 @@ import {
   resolveParams,
   resolveRegionConfig,
   resolveRetryConfig,
+  resolveUserAgentConfig,
   sdkStreamMixin,
   serializeDateTime,
   splitStream,
@@ -99,23 +95,23 @@ import {
   strictParseLong,
   supportsWebCrypto,
   toBase64,
-  toHex,
   toUint8Array,
   toUtf8,
-  uint32ArrayFrom,
   withBaseException
-} from "./chunk-6GN2Y7VZ.js";
+} from "./chunk-TC2ZGZ7K.js";
+import {
+  __awaiter,
+  __generator,
+  __values
+} from "./chunk-7VQPY5UX.js";
 import {
   __async,
-  __asyncGenerator,
-  __await,
-  __forAwait,
   __objRest,
   __spreadProps,
   __spreadValues
 } from "./chunk-CDW57LCT.js";
 
-// ../../../../node_modules/@aws-sdk/middleware-expect-continue/dist-es/index.js
+// node_modules/@aws-sdk/middleware-expect-continue/dist-es/index.js
 function addExpectContinueMiddleware(options) {
   return (next) => (args) => __async(this, null, function* () {
     const { request } = args;
@@ -143,7 +139,7 @@ var getAddExpectContinuePlugin = (options) => ({
   }
 });
 
-// ../../../../node_modules/@aws-sdk/middleware-sdk-s3/dist-es/check-content-length-header.js
+// node_modules/@aws-sdk/middleware-sdk-s3/dist-es/check-content-length-header.js
 var CONTENT_LENGTH_HEADER = "content-length";
 function checkContentLengthHeader() {
   return (next, context) => (args) => __async(this, null, function* () {
@@ -173,7 +169,7 @@ var getCheckContentLengthHeaderPlugin = (unused) => ({
   }
 });
 
-// ../../../../node_modules/@aws-sdk/middleware-sdk-s3/dist-es/region-redirect-endpoint-middleware.js
+// node_modules/@aws-sdk/middleware-sdk-s3/dist-es/region-redirect-endpoint-middleware.js
 var regionRedirectEndpointMiddleware = (config) => {
   return (next, context) => (args) => __async(void 0, null, function* () {
     const originalRegion = yield config.region();
@@ -216,7 +212,7 @@ var regionRedirectEndpointMiddlewareOptions = {
   toMiddleware: "endpointV2Middleware"
 };
 
-// ../../../../node_modules/@aws-sdk/middleware-sdk-s3/dist-es/region-redirect-middleware.js
+// node_modules/@aws-sdk/middleware-sdk-s3/dist-es/region-redirect-middleware.js
 function regionRedirectMiddleware(clientConfig) {
   return (next, context) => (args) => __async(this, null, function* () {
     try {
@@ -250,7 +246,7 @@ var getRegionRedirectMiddlewarePlugin = (clientConfig) => ({
   }
 });
 
-// ../../../../node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-expires-middleware.js
+// node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-expires-middleware.js
 var s3ExpiresMiddleware = (config) => {
   return (next, context) => (args) => __async(void 0, null, function* () {
     const result = yield next(args);
@@ -282,7 +278,7 @@ var getS3ExpiresMiddlewarePlugin = (clientConfig) => ({
   }
 });
 
-// ../../../../node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/classes/S3ExpressIdentityCache.js
+// node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/classes/S3ExpressIdentityCache.js
 var S3ExpressIdentityCache = class _S3ExpressIdentityCache {
   constructor(data = {}) {
     this.data = data;
@@ -324,7 +320,7 @@ var S3ExpressIdentityCache = class _S3ExpressIdentityCache {
 };
 S3ExpressIdentityCache.EXPIRED_CREDENTIAL_PURGE_INTERVAL_MS = 3e4;
 
-// ../../../../node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/classes/S3ExpressIdentityCacheEntry.js
+// node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/classes/S3ExpressIdentityCacheEntry.js
 var S3ExpressIdentityCacheEntry = class {
   constructor(_identity, isRefreshing = false, accessed = Date.now()) {
     this._identity = _identity;
@@ -337,7 +333,7 @@ var S3ExpressIdentityCacheEntry = class {
   }
 };
 
-// ../../../../node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/classes/S3ExpressIdentityProviderImpl.js
+// node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/classes/S3ExpressIdentityProviderImpl.js
 var S3ExpressIdentityProviderImpl = class _S3ExpressIdentityProviderImpl {
   constructor(createSessionFn, cache = new S3ExpressIdentityCache()) {
     this.createSessionFn = createSessionFn;
@@ -388,14 +384,14 @@ var S3ExpressIdentityProviderImpl = class _S3ExpressIdentityProviderImpl {
 };
 S3ExpressIdentityProviderImpl.REFRESH_WINDOW_MS = 6e4;
 
-// ../../../../node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/constants.js
+// node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/constants.js
 var S3_EXPRESS_BUCKET_TYPE = "Directory";
 var S3_EXPRESS_BACKEND = "S3Express";
 var S3_EXPRESS_AUTH_SCHEME = "sigv4-s3express";
 var SESSION_TOKEN_QUERY_PARAM = "X-Amz-S3session-Token";
 var SESSION_TOKEN_HEADER = SESSION_TOKEN_QUERY_PARAM.toLowerCase();
 
-// ../../../../node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/classes/SignatureV4S3Express.js
+// node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/classes/SignatureV4S3Express.js
 var SignatureV4S3Express = class extends SignatureV4 {
   signWithCredentials(requestToSign, credentials, options) {
     return __async(this, null, function* () {
@@ -440,7 +436,7 @@ function setSingleOverride(privateAccess, credentialsWithoutSessionToken) {
   privateAccess.credentialProvider = overrideCredentialsProviderOnce;
 }
 
-// ../../../../node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/functions/s3ExpressMiddleware.js
+// node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/functions/s3ExpressMiddleware.js
 var s3ExpressMiddleware = (options) => {
   return (next, context) => (args) => __async(void 0, null, function* () {
     if (context.endpointV2) {
@@ -478,7 +474,7 @@ var getS3ExpressPlugin = (options) => ({
   }
 });
 
-// ../../../../node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/functions/signS3Express.js
+// node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/functions/signS3Express.js
 var signS3Express = (s3ExpressIdentity, signingOptions, request, sigV4MultiRegionSigner) => __async(void 0, null, function* () {
   const signedRequest = yield sigV4MultiRegionSigner.signWithCredentials(request, s3ExpressIdentity, {});
   if (signedRequest.headers["X-Amz-Security-Token"] || signedRequest.headers["x-amz-security-token"]) {
@@ -487,7 +483,7 @@ var signS3Express = (s3ExpressIdentity, signingOptions, request, sigV4MultiRegio
   return signedRequest;
 });
 
-// ../../../../node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/functions/s3ExpressHttpSigningMiddleware.js
+// node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/functions/s3ExpressHttpSigningMiddleware.js
 var defaultErrorHandler = (signingProperties) => (error) => {
   throw error;
 };
@@ -521,7 +517,7 @@ var getS3ExpressHttpSigningPlugin = (config) => ({
   }
 });
 
-// ../../../../node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3Configuration.js
+// node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3Configuration.js
 var resolveS3Config = (input, { session }) => {
   const [s3ClientProvider, CreateSessionCommandCtor] = session;
   return __spreadProps(__spreadValues({}, input), {
@@ -539,7 +535,7 @@ var resolveS3Config = (input, { session }) => {
   });
 };
 
-// ../../../../node_modules/@aws-sdk/middleware-sdk-s3/dist-es/throw-200-exceptions.js
+// node_modules/@aws-sdk/middleware-sdk-s3/dist-es/throw-200-exceptions.js
 var THROW_IF_EMPTY_BODY = {
   CopyObjectCommand: true,
   UploadPartCopyCommand: true,
@@ -604,10 +600,10 @@ var getThrow200ExceptionsPlugin = (config) => ({
   }
 });
 
-// ../../../../node_modules/@aws-sdk/util-arn-parser/dist-es/index.js
+// node_modules/@aws-sdk/util-arn-parser/dist-es/index.js
 var validate = (str) => typeof str === "string" && str.indexOf("arn:") === 0 && str.split(":").length >= 6;
 
-// ../../../../node_modules/@aws-sdk/middleware-sdk-s3/dist-es/bucket-endpoint-middleware.js
+// node_modules/@aws-sdk/middleware-sdk-s3/dist-es/bucket-endpoint-middleware.js
 function bucketEndpointMiddleware(options) {
   return (next, context) => (args) => __async(this, null, function* () {
     if (options.bucketEndpoint) {
@@ -640,7 +636,7 @@ var bucketEndpointMiddlewareOptions = {
   toMiddleware: "endpointV2Middleware"
 };
 
-// ../../../../node_modules/@aws-sdk/middleware-sdk-s3/dist-es/validate-bucket-name.js
+// node_modules/@aws-sdk/middleware-sdk-s3/dist-es/validate-bucket-name.js
 function validateBucketNameMiddleware({ bucketEndpoint }) {
   return (next) => (args) => __async(this, null, function* () {
     const { input: { Bucket } } = args;
@@ -665,17 +661,12 @@ var getValidateBucketNamePlugin = (options) => ({
   }
 });
 
-// ../../../../node_modules/@smithy/eventstream-serde-config-resolver/dist-es/EventStreamSerdeConfig.js
-var resolveEventStreamSerdeConfig = (input) => __spreadProps(__spreadValues({}, input), {
-  eventStreamMarshaller: input.eventStreamSerdeProvider(input)
-});
-
-// ../../../../node_modules/@aws-sdk/signature-v4-multi-region/dist-es/signature-v4-crt-container.js
+// node_modules/@aws-sdk/signature-v4-multi-region/dist-es/signature-v4-crt-container.js
 var signatureV4CrtContainer = {
   CrtSignerV4: null
 };
 
-// ../../../../node_modules/@aws-sdk/signature-v4-multi-region/dist-es/SignatureV4MultiRegion.js
+// node_modules/@aws-sdk/signature-v4-multi-region/dist-es/SignatureV4MultiRegion.js
 var SignatureV4MultiRegion = class {
   constructor(options) {
     this.sigv4Signer = new SignatureV4S3Express(options);
@@ -741,7 +732,7 @@ For more information please go to https://github.com/aws/aws-sdk-js-v3#functiona
   }
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/endpoint/ruleset.js
+// node_modules/@aws-sdk/client-s3/dist-es/endpoint/ruleset.js
 var ce = "required";
 var cf = "type";
 var cg = "conditions";
@@ -921,7 +912,7 @@ var cd = [{ [ch]: x, [ci]: [{ [cj]: "Region" }, true] }];
 var _data = { version: "1.0", parameters: { Bucket: S, Region: S, UseFIPS: T, UseDualStack: T, Endpoint: S, ForcePathStyle: T, Accelerate: T, UseGlobalEndpoint: T, UseObjectLambdaEndpoint: U, Key: S, Prefix: S, CopySource: S, DisableAccessPoints: U, DisableMultiRegionAccessPoints: T, UseArnRegion: U, UseS3ExpressControlEndpoint: U, DisableS3ExpressSessionAuth: U }, rules: [{ [cg]: [{ [ch]: c, [ci]: bw }], rules: [{ [cg]: [V, W], error: "Accelerate cannot be used with FIPS", [cf]: e }, { [cg]: [X, Y], error: "Cannot set dual-stack in combination with a custom endpoint.", [cf]: e }, { [cg]: [Y, W], error: "A custom endpoint cannot be combined with FIPS", [cf]: e }, { [cg]: [Y, V], error: "A custom endpoint cannot be combined with S3 Accelerate", [cf]: e }, { [cg]: [W, Z, aa], error: "Partition does not support FIPS", [cf]: e }, { [cg]: [ab, { [ch]: j, [ci]: [ac, 0, 6, b], [ck]: k }, { [ch]: g, [ci]: [{ [cj]: k }, "--x-s3"] }], rules: [{ [cg]: bz, error: "S3Express does not support Dual-stack.", [cf]: e }, { [cg]: bA, error: "S3Express does not support S3 Accelerate.", [cf]: e }, { [cg]: bB, rules: [{ [cg]: bC, rules: [{ [cg]: bD, rules: [{ [cg]: bE, rules: [{ endpoint: { [cl]: m, [cm]: ah, [cs]: ai }, [cf]: n }], [cf]: o }], [cf]: o }, { [cg]: bF, rules: [{ endpoint: { [cl]: q, [cm]: ah, [cs]: ai }, [cf]: n }], [cf]: o }, ak], [cf]: o }, { [cg]: bD, rules: [{ [cg]: bE, rules: [{ endpoint: { [cl]: m, [cm]: al, [cs]: ai }, [cf]: n }], [cf]: o }], [cf]: o }, { [cg]: bF, rules: [{ endpoint: { [cl]: q, [cm]: al, [cs]: ai }, [cf]: n }], [cf]: o }, ak], [cf]: o }, { [cg]: [am, an], rules: [{ [cg]: [ag, ao], rules: [{ [cg]: bG, endpoint: { [cl]: "https://s3express-control-fips.{Region}.amazonaws.com/{uri_encoded_bucket}", [cm]: ah, [cs]: ai }, [cf]: n }, { endpoint: { [cl]: "https://s3express-control.{Region}.amazonaws.com/{uri_encoded_bucket}", [cm]: ah, [cs]: ai }, [cf]: n }], [cf]: o }], [cf]: o }, { [cg]: bF, rules: [{ [cg]: bC, rules: [{ [cg]: bH, rules: bI, [cf]: o }, { [cg]: bJ, rules: bI, [cf]: o }, ap], [cf]: o }, { [cg]: bH, rules: bK, [cf]: o }, { [cg]: bJ, rules: bK, [cf]: o }, ap], [cf]: o }, ak], [cf]: o }, { [cg]: [aq, am, an], rules: [{ [cg]: bB, endpoint: { [cl]: s, [cm]: ah, [cs]: ai }, [cf]: n }, { [cg]: bG, endpoint: { [cl]: "https://s3express-control-fips.{Region}.amazonaws.com", [cm]: ah, [cs]: ai }, [cf]: n }, { endpoint: { [cl]: "https://s3express-control.{Region}.amazonaws.com", [cm]: ah, [cs]: ai }, [cf]: n }], [cf]: o }, { [cg]: [ab, { [ch]: j, [ci]: [ac, 49, 50, b], [ck]: t }, { [ch]: j, [ci]: [ac, 8, 12, b], [ck]: u }, { [ch]: j, [ci]: [ac, 0, 7, b], [ck]: v }, { [ch]: j, [ci]: [ac, 32, 49, b], [ck]: w }, { [ch]: f, [ci]: bw, [ck]: "regionPartition" }, { [ch]: g, [ci]: [{ [cj]: v }, "--op-s3"] }], rules: [{ [cg]: bM, rules: [{ [cg]: [{ [ch]: g, [ci]: [ar, "e"] }], rules: [{ [cg]: bN, rules: [as, { [cg]: bB, endpoint: { [cl]: "https://{Bucket}.ec2.{url#authority}", [cm]: at, [cs]: ai }, [cf]: n }], [cf]: o }, { endpoint: { [cl]: "https://{Bucket}.ec2.s3-outposts.{Region}.{regionPartition#dnsSuffix}", [cm]: at, [cs]: ai }, [cf]: n }], [cf]: o }, { [cg]: [{ [ch]: g, [ci]: [ar, "o"] }], rules: [{ [cg]: bN, rules: [as, { [cg]: bB, endpoint: { [cl]: "https://{Bucket}.op-{outpostId}.{url#authority}", [cm]: at, [cs]: ai }, [cf]: n }], [cf]: o }, { endpoint: { [cl]: "https://{Bucket}.op-{outpostId}.s3-outposts.{Region}.{regionPartition#dnsSuffix}", [cm]: at, [cs]: ai }, [cf]: n }], [cf]: o }, { error: 'Unrecognized hardware type: "Expected hardware type o or e but got {hardwareType}"', [cf]: e }], [cf]: o }, { error: "Invalid ARN: The outpost Id must only contain a-z, A-Z, 0-9 and `-`.", [cf]: e }], [cf]: o }, { [cg]: bL, rules: [{ [cg]: [Y, { [ch]: r, [ci]: [{ [ch]: c, [ci]: [{ [ch]: l, [ci]: bx }] }] }], error: "Custom endpoint `{Endpoint}` was not a valid URI", [cf]: e }, { [cg]: [au, aj], rules: [{ [cg]: bP, rules: [{ [cg]: bQ, rules: [{ [cg]: [V, aa], error: "S3 Accelerate cannot be used in this region", [cf]: e }, { [cg]: [X, W, aw, ao, ax], endpoint: { [cl]: "https://{Bucket}.s3-fips.dualstack.us-east-1.{partitionResult#dnsSuffix}", [cm]: ay, [cs]: ai }, [cf]: n }, { [cg]: [X, W, aw, ao, az, aA], rules: [{ endpoint: aB, [cf]: n }], [cf]: o }, { [cg]: [X, W, aw, ao, az, aD], endpoint: aB, [cf]: n }, { [cg]: [aE, W, aw, ao, ax], endpoint: { [cl]: "https://{Bucket}.s3-fips.us-east-1.{partitionResult#dnsSuffix}", [cm]: ay, [cs]: ai }, [cf]: n }, { [cg]: [aE, W, aw, ao, az, aA], rules: [{ endpoint: aF, [cf]: n }], [cf]: o }, { [cg]: [aE, W, aw, ao, az, aD], endpoint: aF, [cf]: n }, { [cg]: [X, aG, V, ao, ax], endpoint: { [cl]: "https://{Bucket}.s3-accelerate.dualstack.us-east-1.{partitionResult#dnsSuffix}", [cm]: ay, [cs]: ai }, [cf]: n }, { [cg]: [X, aG, V, ao, az, aA], rules: [{ endpoint: aH, [cf]: n }], [cf]: o }, { [cg]: [X, aG, V, ao, az, aD], endpoint: aH, [cf]: n }, { [cg]: [X, aG, aw, ao, ax], endpoint: { [cl]: "https://{Bucket}.s3.dualstack.us-east-1.{partitionResult#dnsSuffix}", [cm]: ay, [cs]: ai }, [cf]: n }, { [cg]: [X, aG, aw, ao, az, aA], rules: [{ endpoint: aI, [cf]: n }], [cf]: o }, { [cg]: [X, aG, aw, ao, az, aD], endpoint: aI, [cf]: n }, { [cg]: [aE, aG, aw, Y, ad, ae, ax], endpoint: { [cl]: B, [cm]: ay, [cs]: ai }, [cf]: n }, { [cg]: [aE, aG, aw, Y, ad, aJ, ax], endpoint: { [cl]: q, [cm]: ay, [cs]: ai }, [cf]: n }, { [cg]: [aE, aG, aw, Y, ad, ae, az, aA], rules: [{ [cg]: bR, endpoint: aK, [cf]: n }, { endpoint: aK, [cf]: n }], [cf]: o }, { [cg]: [aE, aG, aw, Y, ad, aJ, az, aA], rules: [{ [cg]: bR, endpoint: aL, [cf]: n }, aM], [cf]: o }, { [cg]: [aE, aG, aw, Y, ad, ae, az, aD], endpoint: aK, [cf]: n }, { [cg]: [aE, aG, aw, Y, ad, aJ, az, aD], endpoint: aL, [cf]: n }, { [cg]: [aE, aG, V, ao, ax], endpoint: { [cl]: C, [cm]: ay, [cs]: ai }, [cf]: n }, { [cg]: [aE, aG, V, ao, az, aA], rules: [{ [cg]: bR, endpoint: aN, [cf]: n }, { endpoint: aN, [cf]: n }], [cf]: o }, { [cg]: [aE, aG, V, ao, az, aD], endpoint: aN, [cf]: n }, { [cg]: [aE, aG, aw, ao, ax], endpoint: { [cl]: D, [cm]: ay, [cs]: ai }, [cf]: n }, { [cg]: [aE, aG, aw, ao, az, aA], rules: [{ [cg]: bR, endpoint: { [cl]: D, [cm]: aC, [cs]: ai }, [cf]: n }, { endpoint: aO, [cf]: n }], [cf]: o }, { [cg]: [aE, aG, aw, ao, az, aD], endpoint: aO, [cf]: n }], [cf]: o }, aP], [cf]: o }], [cf]: o }, { [cg]: [Y, ad, { [ch]: g, [ci]: [{ [ch]: h, [ci]: [af, "scheme"] }, "http"] }, { [ch]: p, [ci]: [ac, b] }, au, aG, aE, aw], rules: [{ [cg]: bP, rules: [{ [cg]: bQ, rules: [aM], [cf]: o }, aP], [cf]: o }], [cf]: o }, { [cg]: [au, { [ch]: E, [ci]: by, [ck]: F }], rules: [{ [cg]: [{ [ch]: h, [ci]: [aQ, "resourceId[0]"], [ck]: G }, { [ch]: r, [ci]: [{ [ch]: g, [ci]: [aR, H] }] }], rules: [{ [cg]: [{ [ch]: g, [ci]: [aS, I] }], rules: [{ [cg]: bS, rules: [{ [cg]: bT, rules: [aU, aV, { [cg]: bV, rules: [aW, { [cg]: bW, rules: [aX, { [cg]: bY, rules: [{ [cg]: bP, rules: [{ [cg]: bZ, rules: [{ [cg]: ca, rules: [{ [cg]: [{ [ch]: g, [ci]: [aZ, H] }], error: "Invalid ARN: Missing account id", [cf]: e }, { [cg]: cb, rules: [{ [cg]: cc, rules: [{ [cg]: bB, endpoint: { [cl]: L, [cm]: ba, [cs]: ai }, [cf]: n }, { [cg]: bG, endpoint: { [cl]: "https://{accessPointName}-{bucketArn#accountId}.s3-object-lambda-fips.{bucketArn#region}.{bucketPartition#dnsSuffix}", [cm]: ba, [cs]: ai }, [cf]: n }, { endpoint: { [cl]: "https://{accessPointName}-{bucketArn#accountId}.s3-object-lambda.{bucketArn#region}.{bucketPartition#dnsSuffix}", [cm]: ba, [cs]: ai }, [cf]: n }], [cf]: o }, bb], [cf]: o }, bc], [cf]: o }, bd], [cf]: o }, be], [cf]: o }], [cf]: o }], [cf]: o }, bf], [cf]: o }, { error: "Invalid ARN: bucket ARN is missing a region", [cf]: e }], [cf]: o }, bg], [cf]: o }, { error: "Invalid ARN: Object Lambda ARNs only support `accesspoint` arn types, but found: `{arnType}`", [cf]: e }], [cf]: o }, { [cg]: bS, rules: [{ [cg]: bT, rules: [{ [cg]: bV, rules: [{ [cg]: bS, rules: [{ [cg]: bV, rules: [aW, { [cg]: bW, rules: [aX, { [cg]: bY, rules: [{ [cg]: bP, rules: [{ [cg]: [{ [ch]: g, [ci]: [aY, "{partitionResult#name}"] }], rules: [{ [cg]: ca, rules: [{ [cg]: [{ [ch]: g, [ci]: [aS, A] }], rules: [{ [cg]: cb, rules: [{ [cg]: cc, rules: [{ [cg]: bA, error: "Access Points do not support S3 Accelerate", [cf]: e }, { [cg]: [W, X], endpoint: { [cl]: "https://{accessPointName}-{bucketArn#accountId}.s3-accesspoint-fips.dualstack.{bucketArn#region}.{bucketPartition#dnsSuffix}", [cm]: bh, [cs]: ai }, [cf]: n }, { [cg]: [W, aE], endpoint: { [cl]: "https://{accessPointName}-{bucketArn#accountId}.s3-accesspoint-fips.{bucketArn#region}.{bucketPartition#dnsSuffix}", [cm]: bh, [cs]: ai }, [cf]: n }, { [cg]: [aG, X], endpoint: { [cl]: "https://{accessPointName}-{bucketArn#accountId}.s3-accesspoint.dualstack.{bucketArn#region}.{bucketPartition#dnsSuffix}", [cm]: bh, [cs]: ai }, [cf]: n }, { [cg]: [aG, aE, Y, ad], endpoint: { [cl]: L, [cm]: bh, [cs]: ai }, [cf]: n }, { [cg]: [aG, aE], endpoint: { [cl]: "https://{accessPointName}-{bucketArn#accountId}.s3-accesspoint.{bucketArn#region}.{bucketPartition#dnsSuffix}", [cm]: bh, [cs]: ai }, [cf]: n }], [cf]: o }, bb], [cf]: o }, bc], [cf]: o }, { error: "Invalid ARN: The ARN was not for the S3 service, found: {bucketArn#service}", [cf]: e }], [cf]: o }, bd], [cf]: o }, be], [cf]: o }], [cf]: o }], [cf]: o }, bf], [cf]: o }], [cf]: o }], [cf]: o }, { [cg]: [{ [ch]: x, [ci]: [aT, b] }], rules: [{ [cg]: bz, error: "S3 MRAP does not support dual-stack", [cf]: e }, { [cg]: bG, error: "S3 MRAP does not support FIPS", [cf]: e }, { [cg]: bA, error: "S3 MRAP does not support S3 Accelerate", [cf]: e }, { [cg]: [{ [ch]: d, [ci]: [{ [cj]: "DisableMultiRegionAccessPoints" }, b] }], error: "Invalid configuration: Multi-Region Access Point ARNs are disabled.", [cf]: e }, { [cg]: [{ [ch]: f, [ci]: bw, [ck]: M }], rules: [{ [cg]: [{ [ch]: g, [ci]: [{ [ch]: h, [ci]: [{ [cj]: M }, i] }, { [ch]: h, [ci]: [aQ, "partition"] }] }], rules: [{ endpoint: { [cl]: "https://{accessPointName}.accesspoint.s3-global.{mrapPartition#dnsSuffix}", [cm]: { [co]: [{ [cp]: b, name: y, [cq]: A, [ct]: bO }] }, [cs]: ai }, [cf]: n }], [cf]: o }, { error: "Client was configured for partition `{mrapPartition#name}` but bucket referred to partition `{bucketArn#partition}`", [cf]: e }], [cf]: o }], [cf]: o }, { error: "Invalid Access Point Name", [cf]: e }], [cf]: o }, bg], [cf]: o }, { [cg]: [{ [ch]: g, [ci]: [aS, z] }], rules: [{ [cg]: bz, error: "S3 Outposts does not support Dual-stack", [cf]: e }, { [cg]: bG, error: "S3 Outposts does not support FIPS", [cf]: e }, { [cg]: bA, error: "S3 Outposts does not support S3 Accelerate", [cf]: e }, { [cg]: [{ [ch]: c, [ci]: [{ [ch]: h, [ci]: [aQ, "resourceId[4]"] }] }], error: "Invalid Arn: Outpost Access Point ARN contains sub resources", [cf]: e }, { [cg]: [{ [ch]: h, [ci]: bU, [ck]: w }], rules: [{ [cg]: bM, rules: [aX, { [cg]: bY, rules: [{ [cg]: bP, rules: [{ [cg]: bZ, rules: [{ [cg]: ca, rules: [{ [cg]: cb, rules: [{ [cg]: [{ [ch]: h, [ci]: bX, [ck]: N }], rules: [{ [cg]: [{ [ch]: h, [ci]: [aQ, "resourceId[3]"], [ck]: K }], rules: [{ [cg]: [{ [ch]: g, [ci]: [{ [cj]: N }, J] }], rules: [{ [cg]: bB, endpoint: { [cl]: "https://{accessPointName}-{bucketArn#accountId}.{outpostId}.{url#authority}", [cm]: bi, [cs]: ai }, [cf]: n }, { endpoint: { [cl]: "https://{accessPointName}-{bucketArn#accountId}.{outpostId}.s3-outposts.{bucketArn#region}.{bucketPartition#dnsSuffix}", [cm]: bi, [cs]: ai }, [cf]: n }], [cf]: o }, { error: "Expected an outpost type `accesspoint`, found {outpostType}", [cf]: e }], [cf]: o }, { error: "Invalid ARN: expected an access point name", [cf]: e }], [cf]: o }, { error: "Invalid ARN: Expected a 4-component resource", [cf]: e }], [cf]: o }, bc], [cf]: o }, bd], [cf]: o }, be], [cf]: o }], [cf]: o }], [cf]: o }, { error: "Invalid ARN: The outpost Id may only contain a-z, A-Z, 0-9 and `-`. Found: `{outpostId}`", [cf]: e }], [cf]: o }, { error: "Invalid ARN: The Outpost Id was not set", [cf]: e }], [cf]: o }, { error: "Invalid ARN: Unrecognized format: {Bucket} (type: {arnType})", [cf]: e }], [cf]: o }, { error: "Invalid ARN: No ARN type specified", [cf]: e }], [cf]: o }, { [cg]: [{ [ch]: j, [ci]: [ac, 0, 4, a], [ck]: O }, { [ch]: g, [ci]: [{ [cj]: O }, "arn:"] }, { [ch]: r, [ci]: [{ [ch]: c, [ci]: [bj] }] }], error: "Invalid ARN: `{Bucket}` was not a valid ARN", [cf]: e }, { [cg]: [{ [ch]: d, [ci]: [av, b] }, bj], error: "Path-style addressing cannot be used with ARN buckets", [cf]: e }, { [cg]: bE, rules: [{ [cg]: bP, rules: [{ [cg]: [aw], rules: [{ [cg]: [X, ao, W, ax], endpoint: { [cl]: "https://s3-fips.dualstack.us-east-1.{partitionResult#dnsSuffix}/{uri_encoded_bucket}", [cm]: ay, [cs]: ai }, [cf]: n }, { [cg]: [X, ao, W, az, aA], rules: [{ endpoint: bk, [cf]: n }], [cf]: o }, { [cg]: [X, ao, W, az, aD], endpoint: bk, [cf]: n }, { [cg]: [aE, ao, W, ax], endpoint: { [cl]: "https://s3-fips.us-east-1.{partitionResult#dnsSuffix}/{uri_encoded_bucket}", [cm]: ay, [cs]: ai }, [cf]: n }, { [cg]: [aE, ao, W, az, aA], rules: [{ endpoint: bl, [cf]: n }], [cf]: o }, { [cg]: [aE, ao, W, az, aD], endpoint: bl, [cf]: n }, { [cg]: [X, ao, aG, ax], endpoint: { [cl]: "https://s3.dualstack.us-east-1.{partitionResult#dnsSuffix}/{uri_encoded_bucket}", [cm]: ay, [cs]: ai }, [cf]: n }, { [cg]: [X, ao, aG, az, aA], rules: [{ endpoint: bm, [cf]: n }], [cf]: o }, { [cg]: [X, ao, aG, az, aD], endpoint: bm, [cf]: n }, { [cg]: [aE, Y, ad, aG, ax], endpoint: { [cl]: P, [cm]: ay, [cs]: ai }, [cf]: n }, { [cg]: [aE, Y, ad, aG, az, aA], rules: [{ [cg]: bR, endpoint: bn, [cf]: n }, { endpoint: bn, [cf]: n }], [cf]: o }, { [cg]: [aE, Y, ad, aG, az, aD], endpoint: bn, [cf]: n }, { [cg]: [aE, ao, aG, ax], endpoint: { [cl]: Q, [cm]: ay, [cs]: ai }, [cf]: n }, { [cg]: [aE, ao, aG, az, aA], rules: [{ [cg]: bR, endpoint: { [cl]: Q, [cm]: aC, [cs]: ai }, [cf]: n }, { endpoint: bo, [cf]: n }], [cf]: o }, { [cg]: [aE, ao, aG, az, aD], endpoint: bo, [cf]: n }], [cf]: o }, { error: "Path-style addressing cannot be used with S3 Accelerate", [cf]: e }], [cf]: o }], [cf]: o }], [cf]: o }, { [cg]: [{ [ch]: c, [ci]: [bp] }, { [ch]: d, [ci]: [bp, b] }], rules: [{ [cg]: bP, rules: [{ [cg]: cd, rules: [aU, aV, { [cg]: bB, endpoint: { [cl]: s, [cm]: bq, [cs]: ai }, [cf]: n }, { [cg]: bG, endpoint: { [cl]: "https://s3-object-lambda-fips.{Region}.{partitionResult#dnsSuffix}", [cm]: bq, [cs]: ai }, [cf]: n }, { endpoint: { [cl]: "https://s3-object-lambda.{Region}.{partitionResult#dnsSuffix}", [cm]: bq, [cs]: ai }, [cf]: n }], [cf]: o }, aP], [cf]: o }], [cf]: o }, { [cg]: [aq], rules: [{ [cg]: bP, rules: [{ [cg]: cd, rules: [{ [cg]: [W, X, ao, ax], endpoint: { [cl]: "https://s3-fips.dualstack.us-east-1.{partitionResult#dnsSuffix}", [cm]: ay, [cs]: ai }, [cf]: n }, { [cg]: [W, X, ao, az, aA], rules: [{ endpoint: br, [cf]: n }], [cf]: o }, { [cg]: [W, X, ao, az, aD], endpoint: br, [cf]: n }, { [cg]: [W, aE, ao, ax], endpoint: { [cl]: "https://s3-fips.us-east-1.{partitionResult#dnsSuffix}", [cm]: ay, [cs]: ai }, [cf]: n }, { [cg]: [W, aE, ao, az, aA], rules: [{ endpoint: bs, [cf]: n }], [cf]: o }, { [cg]: [W, aE, ao, az, aD], endpoint: bs, [cf]: n }, { [cg]: [aG, X, ao, ax], endpoint: { [cl]: "https://s3.dualstack.us-east-1.{partitionResult#dnsSuffix}", [cm]: ay, [cs]: ai }, [cf]: n }, { [cg]: [aG, X, ao, az, aA], rules: [{ endpoint: bt, [cf]: n }], [cf]: o }, { [cg]: [aG, X, ao, az, aD], endpoint: bt, [cf]: n }, { [cg]: [aG, aE, Y, ad, ax], endpoint: { [cl]: s, [cm]: ay, [cs]: ai }, [cf]: n }, { [cg]: [aG, aE, Y, ad, az, aA], rules: [{ [cg]: bR, endpoint: bu, [cf]: n }, { endpoint: bu, [cf]: n }], [cf]: o }, { [cg]: [aG, aE, Y, ad, az, aD], endpoint: bu, [cf]: n }, { [cg]: [aG, aE, ao, ax], endpoint: { [cl]: R, [cm]: ay, [cs]: ai }, [cf]: n }, { [cg]: [aG, aE, ao, az, aA], rules: [{ [cg]: bR, endpoint: { [cl]: R, [cm]: aC, [cs]: ai }, [cf]: n }, { endpoint: bv, [cf]: n }], [cf]: o }, { [cg]: [aG, aE, ao, az, aD], endpoint: bv, [cf]: n }], [cf]: o }, aP], [cf]: o }], [cf]: o }], [cf]: o }, { error: "A region must be set when sending requests to S3.", [cf]: e }] };
 var ruleSet = _data;
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/endpoint/endpointResolver.js
+// node_modules/@aws-sdk/client-s3/dist-es/endpoint/endpointResolver.js
 var defaultEndpointResolver = (endpointParams, context = {}) => {
   return resolveEndpoint(ruleSet, {
     endpointParams,
@@ -930,7 +921,7 @@ var defaultEndpointResolver = (endpointParams, context = {}) => {
 };
 customEndpointFunctions.aws = awsEndpointFunctions;
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/auth/httpAuthSchemeProvider.js
+// node_modules/@aws-sdk/client-s3/dist-es/auth/httpAuthSchemeProvider.js
 var createEndpointRuleSetHttpAuthSchemeParametersProvider = (defaultHttpAuthSchemeParametersProvider) => (config, context, input) => __async(void 0, null, function* () {
   if (!input) {
     throw new Error(`Could not find \`input\` for \`defaultEndpointRuleSetHttpAuthSchemeParametersProvider\``);
@@ -1044,7 +1035,7 @@ var resolveHttpAuthSchemeConfig = (config) => {
   return __spreadValues({}, config_1);
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/endpoint/EndpointParameters.js
+// node_modules/@aws-sdk/client-s3/dist-es/endpoint/EndpointParameters.js
 var resolveClientEndpointParameters = (options) => {
   return __spreadProps(__spreadValues({}, options), {
     useFipsEndpoint: options.useFipsEndpoint ?? false,
@@ -1069,7 +1060,7 @@ var commonParams = {
   UseDualStack: { type: "builtInParams", name: "useDualstackEndpoint" }
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/models/S3ServiceException.js
+// node_modules/@aws-sdk/client-s3/dist-es/models/S3ServiceException.js
 var S3ServiceException = class _S3ServiceException extends ServiceException {
   constructor(options) {
     super(options);
@@ -1077,7 +1068,7 @@ var S3ServiceException = class _S3ServiceException extends ServiceException {
   }
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/models/models_0.js
+// node_modules/@aws-sdk/client-s3/dist-es/models/models_0.js
 var RequestCharged = {
   requester: "requester"
 };
@@ -1585,17 +1576,17 @@ var PutBucketInventoryConfigurationRequestFilterSensitiveLog = (obj) => __spread
   InventoryConfiguration: InventoryConfigurationFilterSensitiveLog(obj.InventoryConfiguration)
 });
 
-// ../../../../node_modules/@aws-sdk/xml-builder/dist-es/escape-attribute.js
+// node_modules/@aws-sdk/xml-builder/dist-es/escape-attribute.js
 function escapeAttribute(value) {
   return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
-// ../../../../node_modules/@aws-sdk/xml-builder/dist-es/escape-element.js
+// node_modules/@aws-sdk/xml-builder/dist-es/escape-element.js
 function escapeElement(value) {
   return value.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/'/g, "&apos;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\r/g, "&#x0D;").replace(/\n/g, "&#x0A;").replace(/\u0085/g, "&#x85;").replace(/\u2028/, "&#x2028;");
 }
 
-// ../../../../node_modules/@aws-sdk/xml-builder/dist-es/XmlText.js
+// node_modules/@aws-sdk/xml-builder/dist-es/XmlText.js
 var XmlText = class {
   constructor(value) {
     this.value = value;
@@ -1605,7 +1596,7 @@ var XmlText = class {
   }
 };
 
-// ../../../../node_modules/@aws-sdk/xml-builder/dist-es/XmlNode.js
+// node_modules/@aws-sdk/xml-builder/dist-es/XmlNode.js
 var XmlNode = class _XmlNode {
   static of(name, childText, withName) {
     const node = new _XmlNode(name);
@@ -1691,7 +1682,7 @@ var XmlNode = class _XmlNode {
   }
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/models/models_1.js
+// node_modules/@aws-sdk/client-s3/dist-es/models/models_1.js
 var MFADelete = {
   Disabled: "Disabled",
   Enabled: "Enabled"
@@ -1781,7 +1772,7 @@ var UploadPartCopyOutputFilterSensitiveLog = (obj) => __spreadValues(__spreadVal
 var UploadPartCopyRequestFilterSensitiveLog = (obj) => __spreadValues(__spreadValues(__spreadValues({}, obj), obj.SSECustomerKey && { SSECustomerKey: SENSITIVE_STRING }), obj.CopySourceSSECustomerKey && { CopySourceSSECustomerKey: SENSITIVE_STRING });
 var WriteGetObjectResponseRequestFilterSensitiveLog = (obj) => __spreadValues(__spreadValues({}, obj), obj.SSEKMSKeyId && { SSEKMSKeyId: SENSITIVE_STRING });
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/protocols/Aws_restXml.js
+// node_modules/@aws-sdk/client-s3/dist-es/protocols/Aws_restXml.js
 var se_AbortMultipartUploadCommand = (input, context) => __async(void 0, null, function* () {
   const b2 = requestBuilder(input, context);
   const headers = map({}, isSerializableHeaderValue, {
@@ -9023,7 +9014,7 @@ var _xavi = "x-amz-version-id";
 var _xawrl = "x-amz-website-redirect-location";
 var _xi = "x-id";
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/CreateSessionCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/CreateSessionCommand.js
 var CreateSessionCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   DisableS3ExpressSessionAuth: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -9036,11 +9027,11 @@ var CreateSessionCommand = class extends Command.classBuilder().ep(__spreadProps
 }).s("AmazonS3", "CreateSession", {}).n("S3Client", "CreateSessionCommand").f(void 0, CreateSessionOutputFilterSensitiveLog).ser(se_CreateSessionCommand).de(de_CreateSessionCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/package.json
+// node_modules/@aws-sdk/client-s3/package.json
 var package_default = {
   name: "@aws-sdk/client-s3",
   description: "AWS SDK for JavaScript S3 Client for Node.js, Browser and React Native",
-  version: "3.637.0",
+  version: "3.645.0",
   scripts: {
     build: "concurrently 'yarn:build:cjs' 'yarn:build:es' 'yarn:build:types'",
     "build:cjs": "node ../../scripts/compilation/inline client-s3",
@@ -9065,10 +9056,10 @@ var package_default = {
     "@aws-crypto/sha1-browser": "5.2.0",
     "@aws-crypto/sha256-browser": "5.2.0",
     "@aws-crypto/sha256-js": "5.2.0",
-    "@aws-sdk/client-sso-oidc": "3.637.0",
-    "@aws-sdk/client-sts": "3.637.0",
+    "@aws-sdk/client-sso-oidc": "3.645.0",
+    "@aws-sdk/client-sts": "3.645.0",
     "@aws-sdk/core": "3.635.0",
-    "@aws-sdk/credential-provider-node": "3.637.0",
+    "@aws-sdk/credential-provider-node": "3.645.0",
     "@aws-sdk/middleware-bucket-endpoint": "3.620.0",
     "@aws-sdk/middleware-expect-continue": "3.620.0",
     "@aws-sdk/middleware-flexible-checksums": "3.620.0",
@@ -9078,11 +9069,11 @@ var package_default = {
     "@aws-sdk/middleware-recursion-detection": "3.620.0",
     "@aws-sdk/middleware-sdk-s3": "3.635.0",
     "@aws-sdk/middleware-ssec": "3.609.0",
-    "@aws-sdk/middleware-user-agent": "3.637.0",
+    "@aws-sdk/middleware-user-agent": "3.645.0",
     "@aws-sdk/region-config-resolver": "3.614.0",
     "@aws-sdk/signature-v4-multi-region": "3.635.0",
     "@aws-sdk/types": "3.609.0",
-    "@aws-sdk/util-endpoints": "3.637.0",
+    "@aws-sdk/util-endpoints": "3.645.0",
     "@aws-sdk/util-user-agent-browser": "3.609.0",
     "@aws-sdk/util-user-agent-node": "3.614.0",
     "@aws-sdk/xml-builder": "3.609.0",
@@ -9164,18 +9155,18 @@ var package_default = {
   }
 };
 
-// ../../../../node_modules/@aws-crypto/sha1-browser/node_modules/@smithy/util-utf8/dist-es/fromUtf8.browser.js
+// node_modules/@aws-crypto/sha1-browser/node_modules/@smithy/util-utf8/dist-es/fromUtf8.browser.js
 var fromUtf82 = (input) => new TextEncoder().encode(input);
 
-// ../../../../node_modules/@aws-crypto/sha1-browser/build/module/isEmptyData.js
-function isEmptyData2(data) {
+// node_modules/@aws-crypto/sha1-browser/build/module/isEmptyData.js
+function isEmptyData(data) {
   if (typeof data === "string") {
     return data.length === 0;
   }
   return data.byteLength === 0;
 }
 
-// ../../../../node_modules/@aws-crypto/sha1-browser/build/module/constants.js
+// node_modules/@aws-crypto/sha1-browser/build/module/constants.js
 var SHA_1_HASH = { name: "SHA-1" };
 var SHA_1_HMAC_ALGO = {
   name: "HMAC",
@@ -9204,7 +9195,7 @@ var EMPTY_DATA_SHA_1 = new Uint8Array([
   9
 ]);
 
-// ../../../../node_modules/@aws-crypto/sha1-browser/build/module/webCryptoSha1.js
+// node_modules/@aws-crypto/sha1-browser/build/module/webCryptoSha1.js
 var Sha1 = (
   /** @class */
   function() {
@@ -9212,17 +9203,17 @@ var Sha1 = (
       this.toHash = new Uint8Array(0);
       if (secret !== void 0) {
         this.key = new Promise(function(resolve, reject) {
-          locateWindow().crypto.subtle.importKey("raw", convertToBuffer2(secret), SHA_1_HMAC_ALGO, false, ["sign"]).then(resolve, reject);
+          locateWindow().crypto.subtle.importKey("raw", convertToBuffer(secret), SHA_1_HMAC_ALGO, false, ["sign"]).then(resolve, reject);
         });
         this.key.catch(function() {
         });
       }
     }
     Sha13.prototype.update = function(data) {
-      if (isEmptyData2(data)) {
+      if (isEmptyData(data)) {
         return;
       }
-      var update = convertToBuffer2(data);
+      var update = convertToBuffer(data);
       var typedArray = new Uint8Array(this.toHash.byteLength + update.byteLength);
       typedArray.set(this.toHash, 0);
       typedArray.set(update, this.toHash.byteLength);
@@ -9237,7 +9228,7 @@ var Sha1 = (
           });
         });
       }
-      if (isEmptyData2(this.toHash)) {
+      if (isEmptyData(this.toHash)) {
         return Promise.resolve(EMPTY_DATA_SHA_1);
       }
       return Promise.resolve().then(function() {
@@ -9252,7 +9243,7 @@ var Sha1 = (
     return Sha13;
   }()
 );
-function convertToBuffer2(data) {
+function convertToBuffer(data) {
   if (typeof data === "string") {
     return fromUtf82(data);
   }
@@ -9262,7 +9253,23 @@ function convertToBuffer2(data) {
   return new Uint8Array(data);
 }
 
-// ../../../../node_modules/@aws-crypto/sha1-browser/build/module/crossPlatformSha1.js
+// node_modules/@aws-crypto/sha1-browser/node_modules/@aws-crypto/util/build/module/convertToBuffer.js
+var fromUtf83 = typeof Buffer !== "undefined" && Buffer.from ? function(input) {
+  return Buffer.from(input, "utf8");
+} : fromUtf82;
+function convertToBuffer2(data) {
+  if (data instanceof Uint8Array)
+    return data;
+  if (typeof data === "string") {
+    return fromUtf83(data);
+  }
+  if (ArrayBuffer.isView(data)) {
+    return new Uint8Array(data.buffer, data.byteOffset, data.byteLength / Uint8Array.BYTES_PER_ELEMENT);
+  }
+  return new Uint8Array(data);
+}
+
+// node_modules/@aws-crypto/sha1-browser/build/module/crossPlatformSha1.js
 var Sha12 = (
   /** @class */
   function() {
@@ -9274,7 +9281,7 @@ var Sha12 = (
       }
     }
     Sha13.prototype.update = function(data, encoding) {
-      this.hash.update(convertToBuffer(data));
+      this.hash.update(convertToBuffer2(data));
     };
     Sha13.prototype.digest = function() {
       return this.hash.digest();
@@ -9286,948 +9293,7 @@ var Sha12 = (
   }()
 );
 
-// ../../../../node_modules/@aws-crypto/crc32/build/module/aws_crc32.js
-var AwsCrc32 = (
-  /** @class */
-  function() {
-    function AwsCrc322() {
-      this.crc32 = new Crc32();
-    }
-    AwsCrc322.prototype.update = function(toHash) {
-      if (isEmptyData(toHash))
-        return;
-      this.crc32.update(convertToBuffer(toHash));
-    };
-    AwsCrc322.prototype.digest = function() {
-      return __awaiter(this, void 0, void 0, function() {
-        return __generator(this, function(_a2) {
-          return [2, numToUint8(this.crc32.digest())];
-        });
-      });
-    };
-    AwsCrc322.prototype.reset = function() {
-      this.crc32 = new Crc32();
-    };
-    return AwsCrc322;
-  }()
-);
-
-// ../../../../node_modules/@aws-crypto/crc32/build/module/index.js
-var Crc32 = (
-  /** @class */
-  function() {
-    function Crc322() {
-      this.checksum = 4294967295;
-    }
-    Crc322.prototype.update = function(data) {
-      var e_1, _a2;
-      try {
-        for (var data_1 = __values(data), data_1_1 = data_1.next(); !data_1_1.done; data_1_1 = data_1.next()) {
-          var byte = data_1_1.value;
-          this.checksum = this.checksum >>> 8 ^ lookupTable[(this.checksum ^ byte) & 255];
-        }
-      } catch (e_1_1) {
-        e_1 = { error: e_1_1 };
-      } finally {
-        try {
-          if (data_1_1 && !data_1_1.done && (_a2 = data_1.return))
-            _a2.call(data_1);
-        } finally {
-          if (e_1)
-            throw e_1.error;
-        }
-      }
-      return this;
-    };
-    Crc322.prototype.digest = function() {
-      return (this.checksum ^ 4294967295) >>> 0;
-    };
-    return Crc322;
-  }()
-);
-var a_lookUpTable = [
-  0,
-  1996959894,
-  3993919788,
-  2567524794,
-  124634137,
-  1886057615,
-  3915621685,
-  2657392035,
-  249268274,
-  2044508324,
-  3772115230,
-  2547177864,
-  162941995,
-  2125561021,
-  3887607047,
-  2428444049,
-  498536548,
-  1789927666,
-  4089016648,
-  2227061214,
-  450548861,
-  1843258603,
-  4107580753,
-  2211677639,
-  325883990,
-  1684777152,
-  4251122042,
-  2321926636,
-  335633487,
-  1661365465,
-  4195302755,
-  2366115317,
-  997073096,
-  1281953886,
-  3579855332,
-  2724688242,
-  1006888145,
-  1258607687,
-  3524101629,
-  2768942443,
-  901097722,
-  1119000684,
-  3686517206,
-  2898065728,
-  853044451,
-  1172266101,
-  3705015759,
-  2882616665,
-  651767980,
-  1373503546,
-  3369554304,
-  3218104598,
-  565507253,
-  1454621731,
-  3485111705,
-  3099436303,
-  671266974,
-  1594198024,
-  3322730930,
-  2970347812,
-  795835527,
-  1483230225,
-  3244367275,
-  3060149565,
-  1994146192,
-  31158534,
-  2563907772,
-  4023717930,
-  1907459465,
-  112637215,
-  2680153253,
-  3904427059,
-  2013776290,
-  251722036,
-  2517215374,
-  3775830040,
-  2137656763,
-  141376813,
-  2439277719,
-  3865271297,
-  1802195444,
-  476864866,
-  2238001368,
-  4066508878,
-  1812370925,
-  453092731,
-  2181625025,
-  4111451223,
-  1706088902,
-  314042704,
-  2344532202,
-  4240017532,
-  1658658271,
-  366619977,
-  2362670323,
-  4224994405,
-  1303535960,
-  984961486,
-  2747007092,
-  3569037538,
-  1256170817,
-  1037604311,
-  2765210733,
-  3554079995,
-  1131014506,
-  879679996,
-  2909243462,
-  3663771856,
-  1141124467,
-  855842277,
-  2852801631,
-  3708648649,
-  1342533948,
-  654459306,
-  3188396048,
-  3373015174,
-  1466479909,
-  544179635,
-  3110523913,
-  3462522015,
-  1591671054,
-  702138776,
-  2966460450,
-  3352799412,
-  1504918807,
-  783551873,
-  3082640443,
-  3233442989,
-  3988292384,
-  2596254646,
-  62317068,
-  1957810842,
-  3939845945,
-  2647816111,
-  81470997,
-  1943803523,
-  3814918930,
-  2489596804,
-  225274430,
-  2053790376,
-  3826175755,
-  2466906013,
-  167816743,
-  2097651377,
-  4027552580,
-  2265490386,
-  503444072,
-  1762050814,
-  4150417245,
-  2154129355,
-  426522225,
-  1852507879,
-  4275313526,
-  2312317920,
-  282753626,
-  1742555852,
-  4189708143,
-  2394877945,
-  397917763,
-  1622183637,
-  3604390888,
-  2714866558,
-  953729732,
-  1340076626,
-  3518719985,
-  2797360999,
-  1068828381,
-  1219638859,
-  3624741850,
-  2936675148,
-  906185462,
-  1090812512,
-  3747672003,
-  2825379669,
-  829329135,
-  1181335161,
-  3412177804,
-  3160834842,
-  628085408,
-  1382605366,
-  3423369109,
-  3138078467,
-  570562233,
-  1426400815,
-  3317316542,
-  2998733608,
-  733239954,
-  1555261956,
-  3268935591,
-  3050360625,
-  752459403,
-  1541320221,
-  2607071920,
-  3965973030,
-  1969922972,
-  40735498,
-  2617837225,
-  3943577151,
-  1913087877,
-  83908371,
-  2512341634,
-  3803740692,
-  2075208622,
-  213261112,
-  2463272603,
-  3855990285,
-  2094854071,
-  198958881,
-  2262029012,
-  4057260610,
-  1759359992,
-  534414190,
-  2176718541,
-  4139329115,
-  1873836001,
-  414664567,
-  2282248934,
-  4279200368,
-  1711684554,
-  285281116,
-  2405801727,
-  4167216745,
-  1634467795,
-  376229701,
-  2685067896,
-  3608007406,
-  1308918612,
-  956543938,
-  2808555105,
-  3495958263,
-  1231636301,
-  1047427035,
-  2932959818,
-  3654703836,
-  1088359270,
-  936918e3,
-  2847714899,
-  3736837829,
-  1202900863,
-  817233897,
-  3183342108,
-  3401237130,
-  1404277552,
-  615818150,
-  3134207493,
-  3453421203,
-  1423857449,
-  601450431,
-  3009837614,
-  3294710456,
-  1567103746,
-  711928724,
-  3020668471,
-  3272380065,
-  1510334235,
-  755167117
-];
-var lookupTable = uint32ArrayFrom(a_lookUpTable);
-
-// ../../../../node_modules/@smithy/eventstream-codec/dist-es/Int64.js
-var Int64 = class _Int64 {
-  constructor(bytes) {
-    this.bytes = bytes;
-    if (bytes.byteLength !== 8) {
-      throw new Error("Int64 buffers must be exactly 8 bytes");
-    }
-  }
-  static fromNumber(number) {
-    if (number > 9223372036854776e3 || number < -9223372036854776e3) {
-      throw new Error(`${number} is too large (or, if negative, too small) to represent as an Int64`);
-    }
-    const bytes = new Uint8Array(8);
-    for (let i2 = 7, remaining = Math.abs(Math.round(number)); i2 > -1 && remaining > 0; i2--, remaining /= 256) {
-      bytes[i2] = remaining;
-    }
-    if (number < 0) {
-      negate(bytes);
-    }
-    return new _Int64(bytes);
-  }
-  valueOf() {
-    const bytes = this.bytes.slice(0);
-    const negative = bytes[0] & 128;
-    if (negative) {
-      negate(bytes);
-    }
-    return parseInt(toHex(bytes), 16) * (negative ? -1 : 1);
-  }
-  toString() {
-    return String(this.valueOf());
-  }
-};
-function negate(bytes) {
-  for (let i2 = 0; i2 < 8; i2++) {
-    bytes[i2] ^= 255;
-  }
-  for (let i2 = 7; i2 > -1; i2--) {
-    bytes[i2]++;
-    if (bytes[i2] !== 0)
-      break;
-  }
-}
-
-// ../../../../node_modules/@smithy/eventstream-codec/dist-es/HeaderMarshaller.js
-var HeaderMarshaller = class {
-  constructor(toUtf82, fromUtf83) {
-    this.toUtf8 = toUtf82;
-    this.fromUtf8 = fromUtf83;
-  }
-  format(headers) {
-    const chunks = [];
-    for (const headerName of Object.keys(headers)) {
-      const bytes = this.fromUtf8(headerName);
-      chunks.push(Uint8Array.from([bytes.byteLength]), bytes, this.formatHeaderValue(headers[headerName]));
-    }
-    const out = new Uint8Array(chunks.reduce((carry, bytes) => carry + bytes.byteLength, 0));
-    let position = 0;
-    for (const chunk of chunks) {
-      out.set(chunk, position);
-      position += chunk.byteLength;
-    }
-    return out;
-  }
-  formatHeaderValue(header) {
-    switch (header.type) {
-      case "boolean":
-        return Uint8Array.from([header.value ? 0 : 1]);
-      case "byte":
-        return Uint8Array.from([2, header.value]);
-      case "short":
-        const shortView = new DataView(new ArrayBuffer(3));
-        shortView.setUint8(0, 3);
-        shortView.setInt16(1, header.value, false);
-        return new Uint8Array(shortView.buffer);
-      case "integer":
-        const intView = new DataView(new ArrayBuffer(5));
-        intView.setUint8(0, 4);
-        intView.setInt32(1, header.value, false);
-        return new Uint8Array(intView.buffer);
-      case "long":
-        const longBytes = new Uint8Array(9);
-        longBytes[0] = 5;
-        longBytes.set(header.value.bytes, 1);
-        return longBytes;
-      case "binary":
-        const binView = new DataView(new ArrayBuffer(3 + header.value.byteLength));
-        binView.setUint8(0, 6);
-        binView.setUint16(1, header.value.byteLength, false);
-        const binBytes = new Uint8Array(binView.buffer);
-        binBytes.set(header.value, 3);
-        return binBytes;
-      case "string":
-        const utf8Bytes = this.fromUtf8(header.value);
-        const strView = new DataView(new ArrayBuffer(3 + utf8Bytes.byteLength));
-        strView.setUint8(0, 7);
-        strView.setUint16(1, utf8Bytes.byteLength, false);
-        const strBytes = new Uint8Array(strView.buffer);
-        strBytes.set(utf8Bytes, 3);
-        return strBytes;
-      case "timestamp":
-        const tsBytes = new Uint8Array(9);
-        tsBytes[0] = 8;
-        tsBytes.set(Int64.fromNumber(header.value.valueOf()).bytes, 1);
-        return tsBytes;
-      case "uuid":
-        if (!UUID_PATTERN.test(header.value)) {
-          throw new Error(`Invalid UUID received: ${header.value}`);
-        }
-        const uuidBytes = new Uint8Array(17);
-        uuidBytes[0] = 9;
-        uuidBytes.set(fromHex(header.value.replace(/\-/g, "")), 1);
-        return uuidBytes;
-    }
-  }
-  parse(headers) {
-    const out = {};
-    let position = 0;
-    while (position < headers.byteLength) {
-      const nameLength = headers.getUint8(position++);
-      const name = this.toUtf8(new Uint8Array(headers.buffer, headers.byteOffset + position, nameLength));
-      position += nameLength;
-      switch (headers.getUint8(position++)) {
-        case 0:
-          out[name] = {
-            type: BOOLEAN_TAG,
-            value: true
-          };
-          break;
-        case 1:
-          out[name] = {
-            type: BOOLEAN_TAG,
-            value: false
-          };
-          break;
-        case 2:
-          out[name] = {
-            type: BYTE_TAG,
-            value: headers.getInt8(position++)
-          };
-          break;
-        case 3:
-          out[name] = {
-            type: SHORT_TAG,
-            value: headers.getInt16(position, false)
-          };
-          position += 2;
-          break;
-        case 4:
-          out[name] = {
-            type: INT_TAG,
-            value: headers.getInt32(position, false)
-          };
-          position += 4;
-          break;
-        case 5:
-          out[name] = {
-            type: LONG_TAG,
-            value: new Int64(new Uint8Array(headers.buffer, headers.byteOffset + position, 8))
-          };
-          position += 8;
-          break;
-        case 6:
-          const binaryLength = headers.getUint16(position, false);
-          position += 2;
-          out[name] = {
-            type: BINARY_TAG,
-            value: new Uint8Array(headers.buffer, headers.byteOffset + position, binaryLength)
-          };
-          position += binaryLength;
-          break;
-        case 7:
-          const stringLength = headers.getUint16(position, false);
-          position += 2;
-          out[name] = {
-            type: STRING_TAG,
-            value: this.toUtf8(new Uint8Array(headers.buffer, headers.byteOffset + position, stringLength))
-          };
-          position += stringLength;
-          break;
-        case 8:
-          out[name] = {
-            type: TIMESTAMP_TAG,
-            value: new Date(new Int64(new Uint8Array(headers.buffer, headers.byteOffset + position, 8)).valueOf())
-          };
-          position += 8;
-          break;
-        case 9:
-          const uuidBytes = new Uint8Array(headers.buffer, headers.byteOffset + position, 16);
-          position += 16;
-          out[name] = {
-            type: UUID_TAG,
-            value: `${toHex(uuidBytes.subarray(0, 4))}-${toHex(uuidBytes.subarray(4, 6))}-${toHex(uuidBytes.subarray(6, 8))}-${toHex(uuidBytes.subarray(8, 10))}-${toHex(uuidBytes.subarray(10))}`
-          };
-          break;
-        default:
-          throw new Error(`Unrecognized header type tag`);
-      }
-    }
-    return out;
-  }
-};
-var HEADER_VALUE_TYPE;
-(function(HEADER_VALUE_TYPE2) {
-  HEADER_VALUE_TYPE2[HEADER_VALUE_TYPE2["boolTrue"] = 0] = "boolTrue";
-  HEADER_VALUE_TYPE2[HEADER_VALUE_TYPE2["boolFalse"] = 1] = "boolFalse";
-  HEADER_VALUE_TYPE2[HEADER_VALUE_TYPE2["byte"] = 2] = "byte";
-  HEADER_VALUE_TYPE2[HEADER_VALUE_TYPE2["short"] = 3] = "short";
-  HEADER_VALUE_TYPE2[HEADER_VALUE_TYPE2["integer"] = 4] = "integer";
-  HEADER_VALUE_TYPE2[HEADER_VALUE_TYPE2["long"] = 5] = "long";
-  HEADER_VALUE_TYPE2[HEADER_VALUE_TYPE2["byteArray"] = 6] = "byteArray";
-  HEADER_VALUE_TYPE2[HEADER_VALUE_TYPE2["string"] = 7] = "string";
-  HEADER_VALUE_TYPE2[HEADER_VALUE_TYPE2["timestamp"] = 8] = "timestamp";
-  HEADER_VALUE_TYPE2[HEADER_VALUE_TYPE2["uuid"] = 9] = "uuid";
-})(HEADER_VALUE_TYPE || (HEADER_VALUE_TYPE = {}));
-var BOOLEAN_TAG = "boolean";
-var BYTE_TAG = "byte";
-var SHORT_TAG = "short";
-var INT_TAG = "integer";
-var LONG_TAG = "long";
-var BINARY_TAG = "binary";
-var STRING_TAG = "string";
-var TIMESTAMP_TAG = "timestamp";
-var UUID_TAG = "uuid";
-var UUID_PATTERN = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/;
-
-// ../../../../node_modules/@smithy/eventstream-codec/dist-es/splitMessage.js
-var PRELUDE_MEMBER_LENGTH = 4;
-var PRELUDE_LENGTH = PRELUDE_MEMBER_LENGTH * 2;
-var CHECKSUM_LENGTH = 4;
-var MINIMUM_MESSAGE_LENGTH = PRELUDE_LENGTH + CHECKSUM_LENGTH * 2;
-function splitMessage({ byteLength, byteOffset, buffer }) {
-  if (byteLength < MINIMUM_MESSAGE_LENGTH) {
-    throw new Error("Provided message too short to accommodate event stream message overhead");
-  }
-  const view = new DataView(buffer, byteOffset, byteLength);
-  const messageLength = view.getUint32(0, false);
-  if (byteLength !== messageLength) {
-    throw new Error("Reported message length does not match received message length");
-  }
-  const headerLength = view.getUint32(PRELUDE_MEMBER_LENGTH, false);
-  const expectedPreludeChecksum = view.getUint32(PRELUDE_LENGTH, false);
-  const expectedMessageChecksum = view.getUint32(byteLength - CHECKSUM_LENGTH, false);
-  const checksummer = new Crc32().update(new Uint8Array(buffer, byteOffset, PRELUDE_LENGTH));
-  if (expectedPreludeChecksum !== checksummer.digest()) {
-    throw new Error(`The prelude checksum specified in the message (${expectedPreludeChecksum}) does not match the calculated CRC32 checksum (${checksummer.digest()})`);
-  }
-  checksummer.update(new Uint8Array(buffer, byteOffset + PRELUDE_LENGTH, byteLength - (PRELUDE_LENGTH + CHECKSUM_LENGTH)));
-  if (expectedMessageChecksum !== checksummer.digest()) {
-    throw new Error(`The message checksum (${checksummer.digest()}) did not match the expected value of ${expectedMessageChecksum}`);
-  }
-  return {
-    headers: new DataView(buffer, byteOffset + PRELUDE_LENGTH + CHECKSUM_LENGTH, headerLength),
-    body: new Uint8Array(buffer, byteOffset + PRELUDE_LENGTH + CHECKSUM_LENGTH + headerLength, messageLength - headerLength - (PRELUDE_LENGTH + CHECKSUM_LENGTH + CHECKSUM_LENGTH))
-  };
-}
-
-// ../../../../node_modules/@smithy/eventstream-codec/dist-es/EventStreamCodec.js
-var EventStreamCodec = class {
-  constructor(toUtf82, fromUtf83) {
-    this.headerMarshaller = new HeaderMarshaller(toUtf82, fromUtf83);
-    this.messageBuffer = [];
-    this.isEndOfStream = false;
-  }
-  feed(message) {
-    this.messageBuffer.push(this.decode(message));
-  }
-  endOfStream() {
-    this.isEndOfStream = true;
-  }
-  getMessage() {
-    const message = this.messageBuffer.pop();
-    const isEndOfStream = this.isEndOfStream;
-    return {
-      getMessage() {
-        return message;
-      },
-      isEndOfStream() {
-        return isEndOfStream;
-      }
-    };
-  }
-  getAvailableMessages() {
-    const messages = this.messageBuffer;
-    this.messageBuffer = [];
-    const isEndOfStream = this.isEndOfStream;
-    return {
-      getMessages() {
-        return messages;
-      },
-      isEndOfStream() {
-        return isEndOfStream;
-      }
-    };
-  }
-  encode({ headers: rawHeaders, body }) {
-    const headers = this.headerMarshaller.format(rawHeaders);
-    const length = headers.byteLength + body.byteLength + 16;
-    const out = new Uint8Array(length);
-    const view = new DataView(out.buffer, out.byteOffset, out.byteLength);
-    const checksum = new Crc32();
-    view.setUint32(0, length, false);
-    view.setUint32(4, headers.byteLength, false);
-    view.setUint32(8, checksum.update(out.subarray(0, 8)).digest(), false);
-    out.set(headers, 12);
-    out.set(body, headers.byteLength + 12);
-    view.setUint32(length - 4, checksum.update(out.subarray(8, length - 4)).digest(), false);
-    return out;
-  }
-  decode(message) {
-    const { headers, body } = splitMessage(message);
-    return { headers: this.headerMarshaller.parse(headers), body };
-  }
-  formatHeaders(rawHeaders) {
-    return this.headerMarshaller.format(rawHeaders);
-  }
-};
-
-// ../../../../node_modules/@smithy/eventstream-codec/dist-es/MessageDecoderStream.js
-var MessageDecoderStream = class {
-  constructor(options) {
-    this.options = options;
-  }
-  [Symbol.asyncIterator]() {
-    return this.asyncIterator();
-  }
-  asyncIterator() {
-    return __asyncGenerator(this, null, function* () {
-      try {
-        for (var iter = __forAwait(this.options.inputStream), more, temp, error; more = !(temp = yield new __await(iter.next())).done; more = false) {
-          const bytes = temp.value;
-          const decoded = this.options.decoder.decode(bytes);
-          yield decoded;
-        }
-      } catch (temp) {
-        error = [temp];
-      } finally {
-        try {
-          more && (temp = iter.return) && (yield new __await(temp.call(iter)));
-        } finally {
-          if (error)
-            throw error[0];
-        }
-      }
-    });
-  }
-};
-
-// ../../../../node_modules/@smithy/eventstream-codec/dist-es/MessageEncoderStream.js
-var MessageEncoderStream = class {
-  constructor(options) {
-    this.options = options;
-  }
-  [Symbol.asyncIterator]() {
-    return this.asyncIterator();
-  }
-  asyncIterator() {
-    return __asyncGenerator(this, null, function* () {
-      try {
-        for (var iter = __forAwait(this.options.messageStream), more, temp, error; more = !(temp = yield new __await(iter.next())).done; more = false) {
-          const msg = temp.value;
-          const encoded = this.options.encoder.encode(msg);
-          yield encoded;
-        }
-      } catch (temp) {
-        error = [temp];
-      } finally {
-        try {
-          more && (temp = iter.return) && (yield new __await(temp.call(iter)));
-        } finally {
-          if (error)
-            throw error[0];
-        }
-      }
-      if (this.options.includeEndFrame) {
-        yield new Uint8Array(0);
-      }
-    });
-  }
-};
-
-// ../../../../node_modules/@smithy/eventstream-codec/dist-es/SmithyMessageDecoderStream.js
-var SmithyMessageDecoderStream = class {
-  constructor(options) {
-    this.options = options;
-  }
-  [Symbol.asyncIterator]() {
-    return this.asyncIterator();
-  }
-  asyncIterator() {
-    return __asyncGenerator(this, null, function* () {
-      try {
-        for (var iter = __forAwait(this.options.messageStream), more, temp, error; more = !(temp = yield new __await(iter.next())).done; more = false) {
-          const message = temp.value;
-          const deserialized = yield new __await(this.options.deserializer(message));
-          if (deserialized === void 0)
-            continue;
-          yield deserialized;
-        }
-      } catch (temp) {
-        error = [temp];
-      } finally {
-        try {
-          more && (temp = iter.return) && (yield new __await(temp.call(iter)));
-        } finally {
-          if (error)
-            throw error[0];
-        }
-      }
-    });
-  }
-};
-
-// ../../../../node_modules/@smithy/eventstream-codec/dist-es/SmithyMessageEncoderStream.js
-var SmithyMessageEncoderStream = class {
-  constructor(options) {
-    this.options = options;
-  }
-  [Symbol.asyncIterator]() {
-    return this.asyncIterator();
-  }
-  asyncIterator() {
-    return __asyncGenerator(this, null, function* () {
-      try {
-        for (var iter = __forAwait(this.options.inputStream), more, temp, error; more = !(temp = yield new __await(iter.next())).done; more = false) {
-          const chunk = temp.value;
-          const payloadBuf = this.options.serializer(chunk);
-          yield payloadBuf;
-        }
-      } catch (temp) {
-        error = [temp];
-      } finally {
-        try {
-          more && (temp = iter.return) && (yield new __await(temp.call(iter)));
-        } finally {
-          if (error)
-            throw error[0];
-        }
-      }
-    });
-  }
-};
-
-// ../../../../node_modules/@smithy/eventstream-serde-universal/dist-es/getChunkedStream.js
-function getChunkedStream(source) {
-  let currentMessageTotalLength = 0;
-  let currentMessagePendingLength = 0;
-  let currentMessage = null;
-  let messageLengthBuffer = null;
-  const allocateMessage = (size) => {
-    if (typeof size !== "number") {
-      throw new Error("Attempted to allocate an event message where size was not a number: " + size);
-    }
-    currentMessageTotalLength = size;
-    currentMessagePendingLength = 4;
-    currentMessage = new Uint8Array(size);
-    const currentMessageView = new DataView(currentMessage.buffer);
-    currentMessageView.setUint32(0, size, false);
-  };
-  const iterator = function() {
-    return __asyncGenerator(this, null, function* () {
-      const sourceIterator = source[Symbol.asyncIterator]();
-      while (true) {
-        const { value, done } = yield new __await(sourceIterator.next());
-        if (done) {
-          if (!currentMessageTotalLength) {
-            return;
-          } else if (currentMessageTotalLength === currentMessagePendingLength) {
-            yield currentMessage;
-          } else {
-            throw new Error("Truncated event message received.");
-          }
-          return;
-        }
-        const chunkLength = value.length;
-        let currentOffset = 0;
-        while (currentOffset < chunkLength) {
-          if (!currentMessage) {
-            const bytesRemaining = chunkLength - currentOffset;
-            if (!messageLengthBuffer) {
-              messageLengthBuffer = new Uint8Array(4);
-            }
-            const numBytesForTotal = Math.min(4 - currentMessagePendingLength, bytesRemaining);
-            messageLengthBuffer.set(value.slice(currentOffset, currentOffset + numBytesForTotal), currentMessagePendingLength);
-            currentMessagePendingLength += numBytesForTotal;
-            currentOffset += numBytesForTotal;
-            if (currentMessagePendingLength < 4) {
-              break;
-            }
-            allocateMessage(new DataView(messageLengthBuffer.buffer).getUint32(0, false));
-            messageLengthBuffer = null;
-          }
-          const numBytesToWrite = Math.min(currentMessageTotalLength - currentMessagePendingLength, chunkLength - currentOffset);
-          currentMessage.set(value.slice(currentOffset, currentOffset + numBytesToWrite), currentMessagePendingLength);
-          currentMessagePendingLength += numBytesToWrite;
-          currentOffset += numBytesToWrite;
-          if (currentMessageTotalLength && currentMessageTotalLength === currentMessagePendingLength) {
-            yield currentMessage;
-            currentMessage = null;
-            currentMessageTotalLength = 0;
-            currentMessagePendingLength = 0;
-          }
-        }
-      }
-    });
-  };
-  return {
-    [Symbol.asyncIterator]: iterator
-  };
-}
-
-// ../../../../node_modules/@smithy/eventstream-serde-universal/dist-es/getUnmarshalledStream.js
-function getMessageUnmarshaller(deserializer, toUtf82) {
-  return function(message) {
-    return __async(this, null, function* () {
-      const { value: messageType } = message.headers[":message-type"];
-      if (messageType === "error") {
-        const unmodeledError = new Error(message.headers[":error-message"].value || "UnknownError");
-        unmodeledError.name = message.headers[":error-code"].value;
-        throw unmodeledError;
-      } else if (messageType === "exception") {
-        const code = message.headers[":exception-type"].value;
-        const exception = { [code]: message };
-        const deserializedException = yield deserializer(exception);
-        if (deserializedException.$unknown) {
-          const error = new Error(toUtf82(message.body));
-          error.name = code;
-          throw error;
-        }
-        throw deserializedException[code];
-      } else if (messageType === "event") {
-        const event = {
-          [message.headers[":event-type"].value]: message
-        };
-        const deserialized = yield deserializer(event);
-        if (deserialized.$unknown)
-          return;
-        return deserialized;
-      } else {
-        throw Error(`Unrecognizable event type: ${message.headers[":event-type"].value}`);
-      }
-    });
-  };
-}
-
-// ../../../../node_modules/@smithy/eventstream-serde-universal/dist-es/EventStreamMarshaller.js
-var EventStreamMarshaller = class {
-  constructor({ utf8Encoder, utf8Decoder }) {
-    this.eventStreamCodec = new EventStreamCodec(utf8Encoder, utf8Decoder);
-    this.utfEncoder = utf8Encoder;
-  }
-  deserialize(body, deserializer) {
-    const inputStream = getChunkedStream(body);
-    return new SmithyMessageDecoderStream({
-      messageStream: new MessageDecoderStream({ inputStream, decoder: this.eventStreamCodec }),
-      deserializer: getMessageUnmarshaller(deserializer, this.utfEncoder)
-    });
-  }
-  serialize(inputStream, serializer) {
-    return new MessageEncoderStream({
-      messageStream: new SmithyMessageEncoderStream({ inputStream, serializer }),
-      encoder: this.eventStreamCodec,
-      includeEndFrame: true
-    });
-  }
-};
-
-// ../../../../node_modules/@smithy/eventstream-serde-browser/dist-es/utils.js
-var readableStreamtoIterable = (readableStream) => ({
-  [Symbol.asyncIterator]: function() {
-    return __asyncGenerator(this, null, function* () {
-      const reader = readableStream.getReader();
-      try {
-        while (true) {
-          const { done, value } = yield new __await(reader.read());
-          if (done)
-            return;
-          yield value;
-        }
-      } finally {
-        reader.releaseLock();
-      }
-    });
-  }
-});
-var iterableToReadableStream = (asyncIterable) => {
-  const iterator = asyncIterable[Symbol.asyncIterator]();
-  return new ReadableStream({
-    pull(controller) {
-      return __async(this, null, function* () {
-        const { done, value } = yield iterator.next();
-        if (done) {
-          return controller.close();
-        }
-        controller.enqueue(value);
-      });
-    }
-  });
-};
-
-// ../../../../node_modules/@smithy/eventstream-serde-browser/dist-es/EventStreamMarshaller.js
-var EventStreamMarshaller2 = class {
-  constructor({ utf8Encoder, utf8Decoder }) {
-    this.universalMarshaller = new EventStreamMarshaller({
-      utf8Decoder,
-      utf8Encoder
-    });
-  }
-  deserialize(body, deserializer) {
-    const bodyIterable = isReadableStream(body) ? readableStreamtoIterable(body) : body;
-    return this.universalMarshaller.deserialize(bodyIterable, deserializer);
-  }
-  serialize(input, serializer) {
-    const serialziedIterable = this.universalMarshaller.serialize(input, serializer);
-    return typeof ReadableStream === "function" ? iterableToReadableStream(serialziedIterable) : serialziedIterable;
-  }
-};
-var isReadableStream = (body) => typeof ReadableStream === "function" && body instanceof ReadableStream;
-
-// ../../../../node_modules/@smithy/eventstream-serde-browser/dist-es/provider.js
-var eventStreamSerdeProvider = (options) => new EventStreamMarshaller2(options);
-
-// ../../../../node_modules/@smithy/chunked-blob-reader/dist-es/index.js
+// node_modules/@smithy/chunked-blob-reader/dist-es/index.js
 function blobReader(blob, onChunk, chunkSize = 1024 * 1024) {
   return new Promise((resolve, reject) => {
     const fileReader = new FileReader();
@@ -10252,7 +9318,7 @@ function blobReader(blob, onChunk, chunkSize = 1024 * 1024) {
   });
 }
 
-// ../../../../node_modules/@smithy/hash-blob-browser/dist-es/index.js
+// node_modules/@smithy/hash-blob-browser/dist-es/index.js
 var blobHasher = function blobHasher2(hashCtor, blob) {
   return __async(this, null, function* () {
     const hash = new hashCtor();
@@ -10263,12 +9329,12 @@ var blobHasher = function blobHasher2(hashCtor, blob) {
   });
 };
 
-// ../../../../node_modules/@smithy/md5-js/dist-es/constants.js
+// node_modules/@smithy/md5-js/dist-es/constants.js
 var BLOCK_SIZE = 64;
 var DIGEST_LENGTH = 16;
 var INIT = [1732584193, 4023233417, 2562383102, 271733878];
 
-// ../../../../node_modules/@smithy/md5-js/dist-es/index.js
+// node_modules/@smithy/md5-js/dist-es/index.js
 var Md5 = class {
   constructor() {
     this.reset();
@@ -10432,7 +9498,7 @@ function convertToBuffer3(data) {
   return new Uint8Array(data);
 }
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/runtimeConfig.shared.js
+// node_modules/@aws-sdk/client-s3/dist-es/runtimeConfig.shared.js
 var getRuntimeConfig = (config) => {
   return {
     apiVersion: "2006-03-01",
@@ -10467,7 +9533,7 @@ var getRuntimeConfig = (config) => {
   };
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/runtimeConfig.browser.js
+// node_modules/@aws-sdk/client-s3/dist-es/runtimeConfig.browser.js
 var getRuntimeConfig2 = (config) => {
   const defaultsMode = resolveDefaultsModeConfig(config);
   const defaultConfigProvider = () => defaultsMode().then(loadConfigsForDefaultMode);
@@ -10495,7 +9561,7 @@ var getRuntimeConfig2 = (config) => {
   });
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/auth/httpAuthExtensionConfiguration.js
+// node_modules/@aws-sdk/client-s3/dist-es/auth/httpAuthExtensionConfiguration.js
 var getHttpAuthExtensionConfiguration = (runtimeConfig) => {
   const _httpAuthSchemes = runtimeConfig.httpAuthSchemes;
   let _httpAuthSchemeProvider = runtimeConfig.httpAuthSchemeProvider;
@@ -10534,7 +9600,7 @@ var resolveHttpAuthRuntimeConfig = (config) => {
   };
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/runtimeExtensions.js
+// node_modules/@aws-sdk/client-s3/dist-es/runtimeExtensions.js
 var asPartial = (t2) => t2;
 var resolveRuntimeExtensions = (runtimeConfig, extensions) => {
   const extensionConfiguration = __spreadValues(__spreadValues(__spreadValues(__spreadValues({}, asPartial(getAwsRegionExtensionConfiguration(runtimeConfig))), asPartial(getDefaultExtensionConfiguration(runtimeConfig))), asPartial(getHttpHandlerExtensionConfiguration(runtimeConfig))), asPartial(getHttpAuthExtensionConfiguration(runtimeConfig)));
@@ -10542,7 +9608,7 @@ var resolveRuntimeExtensions = (runtimeConfig, extensions) => {
   return __spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues({}, runtimeConfig), resolveAwsRegionExtensionConfiguration(extensionConfiguration)), resolveDefaultRuntimeConfig(extensionConfiguration)), resolveHttpHandlerRuntimeConfig(extensionConfiguration)), resolveHttpAuthRuntimeConfig(extensionConfiguration));
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/S3Client.js
+// node_modules/@aws-sdk/client-s3/dist-es/S3Client.js
 var S3Client = class extends Client {
   constructor(...[configuration]) {
     const _config_0 = getRuntimeConfig2(configuration || {});
@@ -10585,7 +9651,7 @@ var S3Client = class extends Client {
   }
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/AbortMultipartUploadCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/AbortMultipartUploadCommand.js
 var AbortMultipartUploadCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" },
   Key: { type: "contextParams", name: "Key" }
@@ -10598,7 +9664,7 @@ var AbortMultipartUploadCommand = class extends Command.classBuilder().ep(__spre
 }).s("AmazonS3", "AbortMultipartUpload", {}).n("S3Client", "AbortMultipartUploadCommand").f(void 0, void 0).ser(se_AbortMultipartUploadCommand).de(de_AbortMultipartUploadCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/middleware-ssec/dist-es/index.js
+// node_modules/@aws-sdk/middleware-ssec/dist-es/index.js
 function ssecMiddleware(options) {
   return (next) => (args) => __async(this, null, function* () {
     const input = __spreadValues({}, args.input);
@@ -10660,7 +9726,7 @@ function isValidBase64EncodedSSECustomerKey(str, options) {
   }
 }
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/CompleteMultipartUploadCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/CompleteMultipartUploadCommand.js
 var CompleteMultipartUploadCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" },
   Key: { type: "contextParams", name: "Key" }
@@ -10674,7 +9740,7 @@ var CompleteMultipartUploadCommand = class extends Command.classBuilder().ep(__s
 }).s("AmazonS3", "CompleteMultipartUpload", {}).n("S3Client", "CompleteMultipartUploadCommand").f(CompleteMultipartUploadRequestFilterSensitiveLog, CompleteMultipartUploadOutputFilterSensitiveLog).ser(se_CompleteMultipartUploadCommand).de(de_CompleteMultipartUploadCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/CopyObjectCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/CopyObjectCommand.js
 var CopyObjectCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   DisableS3ExpressSessionAuth: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" },
@@ -10690,7 +9756,7 @@ var CopyObjectCommand = class extends Command.classBuilder().ep(__spreadProps(__
 }).s("AmazonS3", "CopyObject", {}).n("S3Client", "CopyObjectCommand").f(CopyObjectRequestFilterSensitiveLog, CopyObjectOutputFilterSensitiveLog).ser(se_CopyObjectCommand).de(de_CopyObjectCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/middleware-location-constraint/dist-es/index.js
+// node_modules/@aws-sdk/middleware-location-constraint/dist-es/index.js
 function locationConstraintMiddleware(options) {
   return (next) => (args) => __async(this, null, function* () {
     const { CreateBucketConfiguration } = args.input;
@@ -10717,7 +9783,7 @@ var getLocationConstraintPlugin = (config) => ({
   }
 });
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/CreateBucketCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/CreateBucketCommand.js
 var CreateBucketCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   DisableAccessPoints: { type: "staticContextParams", value: true },
@@ -10732,7 +9798,7 @@ var CreateBucketCommand = class extends Command.classBuilder().ep(__spreadProps(
 }).s("AmazonS3", "CreateBucket", {}).n("S3Client", "CreateBucketCommand").f(void 0, void 0).ser(se_CreateBucketCommand).de(de_CreateBucketCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/CreateMultipartUploadCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/CreateMultipartUploadCommand.js
 var CreateMultipartUploadCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" },
   Key: { type: "contextParams", name: "Key" }
@@ -10746,7 +9812,7 @@ var CreateMultipartUploadCommand = class extends Command.classBuilder().ep(__spr
 }).s("AmazonS3", "CreateMultipartUpload", {}).n("S3Client", "CreateMultipartUploadCommand").f(CreateMultipartUploadRequestFilterSensitiveLog, CreateMultipartUploadOutputFilterSensitiveLog).ser(se_CreateMultipartUploadCommand).de(de_CreateMultipartUploadCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketAnalyticsConfigurationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketAnalyticsConfigurationCommand.js
 var DeleteBucketAnalyticsConfigurationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -10758,7 +9824,7 @@ var DeleteBucketAnalyticsConfigurationCommand = class extends Command.classBuild
 }).s("AmazonS3", "DeleteBucketAnalyticsConfiguration", {}).n("S3Client", "DeleteBucketAnalyticsConfigurationCommand").f(void 0, void 0).ser(se_DeleteBucketAnalyticsConfigurationCommand).de(de_DeleteBucketAnalyticsConfigurationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketCommand.js
 var DeleteBucketCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -10770,7 +9836,7 @@ var DeleteBucketCommand = class extends Command.classBuilder().ep(__spreadProps(
 }).s("AmazonS3", "DeleteBucket", {}).n("S3Client", "DeleteBucketCommand").f(void 0, void 0).ser(se_DeleteBucketCommand).de(de_DeleteBucketCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketCorsCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketCorsCommand.js
 var DeleteBucketCorsCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -10782,7 +9848,7 @@ var DeleteBucketCorsCommand = class extends Command.classBuilder().ep(__spreadPr
 }).s("AmazonS3", "DeleteBucketCors", {}).n("S3Client", "DeleteBucketCorsCommand").f(void 0, void 0).ser(se_DeleteBucketCorsCommand).de(de_DeleteBucketCorsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketEncryptionCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketEncryptionCommand.js
 var DeleteBucketEncryptionCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -10794,7 +9860,7 @@ var DeleteBucketEncryptionCommand = class extends Command.classBuilder().ep(__sp
 }).s("AmazonS3", "DeleteBucketEncryption", {}).n("S3Client", "DeleteBucketEncryptionCommand").f(void 0, void 0).ser(se_DeleteBucketEncryptionCommand).de(de_DeleteBucketEncryptionCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketIntelligentTieringConfigurationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketIntelligentTieringConfigurationCommand.js
 var DeleteBucketIntelligentTieringConfigurationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -10806,7 +9872,7 @@ var DeleteBucketIntelligentTieringConfigurationCommand = class extends Command.c
 }).s("AmazonS3", "DeleteBucketIntelligentTieringConfiguration", {}).n("S3Client", "DeleteBucketIntelligentTieringConfigurationCommand").f(void 0, void 0).ser(se_DeleteBucketIntelligentTieringConfigurationCommand).de(de_DeleteBucketIntelligentTieringConfigurationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketInventoryConfigurationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketInventoryConfigurationCommand.js
 var DeleteBucketInventoryConfigurationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -10818,7 +9884,7 @@ var DeleteBucketInventoryConfigurationCommand = class extends Command.classBuild
 }).s("AmazonS3", "DeleteBucketInventoryConfiguration", {}).n("S3Client", "DeleteBucketInventoryConfigurationCommand").f(void 0, void 0).ser(se_DeleteBucketInventoryConfigurationCommand).de(de_DeleteBucketInventoryConfigurationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketLifecycleCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketLifecycleCommand.js
 var DeleteBucketLifecycleCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -10830,7 +9896,7 @@ var DeleteBucketLifecycleCommand = class extends Command.classBuilder().ep(__spr
 }).s("AmazonS3", "DeleteBucketLifecycle", {}).n("S3Client", "DeleteBucketLifecycleCommand").f(void 0, void 0).ser(se_DeleteBucketLifecycleCommand).de(de_DeleteBucketLifecycleCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketMetricsConfigurationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketMetricsConfigurationCommand.js
 var DeleteBucketMetricsConfigurationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -10842,7 +9908,7 @@ var DeleteBucketMetricsConfigurationCommand = class extends Command.classBuilder
 }).s("AmazonS3", "DeleteBucketMetricsConfiguration", {}).n("S3Client", "DeleteBucketMetricsConfigurationCommand").f(void 0, void 0).ser(se_DeleteBucketMetricsConfigurationCommand).de(de_DeleteBucketMetricsConfigurationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketOwnershipControlsCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketOwnershipControlsCommand.js
 var DeleteBucketOwnershipControlsCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -10854,7 +9920,7 @@ var DeleteBucketOwnershipControlsCommand = class extends Command.classBuilder().
 }).s("AmazonS3", "DeleteBucketOwnershipControls", {}).n("S3Client", "DeleteBucketOwnershipControlsCommand").f(void 0, void 0).ser(se_DeleteBucketOwnershipControlsCommand).de(de_DeleteBucketOwnershipControlsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketPolicyCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketPolicyCommand.js
 var DeleteBucketPolicyCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -10866,7 +9932,7 @@ var DeleteBucketPolicyCommand = class extends Command.classBuilder().ep(__spread
 }).s("AmazonS3", "DeleteBucketPolicy", {}).n("S3Client", "DeleteBucketPolicyCommand").f(void 0, void 0).ser(se_DeleteBucketPolicyCommand).de(de_DeleteBucketPolicyCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketReplicationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketReplicationCommand.js
 var DeleteBucketReplicationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -10878,7 +9944,7 @@ var DeleteBucketReplicationCommand = class extends Command.classBuilder().ep(__s
 }).s("AmazonS3", "DeleteBucketReplication", {}).n("S3Client", "DeleteBucketReplicationCommand").f(void 0, void 0).ser(se_DeleteBucketReplicationCommand).de(de_DeleteBucketReplicationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketTaggingCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketTaggingCommand.js
 var DeleteBucketTaggingCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -10890,7 +9956,7 @@ var DeleteBucketTaggingCommand = class extends Command.classBuilder().ep(__sprea
 }).s("AmazonS3", "DeleteBucketTagging", {}).n("S3Client", "DeleteBucketTaggingCommand").f(void 0, void 0).ser(se_DeleteBucketTaggingCommand).de(de_DeleteBucketTaggingCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketWebsiteCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketWebsiteCommand.js
 var DeleteBucketWebsiteCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -10902,7 +9968,7 @@ var DeleteBucketWebsiteCommand = class extends Command.classBuilder().ep(__sprea
 }).s("AmazonS3", "DeleteBucketWebsite", {}).n("S3Client", "DeleteBucketWebsiteCommand").f(void 0, void 0).ser(se_DeleteBucketWebsiteCommand).de(de_DeleteBucketWebsiteCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteObjectCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteObjectCommand.js
 var DeleteObjectCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" },
   Key: { type: "contextParams", name: "Key" }
@@ -10915,7 +9981,7 @@ var DeleteObjectCommand = class extends Command.classBuilder().ep(__spreadProps(
 }).s("AmazonS3", "DeleteObject", {}).n("S3Client", "DeleteObjectCommand").f(void 0, void 0).ser(se_DeleteObjectCommand).de(de_DeleteObjectCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/constants.js
+// node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/constants.js
 var ChecksumAlgorithm2;
 (function(ChecksumAlgorithm3) {
   ChecksumAlgorithm3["MD5"] = "MD5";
@@ -10932,7 +9998,7 @@ var ChecksumLocation;
 var DEFAULT_CHECKSUM_ALGORITHM = ChecksumAlgorithm2.MD5;
 var S3_EXPRESS_DEFAULT_CHECKSUM_ALGORITHM = ChecksumAlgorithm2.CRC32;
 
-// ../../../../node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/types.js
+// node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/types.js
 var CLIENT_SUPPORTED_ALGORITHMS = [
   ChecksumAlgorithm2.CRC32,
   ChecksumAlgorithm2.CRC32C,
@@ -10946,7 +10012,7 @@ var PRIORITY_ORDER_ALGORITHMS = [
   ChecksumAlgorithm2.SHA256
 ];
 
-// ../../../../node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/getChecksumAlgorithmForRequest.js
+// node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/getChecksumAlgorithmForRequest.js
 var getChecksumAlgorithmForRequest = (input, { requestChecksumRequired, requestAlgorithmMember }, isS3Express) => {
   const defaultAlgorithm = isS3Express ? S3_EXPRESS_DEFAULT_CHECKSUM_ALGORITHM : DEFAULT_CHECKSUM_ALGORITHM;
   if (!requestAlgorithmMember || !input[requestAlgorithmMember]) {
@@ -10959,10 +10025,10 @@ var getChecksumAlgorithmForRequest = (input, { requestChecksumRequired, requestA
   return checksumAlgorithm;
 };
 
-// ../../../../node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/getChecksumLocationName.js
+// node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/getChecksumLocationName.js
 var getChecksumLocationName = (algorithm) => algorithm === ChecksumAlgorithm2.MD5 ? "content-md5" : `x-amz-checksum-${algorithm.toLowerCase()}`;
 
-// ../../../../node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/hasHeader.js
+// node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/hasHeader.js
 var hasHeader = (header, headers) => {
   const soughtHeader = header.toLowerCase();
   for (const headerName of Object.keys(headers)) {
@@ -10973,10 +10039,61 @@ var hasHeader = (header, headers) => {
   return false;
 };
 
-// ../../../../node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/isStreaming.js
+// node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/isStreaming.js
 var isStreaming = (body) => body !== void 0 && typeof body !== "string" && !ArrayBuffer.isView(body) && !isArrayBuffer(body);
 
-// ../../../../node_modules/@aws-crypto/crc32c/build/module/aws_crc32c.js
+// node_modules/@aws-crypto/crc32c/node_modules/@smithy/util-utf8/dist-es/fromUtf8.browser.js
+var fromUtf84 = (input) => new TextEncoder().encode(input);
+
+// node_modules/@aws-crypto/crc32c/node_modules/@aws-crypto/util/build/module/convertToBuffer.js
+var fromUtf85 = typeof Buffer !== "undefined" && Buffer.from ? function(input) {
+  return Buffer.from(input, "utf8");
+} : fromUtf84;
+function convertToBuffer4(data) {
+  if (data instanceof Uint8Array)
+    return data;
+  if (typeof data === "string") {
+    return fromUtf85(data);
+  }
+  if (ArrayBuffer.isView(data)) {
+    return new Uint8Array(data.buffer, data.byteOffset, data.byteLength / Uint8Array.BYTES_PER_ELEMENT);
+  }
+  return new Uint8Array(data);
+}
+
+// node_modules/@aws-crypto/crc32c/node_modules/@aws-crypto/util/build/module/isEmptyData.js
+function isEmptyData4(data) {
+  if (typeof data === "string") {
+    return data.length === 0;
+  }
+  return data.byteLength === 0;
+}
+
+// node_modules/@aws-crypto/crc32c/node_modules/@aws-crypto/util/build/module/numToUint8.js
+function numToUint82(num) {
+  return new Uint8Array([
+    (num & 4278190080) >> 24,
+    (num & 16711680) >> 16,
+    (num & 65280) >> 8,
+    num & 255
+  ]);
+}
+
+// node_modules/@aws-crypto/crc32c/node_modules/@aws-crypto/util/build/module/uint32ArrayFrom.js
+function uint32ArrayFrom2(a_lookUpTable) {
+  if (!Uint32Array.from) {
+    var return_array = new Uint32Array(a_lookUpTable.length);
+    var a_index = 0;
+    while (a_index < a_lookUpTable.length) {
+      return_array[a_index] = a_lookUpTable[a_index];
+      a_index += 1;
+    }
+    return return_array;
+  }
+  return Uint32Array.from(a_lookUpTable);
+}
+
+// node_modules/@aws-crypto/crc32c/build/module/aws_crc32c.js
 var AwsCrc32c = (
   /** @class */
   function() {
@@ -10984,14 +10101,14 @@ var AwsCrc32c = (
       this.crc32c = new Crc32c();
     }
     AwsCrc32c2.prototype.update = function(toHash) {
-      if (isEmptyData(toHash))
+      if (isEmptyData4(toHash))
         return;
-      this.crc32c.update(convertToBuffer(toHash));
+      this.crc32c.update(convertToBuffer4(toHash));
     };
     AwsCrc32c2.prototype.digest = function() {
       return __awaiter(this, void 0, void 0, function() {
         return __generator(this, function(_a2) {
-          return [2, numToUint8(this.crc32c.digest())];
+          return [2, numToUint82(this.crc32c.digest())];
         });
       });
     };
@@ -11002,7 +10119,7 @@ var AwsCrc32c = (
   }()
 );
 
-// ../../../../node_modules/@aws-crypto/crc32c/build/module/index.js
+// node_modules/@aws-crypto/crc32c/build/module/index.js
 var Crc32c = (
   /** @class */
   function() {
@@ -11014,7 +10131,7 @@ var Crc32c = (
       try {
         for (var data_1 = __values(data), data_1_1 = data_1.next(); !data_1_1.done; data_1_1 = data_1.next()) {
           var byte = data_1_1.value;
-          this.checksum = this.checksum >>> 8 ^ lookupTable2[(this.checksum ^ byte) & 255];
+          this.checksum = this.checksum >>> 8 ^ lookupTable[(this.checksum ^ byte) & 255];
         }
       } catch (e_1_1) {
         e_1 = { error: e_1_1 };
@@ -11293,9 +10410,9 @@ var a_lookupTable = [
   1595330642,
   2910671697
 ];
-var lookupTable2 = uint32ArrayFrom(a_lookupTable);
+var lookupTable = uint32ArrayFrom2(a_lookupTable);
 
-// ../../../../node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/selectChecksumAlgorithmFunction.js
+// node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/selectChecksumAlgorithmFunction.js
 var selectChecksumAlgorithmFunction = (checksumAlgorithm, config) => ({
   [ChecksumAlgorithm2.MD5]: config.md5,
   [ChecksumAlgorithm2.CRC32]: AwsCrc32,
@@ -11304,14 +10421,14 @@ var selectChecksumAlgorithmFunction = (checksumAlgorithm, config) => ({
   [ChecksumAlgorithm2.SHA256]: config.sha256
 })[checksumAlgorithm];
 
-// ../../../../node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/stringHasher.js
+// node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/stringHasher.js
 var stringHasher = (checksumAlgorithmFn, body) => {
   const hash = new checksumAlgorithmFn();
   hash.update(toUint8Array(body || ""));
   return hash.digest();
 };
 
-// ../../../../node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/flexibleChecksumsMiddleware.js
+// node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/flexibleChecksumsMiddleware.js
 var flexibleChecksumsMiddlewareOptions = {
   name: "flexibleChecksumsMiddleware",
   step: "build",
@@ -11368,7 +10485,7 @@ var flexibleChecksumsMiddleware = (config, middlewareConfig) => (next, context) 
   return result;
 });
 
-// ../../../../node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/getChecksumAlgorithmListForResponse.js
+// node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/getChecksumAlgorithmListForResponse.js
 var getChecksumAlgorithmListForResponse = (responseAlgorithms = []) => {
   const validChecksumAlgorithms = [];
   for (const algorithm of PRIORITY_ORDER_ALGORITHMS) {
@@ -11380,7 +10497,7 @@ var getChecksumAlgorithmListForResponse = (responseAlgorithms = []) => {
   return validChecksumAlgorithms;
 };
 
-// ../../../../node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/isChecksumWithPartNumber.js
+// node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/isChecksumWithPartNumber.js
 var isChecksumWithPartNumber = (checksum) => {
   const lastHyphenIndex = checksum.lastIndexOf("-");
   if (lastHyphenIndex !== -1) {
@@ -11395,18 +10512,18 @@ var isChecksumWithPartNumber = (checksum) => {
   return false;
 };
 
-// ../../../../node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/streams/create-read-stream-on-buffer.browser.js
+// node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/streams/create-read-stream-on-buffer.browser.js
 function createReadStreamOnBuffer(buffer) {
   return new Blob([buffer]).stream();
 }
 
-// ../../../../node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/getChecksum.js
+// node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/getChecksum.js
 var getChecksum = (_0, _1) => __async(void 0, [_0, _1], function* (body, { streamHasher, checksumAlgorithmFn, base64Encoder }) {
   const digest = isStreaming(body) ? streamHasher(checksumAlgorithmFn, body) : stringHasher(checksumAlgorithmFn, body);
   return base64Encoder(yield digest);
 });
 
-// ../../../../node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/validateChecksumFromResponse.js
+// node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/validateChecksumFromResponse.js
 var validateChecksumFromResponse = (_0, _1) => __async(void 0, [_0, _1], function* (response, { config, responseAlgorithms }) {
   const checksumAlgorithms = getChecksumAlgorithmListForResponse(responseAlgorithms);
   const { body: responseBody, headers: responseHeaders } = response;
@@ -11425,7 +10542,7 @@ var validateChecksumFromResponse = (_0, _1) => __async(void 0, [_0, _1], functio
   }
 });
 
-// ../../../../node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/flexibleChecksumsResponseMiddleware.js
+// node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/flexibleChecksumsResponseMiddleware.js
 var flexibleChecksumsResponseMiddlewareOptions = {
   name: "flexibleChecksumsResponseMiddleware",
   toMiddleware: "deserializerMiddleware",
@@ -11468,7 +10585,7 @@ var flexibleChecksumsResponseMiddleware = (config, middlewareConfig) => (next, c
   return result;
 });
 
-// ../../../../node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/getFlexibleChecksumsPlugin.js
+// node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/getFlexibleChecksumsPlugin.js
 var getFlexibleChecksumsPlugin = (config, middlewareConfig) => ({
   applyToStack: (clientStack) => {
     clientStack.add(flexibleChecksumsMiddleware(config, middlewareConfig), flexibleChecksumsMiddlewareOptions);
@@ -11476,7 +10593,7 @@ var getFlexibleChecksumsPlugin = (config, middlewareConfig) => ({
   }
 });
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteObjectsCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteObjectsCommand.js
 var DeleteObjectsCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" }
 })).m(function(Command2, cs2, config, o2) {
@@ -11493,7 +10610,7 @@ var DeleteObjectsCommand = class extends Command.classBuilder().ep(__spreadProps
 }).s("AmazonS3", "DeleteObjects", {}).n("S3Client", "DeleteObjectsCommand").f(void 0, void 0).ser(se_DeleteObjectsCommand).de(de_DeleteObjectsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteObjectTaggingCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteObjectTaggingCommand.js
 var DeleteObjectTaggingCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" }
 })).m(function(Command2, cs2, config, o2) {
@@ -11505,7 +10622,7 @@ var DeleteObjectTaggingCommand = class extends Command.classBuilder().ep(__sprea
 }).s("AmazonS3", "DeleteObjectTagging", {}).n("S3Client", "DeleteObjectTaggingCommand").f(void 0, void 0).ser(se_DeleteObjectTaggingCommand).de(de_DeleteObjectTaggingCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/DeletePublicAccessBlockCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/DeletePublicAccessBlockCommand.js
 var DeletePublicAccessBlockCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11517,7 +10634,7 @@ var DeletePublicAccessBlockCommand = class extends Command.classBuilder().ep(__s
 }).s("AmazonS3", "DeletePublicAccessBlock", {}).n("S3Client", "DeletePublicAccessBlockCommand").f(void 0, void 0).ser(se_DeletePublicAccessBlockCommand).de(de_DeletePublicAccessBlockCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketAccelerateConfigurationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketAccelerateConfigurationCommand.js
 var GetBucketAccelerateConfigurationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11530,7 +10647,7 @@ var GetBucketAccelerateConfigurationCommand = class extends Command.classBuilder
 }).s("AmazonS3", "GetBucketAccelerateConfiguration", {}).n("S3Client", "GetBucketAccelerateConfigurationCommand").f(void 0, void 0).ser(se_GetBucketAccelerateConfigurationCommand).de(de_GetBucketAccelerateConfigurationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketAclCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketAclCommand.js
 var GetBucketAclCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11543,7 +10660,7 @@ var GetBucketAclCommand = class extends Command.classBuilder().ep(__spreadProps(
 }).s("AmazonS3", "GetBucketAcl", {}).n("S3Client", "GetBucketAclCommand").f(void 0, void 0).ser(se_GetBucketAclCommand).de(de_GetBucketAclCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketAnalyticsConfigurationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketAnalyticsConfigurationCommand.js
 var GetBucketAnalyticsConfigurationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11556,7 +10673,7 @@ var GetBucketAnalyticsConfigurationCommand = class extends Command.classBuilder(
 }).s("AmazonS3", "GetBucketAnalyticsConfiguration", {}).n("S3Client", "GetBucketAnalyticsConfigurationCommand").f(void 0, void 0).ser(se_GetBucketAnalyticsConfigurationCommand).de(de_GetBucketAnalyticsConfigurationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketCorsCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketCorsCommand.js
 var GetBucketCorsCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11569,7 +10686,7 @@ var GetBucketCorsCommand = class extends Command.classBuilder().ep(__spreadProps
 }).s("AmazonS3", "GetBucketCors", {}).n("S3Client", "GetBucketCorsCommand").f(void 0, void 0).ser(se_GetBucketCorsCommand).de(de_GetBucketCorsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketEncryptionCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketEncryptionCommand.js
 var GetBucketEncryptionCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11582,7 +10699,7 @@ var GetBucketEncryptionCommand = class extends Command.classBuilder().ep(__sprea
 }).s("AmazonS3", "GetBucketEncryption", {}).n("S3Client", "GetBucketEncryptionCommand").f(void 0, GetBucketEncryptionOutputFilterSensitiveLog).ser(se_GetBucketEncryptionCommand).de(de_GetBucketEncryptionCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketIntelligentTieringConfigurationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketIntelligentTieringConfigurationCommand.js
 var GetBucketIntelligentTieringConfigurationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11595,7 +10712,7 @@ var GetBucketIntelligentTieringConfigurationCommand = class extends Command.clas
 }).s("AmazonS3", "GetBucketIntelligentTieringConfiguration", {}).n("S3Client", "GetBucketIntelligentTieringConfigurationCommand").f(void 0, void 0).ser(se_GetBucketIntelligentTieringConfigurationCommand).de(de_GetBucketIntelligentTieringConfigurationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketInventoryConfigurationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketInventoryConfigurationCommand.js
 var GetBucketInventoryConfigurationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11608,7 +10725,7 @@ var GetBucketInventoryConfigurationCommand = class extends Command.classBuilder(
 }).s("AmazonS3", "GetBucketInventoryConfiguration", {}).n("S3Client", "GetBucketInventoryConfigurationCommand").f(void 0, GetBucketInventoryConfigurationOutputFilterSensitiveLog).ser(se_GetBucketInventoryConfigurationCommand).de(de_GetBucketInventoryConfigurationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketLifecycleConfigurationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketLifecycleConfigurationCommand.js
 var GetBucketLifecycleConfigurationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11621,7 +10738,7 @@ var GetBucketLifecycleConfigurationCommand = class extends Command.classBuilder(
 }).s("AmazonS3", "GetBucketLifecycleConfiguration", {}).n("S3Client", "GetBucketLifecycleConfigurationCommand").f(void 0, void 0).ser(se_GetBucketLifecycleConfigurationCommand).de(de_GetBucketLifecycleConfigurationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketLocationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketLocationCommand.js
 var GetBucketLocationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11634,7 +10751,7 @@ var GetBucketLocationCommand = class extends Command.classBuilder().ep(__spreadP
 }).s("AmazonS3", "GetBucketLocation", {}).n("S3Client", "GetBucketLocationCommand").f(void 0, void 0).ser(se_GetBucketLocationCommand).de(de_GetBucketLocationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketLoggingCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketLoggingCommand.js
 var GetBucketLoggingCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11647,7 +10764,7 @@ var GetBucketLoggingCommand = class extends Command.classBuilder().ep(__spreadPr
 }).s("AmazonS3", "GetBucketLogging", {}).n("S3Client", "GetBucketLoggingCommand").f(void 0, void 0).ser(se_GetBucketLoggingCommand).de(de_GetBucketLoggingCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketMetricsConfigurationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketMetricsConfigurationCommand.js
 var GetBucketMetricsConfigurationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11660,7 +10777,7 @@ var GetBucketMetricsConfigurationCommand = class extends Command.classBuilder().
 }).s("AmazonS3", "GetBucketMetricsConfiguration", {}).n("S3Client", "GetBucketMetricsConfigurationCommand").f(void 0, void 0).ser(se_GetBucketMetricsConfigurationCommand).de(de_GetBucketMetricsConfigurationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketNotificationConfigurationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketNotificationConfigurationCommand.js
 var GetBucketNotificationConfigurationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11673,7 +10790,7 @@ var GetBucketNotificationConfigurationCommand = class extends Command.classBuild
 }).s("AmazonS3", "GetBucketNotificationConfiguration", {}).n("S3Client", "GetBucketNotificationConfigurationCommand").f(void 0, void 0).ser(se_GetBucketNotificationConfigurationCommand).de(de_GetBucketNotificationConfigurationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketOwnershipControlsCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketOwnershipControlsCommand.js
 var GetBucketOwnershipControlsCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11686,7 +10803,7 @@ var GetBucketOwnershipControlsCommand = class extends Command.classBuilder().ep(
 }).s("AmazonS3", "GetBucketOwnershipControls", {}).n("S3Client", "GetBucketOwnershipControlsCommand").f(void 0, void 0).ser(se_GetBucketOwnershipControlsCommand).de(de_GetBucketOwnershipControlsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketPolicyCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketPolicyCommand.js
 var GetBucketPolicyCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11699,7 +10816,7 @@ var GetBucketPolicyCommand = class extends Command.classBuilder().ep(__spreadPro
 }).s("AmazonS3", "GetBucketPolicy", {}).n("S3Client", "GetBucketPolicyCommand").f(void 0, void 0).ser(se_GetBucketPolicyCommand).de(de_GetBucketPolicyCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketPolicyStatusCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketPolicyStatusCommand.js
 var GetBucketPolicyStatusCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11712,7 +10829,7 @@ var GetBucketPolicyStatusCommand = class extends Command.classBuilder().ep(__spr
 }).s("AmazonS3", "GetBucketPolicyStatus", {}).n("S3Client", "GetBucketPolicyStatusCommand").f(void 0, void 0).ser(se_GetBucketPolicyStatusCommand).de(de_GetBucketPolicyStatusCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketReplicationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketReplicationCommand.js
 var GetBucketReplicationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11725,7 +10842,7 @@ var GetBucketReplicationCommand = class extends Command.classBuilder().ep(__spre
 }).s("AmazonS3", "GetBucketReplication", {}).n("S3Client", "GetBucketReplicationCommand").f(void 0, void 0).ser(se_GetBucketReplicationCommand).de(de_GetBucketReplicationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketRequestPaymentCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketRequestPaymentCommand.js
 var GetBucketRequestPaymentCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11738,7 +10855,7 @@ var GetBucketRequestPaymentCommand = class extends Command.classBuilder().ep(__s
 }).s("AmazonS3", "GetBucketRequestPayment", {}).n("S3Client", "GetBucketRequestPaymentCommand").f(void 0, void 0).ser(se_GetBucketRequestPaymentCommand).de(de_GetBucketRequestPaymentCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketTaggingCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketTaggingCommand.js
 var GetBucketTaggingCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11751,7 +10868,7 @@ var GetBucketTaggingCommand = class extends Command.classBuilder().ep(__spreadPr
 }).s("AmazonS3", "GetBucketTagging", {}).n("S3Client", "GetBucketTaggingCommand").f(void 0, void 0).ser(se_GetBucketTaggingCommand).de(de_GetBucketTaggingCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketVersioningCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketVersioningCommand.js
 var GetBucketVersioningCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11764,7 +10881,7 @@ var GetBucketVersioningCommand = class extends Command.classBuilder().ep(__sprea
 }).s("AmazonS3", "GetBucketVersioning", {}).n("S3Client", "GetBucketVersioningCommand").f(void 0, void 0).ser(se_GetBucketVersioningCommand).de(de_GetBucketVersioningCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketWebsiteCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketWebsiteCommand.js
 var GetBucketWebsiteCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11777,7 +10894,7 @@ var GetBucketWebsiteCommand = class extends Command.classBuilder().ep(__spreadPr
 }).s("AmazonS3", "GetBucketWebsite", {}).n("S3Client", "GetBucketWebsiteCommand").f(void 0, void 0).ser(se_GetBucketWebsiteCommand).de(de_GetBucketWebsiteCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectAclCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectAclCommand.js
 var GetObjectAclCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" },
   Key: { type: "contextParams", name: "Key" }
@@ -11790,7 +10907,7 @@ var GetObjectAclCommand = class extends Command.classBuilder().ep(__spreadProps(
 }).s("AmazonS3", "GetObjectAcl", {}).n("S3Client", "GetObjectAclCommand").f(void 0, void 0).ser(se_GetObjectAclCommand).de(de_GetObjectAclCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectAttributesCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectAttributesCommand.js
 var GetObjectAttributesCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" }
 })).m(function(Command2, cs2, config, o2) {
@@ -11803,7 +10920,7 @@ var GetObjectAttributesCommand = class extends Command.classBuilder().ep(__sprea
 }).s("AmazonS3", "GetObjectAttributes", {}).n("S3Client", "GetObjectAttributesCommand").f(GetObjectAttributesRequestFilterSensitiveLog, void 0).ser(se_GetObjectAttributesCommand).de(de_GetObjectAttributesCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectCommand.js
 var GetObjectCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" },
   Key: { type: "contextParams", name: "Key" }
@@ -11823,7 +10940,7 @@ var GetObjectCommand = class extends Command.classBuilder().ep(__spreadProps(__s
 }).s("AmazonS3", "GetObject", {}).n("S3Client", "GetObjectCommand").f(GetObjectRequestFilterSensitiveLog, GetObjectOutputFilterSensitiveLog).ser(se_GetObjectCommand).de(de_GetObjectCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectLegalHoldCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectLegalHoldCommand.js
 var GetObjectLegalHoldCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" }
 })).m(function(Command2, cs2, config, o2) {
@@ -11835,7 +10952,7 @@ var GetObjectLegalHoldCommand = class extends Command.classBuilder().ep(__spread
 }).s("AmazonS3", "GetObjectLegalHold", {}).n("S3Client", "GetObjectLegalHoldCommand").f(void 0, void 0).ser(se_GetObjectLegalHoldCommand).de(de_GetObjectLegalHoldCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectLockConfigurationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectLockConfigurationCommand.js
 var GetObjectLockConfigurationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" }
 })).m(function(Command2, cs2, config, o2) {
@@ -11847,7 +10964,7 @@ var GetObjectLockConfigurationCommand = class extends Command.classBuilder().ep(
 }).s("AmazonS3", "GetObjectLockConfiguration", {}).n("S3Client", "GetObjectLockConfigurationCommand").f(void 0, void 0).ser(se_GetObjectLockConfigurationCommand).de(de_GetObjectLockConfigurationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectRetentionCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectRetentionCommand.js
 var GetObjectRetentionCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" }
 })).m(function(Command2, cs2, config, o2) {
@@ -11859,7 +10976,7 @@ var GetObjectRetentionCommand = class extends Command.classBuilder().ep(__spread
 }).s("AmazonS3", "GetObjectRetention", {}).n("S3Client", "GetObjectRetentionCommand").f(void 0, void 0).ser(se_GetObjectRetentionCommand).de(de_GetObjectRetentionCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectTaggingCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectTaggingCommand.js
 var GetObjectTaggingCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" }
 })).m(function(Command2, cs2, config, o2) {
@@ -11871,7 +10988,7 @@ var GetObjectTaggingCommand = class extends Command.classBuilder().ep(__spreadPr
 }).s("AmazonS3", "GetObjectTagging", {}).n("S3Client", "GetObjectTaggingCommand").f(void 0, void 0).ser(se_GetObjectTaggingCommand).de(de_GetObjectTaggingCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectTorrentCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectTorrentCommand.js
 var GetObjectTorrentCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" }
 })).m(function(Command2, cs2, config, o2) {
@@ -11882,7 +10999,7 @@ var GetObjectTorrentCommand = class extends Command.classBuilder().ep(__spreadPr
 }).s("AmazonS3", "GetObjectTorrent", {}).n("S3Client", "GetObjectTorrentCommand").f(void 0, GetObjectTorrentOutputFilterSensitiveLog).ser(se_GetObjectTorrentCommand).de(de_GetObjectTorrentCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/GetPublicAccessBlockCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/GetPublicAccessBlockCommand.js
 var GetPublicAccessBlockCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11895,7 +11012,7 @@ var GetPublicAccessBlockCommand = class extends Command.classBuilder().ep(__spre
 }).s("AmazonS3", "GetPublicAccessBlock", {}).n("S3Client", "GetPublicAccessBlockCommand").f(void 0, void 0).ser(se_GetPublicAccessBlockCommand).de(de_GetPublicAccessBlockCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/HeadBucketCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/HeadBucketCommand.js
 var HeadBucketCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" }
 })).m(function(Command2, cs2, config, o2) {
@@ -11907,7 +11024,7 @@ var HeadBucketCommand = class extends Command.classBuilder().ep(__spreadProps(__
 }).s("AmazonS3", "HeadBucket", {}).n("S3Client", "HeadBucketCommand").f(void 0, void 0).ser(se_HeadBucketCommand).de(de_HeadBucketCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/HeadObjectCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/HeadObjectCommand.js
 var HeadObjectCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" },
   Key: { type: "contextParams", name: "Key" }
@@ -11922,7 +11039,7 @@ var HeadObjectCommand = class extends Command.classBuilder().ep(__spreadProps(__
 }).s("AmazonS3", "HeadObject", {}).n("S3Client", "HeadObjectCommand").f(HeadObjectRequestFilterSensitiveLog, HeadObjectOutputFilterSensitiveLog).ser(se_HeadObjectCommand).de(de_HeadObjectCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/ListBucketAnalyticsConfigurationsCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/ListBucketAnalyticsConfigurationsCommand.js
 var ListBucketAnalyticsConfigurationsCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11935,7 +11052,7 @@ var ListBucketAnalyticsConfigurationsCommand = class extends Command.classBuilde
 }).s("AmazonS3", "ListBucketAnalyticsConfigurations", {}).n("S3Client", "ListBucketAnalyticsConfigurationsCommand").f(void 0, void 0).ser(se_ListBucketAnalyticsConfigurationsCommand).de(de_ListBucketAnalyticsConfigurationsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/ListBucketIntelligentTieringConfigurationsCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/ListBucketIntelligentTieringConfigurationsCommand.js
 var ListBucketIntelligentTieringConfigurationsCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11948,7 +11065,7 @@ var ListBucketIntelligentTieringConfigurationsCommand = class extends Command.cl
 }).s("AmazonS3", "ListBucketIntelligentTieringConfigurations", {}).n("S3Client", "ListBucketIntelligentTieringConfigurationsCommand").f(void 0, void 0).ser(se_ListBucketIntelligentTieringConfigurationsCommand).de(de_ListBucketIntelligentTieringConfigurationsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/ListBucketInventoryConfigurationsCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/ListBucketInventoryConfigurationsCommand.js
 var ListBucketInventoryConfigurationsCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -11961,7 +11078,7 @@ var ListBucketInventoryConfigurationsCommand = class extends Command.classBuilde
 }).s("AmazonS3", "ListBucketInventoryConfigurations", {}).n("S3Client", "ListBucketInventoryConfigurationsCommand").f(void 0, ListBucketInventoryConfigurationsOutputFilterSensitiveLog).ser(se_ListBucketInventoryConfigurationsCommand).de(de_ListBucketInventoryConfigurationsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/ListBucketMetricsConfigurationsCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/ListBucketMetricsConfigurationsCommand.js
 var ListBucketMetricsConfigurationsCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" }
 })).m(function(Command2, cs2, config, o2) {
@@ -11973,7 +11090,7 @@ var ListBucketMetricsConfigurationsCommand = class extends Command.classBuilder(
 }).s("AmazonS3", "ListBucketMetricsConfigurations", {}).n("S3Client", "ListBucketMetricsConfigurationsCommand").f(void 0, void 0).ser(se_ListBucketMetricsConfigurationsCommand).de(de_ListBucketMetricsConfigurationsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/ListBucketsCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/ListBucketsCommand.js
 var ListBucketsCommand = class extends Command.classBuilder().ep(__spreadValues({}, commonParams)).m(function(Command2, cs2, config, o2) {
   return [
     getSerdePlugin(config, this.serialize, this.deserialize),
@@ -11983,7 +11100,7 @@ var ListBucketsCommand = class extends Command.classBuilder().ep(__spreadValues(
 }).s("AmazonS3", "ListBuckets", {}).n("S3Client", "ListBucketsCommand").f(void 0, void 0).ser(se_ListBucketsCommand).de(de_ListBucketsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/ListDirectoryBucketsCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/ListDirectoryBucketsCommand.js
 var ListDirectoryBucketsCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true }
 })).m(function(Command2, cs2, config, o2) {
@@ -11995,7 +11112,7 @@ var ListDirectoryBucketsCommand = class extends Command.classBuilder().ep(__spre
 }).s("AmazonS3", "ListDirectoryBuckets", {}).n("S3Client", "ListDirectoryBucketsCommand").f(void 0, void 0).ser(se_ListDirectoryBucketsCommand).de(de_ListDirectoryBucketsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/ListMultipartUploadsCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/ListMultipartUploadsCommand.js
 var ListMultipartUploadsCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" },
   Prefix: { type: "contextParams", name: "Prefix" }
@@ -12008,7 +11125,7 @@ var ListMultipartUploadsCommand = class extends Command.classBuilder().ep(__spre
 }).s("AmazonS3", "ListMultipartUploads", {}).n("S3Client", "ListMultipartUploadsCommand").f(void 0, void 0).ser(se_ListMultipartUploadsCommand).de(de_ListMultipartUploadsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/ListObjectsCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/ListObjectsCommand.js
 var ListObjectsCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" },
   Prefix: { type: "contextParams", name: "Prefix" }
@@ -12021,7 +11138,7 @@ var ListObjectsCommand = class extends Command.classBuilder().ep(__spreadProps(_
 }).s("AmazonS3", "ListObjects", {}).n("S3Client", "ListObjectsCommand").f(void 0, void 0).ser(se_ListObjectsCommand).de(de_ListObjectsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/ListObjectsV2Command.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/ListObjectsV2Command.js
 var ListObjectsV2Command = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" },
   Prefix: { type: "contextParams", name: "Prefix" }
@@ -12034,7 +11151,7 @@ var ListObjectsV2Command = class extends Command.classBuilder().ep(__spreadProps
 }).s("AmazonS3", "ListObjectsV2", {}).n("S3Client", "ListObjectsV2Command").f(void 0, void 0).ser(se_ListObjectsV2Command).de(de_ListObjectsV2Command).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/ListObjectVersionsCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/ListObjectVersionsCommand.js
 var ListObjectVersionsCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" },
   Prefix: { type: "contextParams", name: "Prefix" }
@@ -12047,7 +11164,7 @@ var ListObjectVersionsCommand = class extends Command.classBuilder().ep(__spread
 }).s("AmazonS3", "ListObjectVersions", {}).n("S3Client", "ListObjectVersionsCommand").f(void 0, void 0).ser(se_ListObjectVersionsCommand).de(de_ListObjectVersionsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/ListPartsCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/ListPartsCommand.js
 var ListPartsCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" },
   Key: { type: "contextParams", name: "Key" }
@@ -12061,7 +11178,7 @@ var ListPartsCommand = class extends Command.classBuilder().ep(__spreadProps(__s
 }).s("AmazonS3", "ListParts", {}).n("S3Client", "ListPartsCommand").f(ListPartsRequestFilterSensitiveLog, void 0).ser(se_ListPartsCommand).de(de_ListPartsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketAccelerateConfigurationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketAccelerateConfigurationCommand.js
 var PutBucketAccelerateConfigurationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -12078,7 +11195,7 @@ var PutBucketAccelerateConfigurationCommand = class extends Command.classBuilder
 }).s("AmazonS3", "PutBucketAccelerateConfiguration", {}).n("S3Client", "PutBucketAccelerateConfigurationCommand").f(void 0, void 0).ser(se_PutBucketAccelerateConfigurationCommand).de(de_PutBucketAccelerateConfigurationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketAclCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketAclCommand.js
 var PutBucketAclCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -12095,7 +11212,7 @@ var PutBucketAclCommand = class extends Command.classBuilder().ep(__spreadProps(
 }).s("AmazonS3", "PutBucketAcl", {}).n("S3Client", "PutBucketAclCommand").f(void 0, void 0).ser(se_PutBucketAclCommand).de(de_PutBucketAclCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketAnalyticsConfigurationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketAnalyticsConfigurationCommand.js
 var PutBucketAnalyticsConfigurationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -12107,7 +11224,7 @@ var PutBucketAnalyticsConfigurationCommand = class extends Command.classBuilder(
 }).s("AmazonS3", "PutBucketAnalyticsConfiguration", {}).n("S3Client", "PutBucketAnalyticsConfigurationCommand").f(void 0, void 0).ser(se_PutBucketAnalyticsConfigurationCommand).de(de_PutBucketAnalyticsConfigurationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketCorsCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketCorsCommand.js
 var PutBucketCorsCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -12124,7 +11241,7 @@ var PutBucketCorsCommand = class extends Command.classBuilder().ep(__spreadProps
 }).s("AmazonS3", "PutBucketCors", {}).n("S3Client", "PutBucketCorsCommand").f(void 0, void 0).ser(se_PutBucketCorsCommand).de(de_PutBucketCorsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketEncryptionCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketEncryptionCommand.js
 var PutBucketEncryptionCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -12141,7 +11258,7 @@ var PutBucketEncryptionCommand = class extends Command.classBuilder().ep(__sprea
 }).s("AmazonS3", "PutBucketEncryption", {}).n("S3Client", "PutBucketEncryptionCommand").f(PutBucketEncryptionRequestFilterSensitiveLog, void 0).ser(se_PutBucketEncryptionCommand).de(de_PutBucketEncryptionCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketIntelligentTieringConfigurationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketIntelligentTieringConfigurationCommand.js
 var PutBucketIntelligentTieringConfigurationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -12153,7 +11270,7 @@ var PutBucketIntelligentTieringConfigurationCommand = class extends Command.clas
 }).s("AmazonS3", "PutBucketIntelligentTieringConfiguration", {}).n("S3Client", "PutBucketIntelligentTieringConfigurationCommand").f(void 0, void 0).ser(se_PutBucketIntelligentTieringConfigurationCommand).de(de_PutBucketIntelligentTieringConfigurationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketInventoryConfigurationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketInventoryConfigurationCommand.js
 var PutBucketInventoryConfigurationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -12165,7 +11282,7 @@ var PutBucketInventoryConfigurationCommand = class extends Command.classBuilder(
 }).s("AmazonS3", "PutBucketInventoryConfiguration", {}).n("S3Client", "PutBucketInventoryConfigurationCommand").f(PutBucketInventoryConfigurationRequestFilterSensitiveLog, void 0).ser(se_PutBucketInventoryConfigurationCommand).de(de_PutBucketInventoryConfigurationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketLifecycleConfigurationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketLifecycleConfigurationCommand.js
 var PutBucketLifecycleConfigurationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -12182,7 +11299,7 @@ var PutBucketLifecycleConfigurationCommand = class extends Command.classBuilder(
 }).s("AmazonS3", "PutBucketLifecycleConfiguration", {}).n("S3Client", "PutBucketLifecycleConfigurationCommand").f(void 0, void 0).ser(se_PutBucketLifecycleConfigurationCommand).de(de_PutBucketLifecycleConfigurationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketLoggingCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketLoggingCommand.js
 var PutBucketLoggingCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -12199,7 +11316,7 @@ var PutBucketLoggingCommand = class extends Command.classBuilder().ep(__spreadPr
 }).s("AmazonS3", "PutBucketLogging", {}).n("S3Client", "PutBucketLoggingCommand").f(void 0, void 0).ser(se_PutBucketLoggingCommand).de(de_PutBucketLoggingCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketMetricsConfigurationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketMetricsConfigurationCommand.js
 var PutBucketMetricsConfigurationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -12211,7 +11328,7 @@ var PutBucketMetricsConfigurationCommand = class extends Command.classBuilder().
 }).s("AmazonS3", "PutBucketMetricsConfiguration", {}).n("S3Client", "PutBucketMetricsConfigurationCommand").f(void 0, void 0).ser(se_PutBucketMetricsConfigurationCommand).de(de_PutBucketMetricsConfigurationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketNotificationConfigurationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketNotificationConfigurationCommand.js
 var PutBucketNotificationConfigurationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -12223,7 +11340,7 @@ var PutBucketNotificationConfigurationCommand = class extends Command.classBuild
 }).s("AmazonS3", "PutBucketNotificationConfiguration", {}).n("S3Client", "PutBucketNotificationConfigurationCommand").f(void 0, void 0).ser(se_PutBucketNotificationConfigurationCommand).de(de_PutBucketNotificationConfigurationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketOwnershipControlsCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketOwnershipControlsCommand.js
 var PutBucketOwnershipControlsCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -12239,7 +11356,7 @@ var PutBucketOwnershipControlsCommand = class extends Command.classBuilder().ep(
 }).s("AmazonS3", "PutBucketOwnershipControls", {}).n("S3Client", "PutBucketOwnershipControlsCommand").f(void 0, void 0).ser(se_PutBucketOwnershipControlsCommand).de(de_PutBucketOwnershipControlsCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketPolicyCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketPolicyCommand.js
 var PutBucketPolicyCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -12256,7 +11373,7 @@ var PutBucketPolicyCommand = class extends Command.classBuilder().ep(__spreadPro
 }).s("AmazonS3", "PutBucketPolicy", {}).n("S3Client", "PutBucketPolicyCommand").f(void 0, void 0).ser(se_PutBucketPolicyCommand).de(de_PutBucketPolicyCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketReplicationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketReplicationCommand.js
 var PutBucketReplicationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -12273,7 +11390,7 @@ var PutBucketReplicationCommand = class extends Command.classBuilder().ep(__spre
 }).s("AmazonS3", "PutBucketReplication", {}).n("S3Client", "PutBucketReplicationCommand").f(void 0, void 0).ser(se_PutBucketReplicationCommand).de(de_PutBucketReplicationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketRequestPaymentCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketRequestPaymentCommand.js
 var PutBucketRequestPaymentCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -12290,7 +11407,7 @@ var PutBucketRequestPaymentCommand = class extends Command.classBuilder().ep(__s
 }).s("AmazonS3", "PutBucketRequestPayment", {}).n("S3Client", "PutBucketRequestPaymentCommand").f(void 0, void 0).ser(se_PutBucketRequestPaymentCommand).de(de_PutBucketRequestPaymentCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketTaggingCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketTaggingCommand.js
 var PutBucketTaggingCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -12307,7 +11424,7 @@ var PutBucketTaggingCommand = class extends Command.classBuilder().ep(__spreadPr
 }).s("AmazonS3", "PutBucketTagging", {}).n("S3Client", "PutBucketTaggingCommand").f(void 0, void 0).ser(se_PutBucketTaggingCommand).de(de_PutBucketTaggingCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketVersioningCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketVersioningCommand.js
 var PutBucketVersioningCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -12324,7 +11441,7 @@ var PutBucketVersioningCommand = class extends Command.classBuilder().ep(__sprea
 }).s("AmazonS3", "PutBucketVersioning", {}).n("S3Client", "PutBucketVersioningCommand").f(void 0, void 0).ser(se_PutBucketVersioningCommand).de(de_PutBucketVersioningCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketWebsiteCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketWebsiteCommand.js
 var PutBucketWebsiteCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -12341,7 +11458,7 @@ var PutBucketWebsiteCommand = class extends Command.classBuilder().ep(__spreadPr
 }).s("AmazonS3", "PutBucketWebsite", {}).n("S3Client", "PutBucketWebsiteCommand").f(void 0, void 0).ser(se_PutBucketWebsiteCommand).de(de_PutBucketWebsiteCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutObjectAclCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutObjectAclCommand.js
 var PutObjectAclCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" },
   Key: { type: "contextParams", name: "Key" }
@@ -12359,7 +11476,7 @@ var PutObjectAclCommand = class extends Command.classBuilder().ep(__spreadProps(
 }).s("AmazonS3", "PutObjectAcl", {}).n("S3Client", "PutObjectAclCommand").f(void 0, void 0).ser(se_PutObjectAclCommand).de(de_PutObjectAclCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutObjectCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutObjectCommand.js
 var PutObjectCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" },
   Key: { type: "contextParams", name: "Key" }
@@ -12379,7 +11496,7 @@ var PutObjectCommand = class extends Command.classBuilder().ep(__spreadProps(__s
 }).s("AmazonS3", "PutObject", {}).n("S3Client", "PutObjectCommand").f(PutObjectRequestFilterSensitiveLog, PutObjectOutputFilterSensitiveLog).ser(se_PutObjectCommand).de(de_PutObjectCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutObjectLegalHoldCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutObjectLegalHoldCommand.js
 var PutObjectLegalHoldCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" }
 })).m(function(Command2, cs2, config, o2) {
@@ -12396,7 +11513,7 @@ var PutObjectLegalHoldCommand = class extends Command.classBuilder().ep(__spread
 }).s("AmazonS3", "PutObjectLegalHold", {}).n("S3Client", "PutObjectLegalHoldCommand").f(void 0, void 0).ser(se_PutObjectLegalHoldCommand).de(de_PutObjectLegalHoldCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutObjectLockConfigurationCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutObjectLockConfigurationCommand.js
 var PutObjectLockConfigurationCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" }
 })).m(function(Command2, cs2, config, o2) {
@@ -12413,7 +11530,7 @@ var PutObjectLockConfigurationCommand = class extends Command.classBuilder().ep(
 }).s("AmazonS3", "PutObjectLockConfiguration", {}).n("S3Client", "PutObjectLockConfigurationCommand").f(void 0, void 0).ser(se_PutObjectLockConfigurationCommand).de(de_PutObjectLockConfigurationCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutObjectRetentionCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutObjectRetentionCommand.js
 var PutObjectRetentionCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" }
 })).m(function(Command2, cs2, config, o2) {
@@ -12430,7 +11547,7 @@ var PutObjectRetentionCommand = class extends Command.classBuilder().ep(__spread
 }).s("AmazonS3", "PutObjectRetention", {}).n("S3Client", "PutObjectRetentionCommand").f(void 0, void 0).ser(se_PutObjectRetentionCommand).de(de_PutObjectRetentionCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutObjectTaggingCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutObjectTaggingCommand.js
 var PutObjectTaggingCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" }
 })).m(function(Command2, cs2, config, o2) {
@@ -12447,7 +11564,7 @@ var PutObjectTaggingCommand = class extends Command.classBuilder().ep(__spreadPr
 }).s("AmazonS3", "PutObjectTagging", {}).n("S3Client", "PutObjectTaggingCommand").f(void 0, void 0).ser(se_PutObjectTaggingCommand).de(de_PutObjectTaggingCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/PutPublicAccessBlockCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/PutPublicAccessBlockCommand.js
 var PutPublicAccessBlockCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseS3ExpressControlEndpoint: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -12464,7 +11581,7 @@ var PutPublicAccessBlockCommand = class extends Command.classBuilder().ep(__spre
 }).s("AmazonS3", "PutPublicAccessBlock", {}).n("S3Client", "PutPublicAccessBlockCommand").f(void 0, void 0).ser(se_PutPublicAccessBlockCommand).de(de_PutPublicAccessBlockCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/RestoreObjectCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/RestoreObjectCommand.js
 var RestoreObjectCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" }
 })).m(function(Command2, cs2, config, o2) {
@@ -12481,7 +11598,7 @@ var RestoreObjectCommand = class extends Command.classBuilder().ep(__spreadProps
 }).s("AmazonS3", "RestoreObject", {}).n("S3Client", "RestoreObjectCommand").f(RestoreObjectRequestFilterSensitiveLog, void 0).ser(se_RestoreObjectCommand).de(de_RestoreObjectCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/SelectObjectContentCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/SelectObjectContentCommand.js
 var SelectObjectContentCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" }
 })).m(function(Command2, cs2, config, o2) {
@@ -12498,7 +11615,7 @@ var SelectObjectContentCommand = class extends Command.classBuilder().ep(__sprea
 }).n("S3Client", "SelectObjectContentCommand").f(SelectObjectContentRequestFilterSensitiveLog, SelectObjectContentOutputFilterSensitiveLog).ser(se_SelectObjectContentCommand).de(de_SelectObjectContentCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/UploadPartCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/UploadPartCommand.js
 var UploadPartCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   Bucket: { type: "contextParams", name: "Bucket" },
   Key: { type: "contextParams", name: "Key" }
@@ -12517,7 +11634,7 @@ var UploadPartCommand = class extends Command.classBuilder().ep(__spreadProps(__
 }).s("AmazonS3", "UploadPart", {}).n("S3Client", "UploadPartCommand").f(UploadPartRequestFilterSensitiveLog, UploadPartOutputFilterSensitiveLog).ser(se_UploadPartCommand).de(de_UploadPartCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/UploadPartCopyCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/UploadPartCopyCommand.js
 var UploadPartCopyCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   DisableS3ExpressSessionAuth: { type: "staticContextParams", value: true },
   Bucket: { type: "contextParams", name: "Bucket" }
@@ -12531,7 +11648,7 @@ var UploadPartCopyCommand = class extends Command.classBuilder().ep(__spreadProp
 }).s("AmazonS3", "UploadPartCopy", {}).n("S3Client", "UploadPartCopyCommand").f(UploadPartCopyRequestFilterSensitiveLog, UploadPartCopyOutputFilterSensitiveLog).ser(se_UploadPartCopyCommand).de(de_UploadPartCopyCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/commands/WriteGetObjectResponseCommand.js
+// node_modules/@aws-sdk/client-s3/dist-es/commands/WriteGetObjectResponseCommand.js
 var WriteGetObjectResponseCommand = class extends Command.classBuilder().ep(__spreadProps(__spreadValues({}, commonParams), {
   UseObjectLambdaEndpoint: { type: "staticContextParams", value: true }
 })).m(function(Command2, cs2, config, o2) {
@@ -12542,7 +11659,7 @@ var WriteGetObjectResponseCommand = class extends Command.classBuilder().ep(__sp
 }).s("AmazonS3", "WriteGetObjectResponse", {}).n("S3Client", "WriteGetObjectResponseCommand").f(WriteGetObjectResponseRequestFilterSensitiveLog, void 0).ser(se_WriteGetObjectResponseCommand).de(de_WriteGetObjectResponseCommand).build() {
 };
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/S3.js
+// node_modules/@aws-sdk/client-s3/dist-es/S3.js
 var commands = {
   AbortMultipartUploadCommand,
   CompleteMultipartUploadCommand,
@@ -12644,19 +11761,19 @@ var S3 = class extends S3Client {
 };
 createAggregatedClient(commands, S3);
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/pagination/ListBucketsPaginator.js
+// node_modules/@aws-sdk/client-s3/dist-es/pagination/ListBucketsPaginator.js
 var paginateListBuckets = createPaginator(S3Client, ListBucketsCommand, "ContinuationToken", "ContinuationToken", "MaxBuckets");
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/pagination/ListDirectoryBucketsPaginator.js
+// node_modules/@aws-sdk/client-s3/dist-es/pagination/ListDirectoryBucketsPaginator.js
 var paginateListDirectoryBuckets = createPaginator(S3Client, ListDirectoryBucketsCommand, "ContinuationToken", "ContinuationToken", "MaxDirectoryBuckets");
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/pagination/ListObjectsV2Paginator.js
+// node_modules/@aws-sdk/client-s3/dist-es/pagination/ListObjectsV2Paginator.js
 var paginateListObjectsV2 = createPaginator(S3Client, ListObjectsV2Command, "ContinuationToken", "NextContinuationToken", "MaxKeys");
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/pagination/ListPartsPaginator.js
+// node_modules/@aws-sdk/client-s3/dist-es/pagination/ListPartsPaginator.js
 var paginateListParts = createPaginator(S3Client, ListPartsCommand, "PartNumberMarker", "NextPartNumberMarker", "MaxParts");
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/waiters/waitForBucketExists.js
+// node_modules/@aws-sdk/client-s3/dist-es/waiters/waitForBucketExists.js
 var checkState = (client, input) => __async(void 0, null, function* () {
   let reason;
   try {
@@ -12681,7 +11798,7 @@ var waitUntilBucketExists = (params, input) => __async(void 0, null, function* (
   return checkExceptions(result);
 });
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/waiters/waitForBucketNotExists.js
+// node_modules/@aws-sdk/client-s3/dist-es/waiters/waitForBucketNotExists.js
 var checkState2 = (client, input) => __async(void 0, null, function* () {
   let reason;
   try {
@@ -12705,7 +11822,7 @@ var waitUntilBucketNotExists = (params, input) => __async(void 0, null, function
   return checkExceptions(result);
 });
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/waiters/waitForObjectExists.js
+// node_modules/@aws-sdk/client-s3/dist-es/waiters/waitForObjectExists.js
 var checkState3 = (client, input) => __async(void 0, null, function* () {
   let reason;
   try {
@@ -12730,7 +11847,7 @@ var waitUntilObjectExists = (params, input) => __async(void 0, null, function* (
   return checkExceptions(result);
 });
 
-// ../../../../node_modules/@aws-sdk/client-s3/dist-es/waiters/waitForObjectNotExists.js
+// node_modules/@aws-sdk/client-s3/dist-es/waiters/waitForObjectNotExists.js
 var checkState4 = (client, input) => __async(void 0, null, function* () {
   let reason;
   try {
