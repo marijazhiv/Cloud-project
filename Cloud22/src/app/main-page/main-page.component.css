@@ -653,3 +653,219 @@ footer .footer span a:hover {
 .delete-movie button:hover {
     background-color: red;
 }
+
+.subscription-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+/*.subscription-list {*/
+/*    flex: 1;*/
+/*    border: 1px solid #ccc;*/
+/*    padding: 20px;*/
+/*    border-radius: 8px;*/
+/*    background-color: #f9f9f9;*/
+/*    max-width: 600px;*/
+/*    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
+/*}*/
+
+/*.subscription-list h2 {*/
+/*    text-align: center;*/
+/*    margin-bottom: 20px;*/
+/*    color: #333;*/
+/*    font-size: 24px;*/
+/*}*/
+
+/*.subscription-list ul {*/
+/*    list-style: none;*/
+/*    padding: 0;*/
+/*    margin: 0;*/
+/*}*/
+
+/*.subscription-list ul li {*/
+/*    padding: 10px;*/
+/*    border-bottom: 1px solid #ddd;*/
+/*    font-size: 18px;*/
+/*    color: #555;*/
+/*}*/
+
+/*.subscription-list ul li strong {*/
+/*    color: #333;*/
+/*    font-weight: 600;*/
+/*}*/
+
+/*.subscription-list ul li:last-child {*/
+/*    border-bottom: none;*/
+/*}*/
+
+/*.subscription-item {*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*    align-items: center;*/
+/*    padding: 10px;*/
+/*    border-bottom: 1px solid #ddd;*/
+/*}*/
+
+/*.subscription-left {*/
+/*    flex-grow: 1;*/
+/*}*/
+
+/*.subscription-right {*/
+/*    display: flex;*/
+/*    gap: 5px; !* Manji razmak između dugmadi *!*/
+/*}*/
+
+/*.btn-update, .btn-delete {*/
+/*    padding: 3px 8px; !* Manje dugmad *!*/
+/*    font-size: 12px;  !* Smanjen font *!*/
+/*    border: none;*/
+/*    background-color: #007bff;*/
+/*    color: white;*/
+/*    cursor: pointer;*/
+/*    border-radius: 4px;*/
+/*}*/
+
+/*.btn-delete {*/
+/*    background-color: #dc3545;*/
+/*}*/
+
+/*.btn-update:hover, .btn-delete:hover {*/
+/*    opacity: 0.9;*/
+/*}*/
+
+
+.subscription-list {
+    flex: 1;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.subscription-list h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+}
+
+.subscription-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.subscription-list ul li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    font-size: 18px;
+    color: #555;
+}
+
+.subscription-list ul li strong {
+    color: #333;
+    font-weight: 600;
+}
+
+.subscription-list ul li:last-child {
+    border-bottom: none;
+}
+
+.subscription-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.subscription-left {
+    flex-grow: 1;
+}
+
+.subscription-right {
+    display: flex;
+    gap: 5px;
+}
+
+.subscription-list input[type="text"] {
+    border: 1px solid #ddd;
+    padding: 6px;
+    border-radius: 4px;
+    width: 150px; /* Adjust width as needed */
+    font-size: 16px;
+}
+
+.btn-update, .btn-delete {
+    padding: 3px 8px;
+    font-size: 12px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.btn-update {
+    background-color: #007bff;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+}
+
+.btn-update:hover, .btn-delete:hover {
+    opacity: 0.9;
+}
+
+.rate-movie-container {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 400px;
+    margin: 20px auto;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.rate-movie-container h2 {
+    color: darkred;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.rate-movie-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 18px;
+    color: #333;
+    text-align: left;
+}
+
+.rate-movie-container input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.rate-movie-container button {
+    background-color: darkred;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.rate-movie-container button:hover {
+    background-color: red;
+}
