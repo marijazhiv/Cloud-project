@@ -62,4 +62,60 @@ export class LambdaService {
             throw error;
         }
     }
+
+    async updateSubscription(subscription_id: string, subscription_value: string): Promise<any> {
+        try {
+            const command = new InvokeCommand({
+                FunctionName: 'updateSubscration',
+                Payload: JSON.stringify({
+                    subscription_id: subscription_id,
+                    subscription_value: subscription_value,
+                }),
+            });
+
+            const response = await this.lambdaClient.send(command);
+            return JSON.parse(new TextDecoder().decode(response.Payload));
+        } catch (error) {
+            console.error('Error invoking updateSubscription Lambda function:', error);
+            throw error;
+        }
+    }
+
+    async deleteSubscription(subscription_id: string): Promise<any> {
+        try {
+            const command = new InvokeCommand({
+                FunctionName: 'deleteSub',
+                Payload: JSON.stringify({
+                    subscription_id: subscription_id
+                }),
+            });
+
+            const response = await this.lambdaClient.send(command);
+            return JSON.parse(new TextDecoder().decode(response.Payload));
+        } catch (error) {
+            console.error('Error invoking deleteSub Lambda function:', error);
+            throw error;
+        }
+    }
+
+    async rateMovie(film_id: string, username: string, rating: number): Promise<any> {
+        try {
+            const command = new InvokeCommand({
+                FunctionName: 'rateMovie',
+                Payload: JSON.stringify({
+                    film_id: film_id,
+                    username: username,
+                    rating: rating
+                }),
+            });
+
+            const response = await this.lambdaClient.send(command);
+            return JSON.parse(new TextDecoder().decode(response.Payload));
+        } catch (error) {
+            console.error('Error invoking rateMovie Lambda function:', error);
+            throw error;
+        }
+    }
+
+
 }

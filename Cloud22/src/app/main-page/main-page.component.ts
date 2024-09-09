@@ -50,6 +50,9 @@ export class MainPageComponent implements OnInit{
 
   deleteId: any;
 
+  filmId: string = '';
+  rating: number = 1;
+
   constructor(private router: Router,
               private authService: AuthService,
               //private movieService: MovieService
@@ -310,6 +313,35 @@ export class MainPageComponent implements OnInit{
   }
 
 
+    async updateSubscription(subscription: any) {
+      try {
+        const result = await this.lambdaService.updateSubscription(subscription.id, subscription.subscription_value);
+        console.log('Subscription updated:', result);
+        // Dodaj logiku za updateovanje liste, prikaz poruke uspeha, itd.
+      } catch (error) {
+        console.error('Error updating subscription:', error);
+      }
+    }
 
+  async deleteSubscription(subscription: any) {
+    try {
+      const result = await this.lambdaService.deleteSubscription(subscription.id);
+      console.log('Subscription deleted:', result);
+      // Nakon uspešnog brisanja, ukloni stavku iz liste prikazanih pretplata
+    } catch (error) {
+      console.error('Error deleting subscription:', error);
+    }
+  }
 
+  onRateMovie() {
+    this.lambdaService.rateMovie(this.filmId, this.username, this.rating)
+        .then(response => {
+          console.log('Movie rated successfully:', response);
+          alert('Movie rated successfully');
+        })
+        .catch(error => {
+          console.error('Error rating movie:', error);
+          alert('Error rating movie');
+        });
+  }
 }

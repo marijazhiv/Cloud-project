@@ -78,7 +78,7 @@
         <div class="boxes">
             <div class="box">
                 <div class="image-container">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/0/0d/Civil_War_2024_film_poster.jpeg">
+                    <img src="https://www.shutterstock.com/shutterstock/photos/1642324960/display_1500/stock-vector-template-colorful-multimedia-frame-mockup-live-stream-window-player-online-broadcasting-social-1642324960.jpg">
                 </div>
                 <div class="topic">
                     <a href="#" target="_blank">Civil War</a>
@@ -95,7 +95,7 @@
 
             <div class="box">
                 <div class="image-container">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/0/0d/Civil_War_2024_film_poster.jpeg">
+                    <img src="https://www.shutterstock.com/shutterstock/photos/1642324960/display_1500/stock-vector-template-colorful-multimedia-frame-mockup-live-stream-window-player-online-broadcasting-social-1642324960.jpg">
                 </div>
                 <div class="topic">
                     <a href="#" target="_blank">
@@ -110,7 +110,7 @@
 
             <div class="box">
                 <div class="image-container">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/0/0d/Civil_War_2024_film_poster.jpeg">
+                    <img src="https://www.shutterstock.com/shutterstock/photos/1642324960/display_1500/stock-vector-template-colorful-multimedia-frame-mockup-live-stream-window-player-online-broadcasting-social-1642324960.jpg">
                 </div>
                 <div class="topic">
                     <a href="#" target="_blank">
@@ -198,12 +198,50 @@
             <button type="submit" class="submit-button">Submit</button>
         </form>
     <!-- Subscription List -->
+<!--        <div class="subscription-list">-->
+<!--            <h2>Subscription List for {{username}}</h2>-->
+<!--            <ul>-->
+<!--                <li *ngFor="let subscription of subscriptions" class="subscription-item">-->
+<!--                    <div class="subscription-left">-->
+<!--                        <br> Subscription type: {{ subscription.subscription_type }}-->
+<!--                        <strong><br> Subscription value: {{ subscription.subscription_value }}</strong>-->
+<!--                    </div>-->
+<!--                    <div class="subscription-right">-->
+<!--                        <button class="btn-update">Update</button>-->
+<!--                        <button class="btn-delete">Delete</button>-->
+<!--                    </div>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </div>-->
+
         <div class="subscription-list">
-            <h2>Subscription List</h2>
+            <h2>Subscription List for {{username}}</h2>
             <ul>
-                <li *ngFor="let subscription of subscriptions">
-                    <strong>{{ subscription.username }}</strong>: {{ subscription.subscription_type }} - {{ subscription.subscription_value }}
-                    <br> Email: {{ subscription.email }}
+                <li *ngFor="let subscription of subscriptions" class="subscription-item">
+                    <div class="subscription-left">
+                        <br> Subscription type: {{ subscription.subscription_type }}
+                        <strong><br> Subscription value:
+                            <input
+                                    type="text"
+                                    [(ngModel)]="subscription.subscription_value"
+                                    class="subscription-value-input"
+                            />
+                        </strong>
+                    </div>
+                    <div class="subscription-right">
+                        <button
+                                class="btn-update"
+                                (click)="updateSubscription(subscription)">
+
+                            Update
+                        </button>
+                        <button
+                                class="btn-delete"
+                                (click)="deleteSubscription(subscription)">
+
+                            Delete
+                        </button>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -217,6 +255,21 @@
         <input type="text" id="movie-id" name="movie-id" [(ngModel)]="deleteId">
         <button type="button" (click)="deleteMovie()">Delete</button>
     </div>
+
+    <div *ngIf="user && userRole === 'RegisteredUser'" class="rate-movie-container">
+        <h2>Rate a Movie</h2>
+        <form (ngSubmit)="onRateMovie()">
+            <label for="filmId">Film ID:</label>
+            <input id="filmId" [(ngModel)]="filmId" name="filmId" required />
+
+            <label for="rating">Rating (1-5):</label>
+            <input id="rating" type="number" [(ngModel)]="rating" name="rating" required min="1" max="5" />
+
+            <button type="submit">Rate</button>
+        </form>
+    </div>
+
+
 
 
 
