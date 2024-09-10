@@ -117,5 +117,81 @@ export class LambdaService {
         }
     }
 
+    // Dodajemo novu funkciju getFeed
+    async getFeed(username: string): Promise<any> {
+        try {
+            const command = new InvokeCommand({
+                FunctionName: 'getFeed',
+                Payload: JSON.stringify({
+                    queryStringParameters: {
+                        username: username
+                    }
+                }),
+            });
+
+            const response = await this.lambdaClient.send(command);
+            return JSON.parse(new TextDecoder().decode(response.Payload));
+        } catch (error) {
+            console.error('Error invoking getFeed Lambda function:', error);
+            throw error;
+        }
+    }
+
+    async subscribeUser(username: string, subscriptionType: string, subscriptionValue: string, email: string): Promise<any> {
+        try {
+            const command = new InvokeCommand({
+                FunctionName: 'subscribe',
+                Payload: JSON.stringify({
+                    username: username,
+                    subscription_type: subscriptionType,
+                    subscription_value: subscriptionValue,
+                    email: email
+                }),
+            });
+
+            const response = await this.lambdaClient.send(command);
+            return JSON.parse(new TextDecoder().decode(response.Payload));
+        } catch (error) {
+            console.error('Error invoking subscribe Lambda function:', error);
+            throw error;
+        }
+    }
+
+    async downloadContent(id: string, username: string): Promise<any> {
+        try {
+            const command = new InvokeCommand({
+                FunctionName: 'download_file',
+                Payload: JSON.stringify({
+                    pathParameters: {
+                        id: id,
+                        username: username,
+                    },
+                }),
+            });
+
+            const response = await this.lambdaClient.send(command);
+            const parsedResponse = JSON.parse(new TextDecoder().decode(response.Payload));
+
+            // Dodatno parsiraj 'body' koji je string unutar JSON-a
+            const parsedBody = JSON.parse(parsedResponse.body);
+
+            // Loguj odgovor za proveru
+            console.log('Parsed Lambda body response:', parsedBody);
+
+            return parsedBody;
+        } catch (error) {
+            console.error('Error invoking download Lambda function:', error);
+            throw error;
+        }
+    }
+
+
+
+
+
+
+
+
+
 
 }

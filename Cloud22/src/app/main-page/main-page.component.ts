@@ -37,7 +37,11 @@ export class MainPageComponent implements OnInit{
   #email = '';
 
   username:any
+  username1:any
   email:any
+  //feed: string = '';
+  feed: any[] = []; // Koristite niz za čuvanje filmova
+
 
   selectedFile: Blob | undefined;
   title1: string = '';
@@ -93,6 +97,7 @@ export class MainPageComponent implements OnInit{
     this.email=this.authService.getCurrentUserEmail();
 
     this.getSubs();
+    this.loadFeed();
   }
 
   logOut(){
@@ -182,28 +187,46 @@ export class MainPageComponent implements OnInit{
     }
   }
 
-  downloadFilm(bucketName: string, key: string): void {
-    this.s3Service.downloadFile(bucketName, key).subscribe({
-      next: (blob) => {
-        // Kreirajte URL za preuzimanje
-        const url = URL.createObjectURL(blob);
+  // downloadFilm(bucketName: string, key: string): void {
+  //   this.s3Service.downloadFile(bucketName, key).subscribe({
+  //     next: (blob) => {
+  //       // Kreirajte URL za preuzimanje
+  //       const url = URL.createObjectURL(blob);
+  //
+  //       // Kreirajte privremeni link za preuzimanje
+  //       const a = document.createElement('a');
+  //       a.href = url;
+  //       a.download = key; // Postavite naziv fajla koji želite da preuzmete
+  //       document.body.appendChild(a);
+  //       a.click();
+  //
+  //       // Očistite URL
+  //       URL.revokeObjectURL(url);
+  //       this.refreshFeed();
+  //
+  //     },
+  //
+  //     error: (err) => {
+  //       console.error('Error downloading file:', err);
+  //     }
+  //   });
+  // }
 
-        // Kreirajte privremeni link za preuzimanje
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = key; // Postavite naziv fajla koji želite da preuzmete
-        document.body.appendChild(a);
-        a.click();
+  async downloadFilm() {
+    const filmId = this.keyInput; // Primer ID-a filma
+    this.username1 = this.authService.getUsername(); // Primer korisničkog imena
 
-        // Očistite URL
-        URL.revokeObjectURL(url);
-      },
-      error: (err) => {
-        console.error('Error downloading file:', err);
-      }
-    });
+    try {
+      const response = await this.lambdaService.downloadContent(filmId, this.username1);
+      console.log('URL za preuzimanje:', this.username1);
+      await this.refreshFeed();
+
+
+      window.open(response.url, '_blank'); // Otvori URL za preuzimanje
+    } catch (error) {
+      console.error('Error downloading film:', error);
+    }
   }
-
 
 
   // onFileSelected(event: any): void {
@@ -278,6 +301,7 @@ export class MainPageComponent implements OnInit{
             genresArray        // Genres kao niz
         );
         console.log('Upload successful:', result);
+        await this.refreshFeed();
       } catch (error) {
         console.error('Upload failed:', error);
       }
@@ -287,29 +311,50 @@ export class MainPageComponent implements OnInit{
   }
 
   // Funkcija koja se poziva prilikom submit-a forme
-  onSubmit() {
-    // Prvo šaljemo podatke u DynamoDB
-    this.subscriptionService.saveSubscription(this.username, this.subscriptionType, this.subscriptionValue, this.email)
-        .subscribe(
-            response => {
-              console.log('Subscription saved:', response);
-              // Nakon uspešnog čuvanja, šaljemo email za verifikaciju
-              this.subscriptionService.sendVerificationEmail(this.email).subscribe(
-                  emailResponse => {
-                    console.log('Verification email sent:', emailResponse);
-                    alert('Uspešno ste se pretplatili. Verifikacioni email je poslat.');
-                  },
-                  emailError => {
-                    console.error('Error sending verification email:', emailError);
-                    alert('Došlo je do greške pri slanju verifikacionog emaila.');
-                  }
-              );
-            },
-            error => {
-              console.error('Error saving subscription:', error);
-              alert('Došlo je do greške pri čuvanju pretplate.');
-            }
-        );
+  // onSubmit() {
+  //   // Prvo šaljemo podatke u DynamoDB
+  //   this.subscriptionService.saveSubscription(this.username, this.subscriptionType, this.subscriptionValue, this.email)
+  //       .subscribe(
+  //           response => {
+  //             console.log('Subscription saved:', response);
+  //              this.refreshFeed();
+  //             // Nakon uspešnog čuvanja, šaljemo email za verifikaciju
+  //             this.subscriptionService.sendVerificationEmail(this.email).subscribe(
+  //                 emailResponse => {
+  //                   console.log('Verification email sent:', emailResponse);
+  //                   alert('Uspešno ste se pretplatili. Verifikacioni email je poslat.');
+  //                 },
+  //                 emailError => {
+  //                   console.error('Error sending verification email:', emailError);
+  //                   alert('Došlo je do greške pri slanju verifikacionog emaila.');
+  //                 }
+  //             );
+  //           },
+  //           error => {
+  //             console.error('Error saving subscription:', error);
+  //             alert('Došlo je do greške pri čuvanju pretplate.');
+  //           }
+  //       );
+  // }
+
+  async onSubscribe() {
+    try {
+      const response = await this.lambdaService.subscribeUser(
+          this.username,
+          this.subscriptionType,
+          this.subscriptionValue,
+          this.email
+      );
+
+      console.log('Subscription successful:', response);
+      await this.refreshFeed();
+      alert('Uspešno ste se pretplatili. Verifikacioni email je poslat.');
+    } catch (error) {
+      console.error('Error during subscription:', error);
+      alert('Došlo je do greške pri slanju verifikacionog emaila.');
+    }
+
+
   }
 
 
@@ -317,6 +362,7 @@ export class MainPageComponent implements OnInit{
       try {
         const result = await this.lambdaService.updateSubscription(subscription.id, subscription.subscription_value);
         console.log('Subscription updated:', result);
+        //await this.refreshFeed();
         // Dodaj logiku za updateovanje liste, prikaz poruke uspeha, itd.
       } catch (error) {
         console.error('Error updating subscription:', error);
@@ -327,6 +373,7 @@ export class MainPageComponent implements OnInit{
     try {
       const result = await this.lambdaService.deleteSubscription(subscription.id);
       console.log('Subscription deleted:', result);
+      //await this.refreshFeed();
       // Nakon uspešnog brisanja, ukloni stavku iz liste prikazanih pretplata
     } catch (error) {
       console.error('Error deleting subscription:', error);
@@ -337,11 +384,51 @@ export class MainPageComponent implements OnInit{
     this.lambdaService.rateMovie(this.filmId, this.username, this.rating)
         .then(response => {
           console.log('Movie rated successfully:', response);
+           this.refreshFeed();
           alert('Movie rated successfully');
+
         })
         .catch(error => {
           console.error('Error rating movie:', error);
           alert('Error rating movie');
         });
   }
+
+  // fetchFeed(): void {
+  //   this.lambdaService.getFeed(this.username).then(
+  //       (response) => {
+  //         console.log('Lambda response:', response); // Ispisuje JSON odgovor u konzolu
+  //         this.feed = response;
+  //       },
+  //       (error) => {
+  //         console.error('Error fetching feed:', error);
+  //       }
+  //   );
+  // }
+
+  async loadFeed() {
+    try {
+      const response = await this.lambdaService.getFeed(this.username);
+      console.log('Lambda response:', response); // Ispisuje ceo odgovor iz Lambda funkcije
+
+      if (response && response.body) {
+        // Parsirajte JSON string iz body
+        this.feed = JSON.parse(response.body);
+      } else {
+        this.feed = [];
+      }
+    } catch (error) {
+      console.error('Error loading feed:', error);
+    }
+  }
+
+  async refreshFeed() {
+    try {
+      await this.loadFeed();
+      console.log('Feed refreshed successfully');
+    } catch (error) {
+      console.error('Error refreshing feed:', error);
+    }
+  }
+
 }
