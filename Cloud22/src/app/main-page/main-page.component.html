@@ -69,12 +69,40 @@
         <button class="show-button">Show</button>
     </div>
 </div>
-
+<!-- feed.component.html -->
 <section class="about" id="My Projects">
     <div class="content">
+        <!-- feed.component.html -->
+        <br>
+        <div *ngIf="feed.length > 0; else noFeed" class="feed-container">
+            <h2 class="feed-title">Recommended Feed</h2>
+            <hr class="feed-divider">
+            <div *ngFor="let item of feed" class="film-item">
+                <div class="film-image">
+                    <img src="https://www.shutterstock.com/shutterstock/photos/1642324960/display_1500/stock-vector-template-colorful-multimedia-frame-mockup-live-stream-window-player-online-broadcasting-social-1642324960.jpg" alt="Film Thumbnail">
+                </div>
+                <div class="film-details">
+                    <h3 class="film-title">Title: {{ item.Title }}</h3>
+                    <p><strong>VideoKey:</strong> {{ item.VideoKey }}</p>
+                    <p><strong>Description:</strong> {{ item.Description }}</p>
+                    <p><strong>Actors:</strong> {{ item.Actors.join(', ') }}</p>
+                    <p><strong>Directors:</strong> {{ item.Directors.join(', ') }}</p>
+                    <p><strong>Genres:</strong> {{ item.Genres.join(', ') }}</p>
+                    <p><strong>Score:</strong> {{ item.Score }}</p>
+                </div>
+            </div>
+        </div>
+
+        <ng-template #noFeed>
+            <p class="no-feed-message">Nema dostupnih podataka za prikaz.</p>
+        </ng-template>
+
+
+
         <div class="title">
             <span>Movies</span>
         </div>
+
         <div class="boxes">
             <div class="box">
                 <div class="image-container">
@@ -90,7 +118,7 @@
                 <input type="text" [(ngModel)]="keyInput" placeholder="Enter the key for the film" />
 
                 <!-- Dugme za preuzimanje -->
-                <button class="download-button" (click)="downloadFilm('bucket-22', keyInput)">Download</button>
+                <button class="download-button" (click)="downloadFilm()">Download</button>
             </div>
 
             <div class="box">
@@ -163,12 +191,12 @@
     <!-- Flex container for subscription form and list -->
     <div class="subscription-container">
         <!-- Subscription Form -->
-        <form (ngSubmit)="onSubmit()" class="subscription-form">
-            <h2>Subscribe to Film Content</h2> <!-- Naziv forme -->
+        <form class="subscription-form">
+            <h2>Subscribe to Film Content</h2>
 
-            <label>Hello, {{username}}! <br> This is a form where you can subscribe to content of the type of actor, director or film genre and receive notifications for them. <br>
-            </label>
-<br>
+            <label>Hello, {{username}}! <br> This is a form where you can subscribe to content of the type of actor, director or film genre and receive notifications for them. <br></label>
+            <br>
+
             <!-- Subscription Type Radio Buttons -->
             <div>
                 <label>Subscription Type:</label>
@@ -189,13 +217,14 @@
 
             <label for="subscriptionValue">Subscription Value:</label>
             <input type="text" id="subscriptionValue" [(ngModel)]="subscriptionValue" name="subscriptionValue" required>
-
             <br>
+
             <label for="email">Notifications for your subscription will be sent to your email address:</label>
             <div id="email">{{email}}</div> <!-- Prikazivanje email kao tekst -->
             <br>
 
-            <button type="submit" class="submit-button">Submit</button>
+            <!-- Subscribe button -->
+            <button (click)="onSubscribe()" class="submit-button">Subscribe</button>
         </form>
     <!-- Subscription List -->
 <!--        <div class="subscription-list">-->

@@ -869,3 +869,53 @@ footer .footer span a:hover {
 .rate-movie-container button:hover {
     background-color: red;
 }
+.feed-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.feed-title {
+    font-size: 24px;
+    color: #333;
+}
+
+.feed-divider {
+    border: 1px solid #ddd;
+    margin: 10px 0;
+}
+
+.film-item {
+    display: flex;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.film-image img {
+    border-radius: 8px;
+    max-width: 240px;
+    height: auto;
+}
+
+.film-details {
+    margin-left: 20px;
+}
+
+.film-title {
+    font-size: 20px;
+    color: #000;
+    margin: 0;
+}
+
+.film-details p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+.no-feed-message {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+}
