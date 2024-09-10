@@ -186,7 +186,20 @@ export class LambdaService {
     }
 
 
+    async updateContent(params: any): Promise<any> {
+        try {
+            const command = new InvokeCommand({
+                FunctionName: 'updateMovie',
+                Payload: JSON.stringify(params),
+            });
 
+            const response = await this.lambdaClient.send(command);
+            return JSON.parse(new TextDecoder().decode(response.Payload));
+        } catch (error) {
+            console.error('Error invoking Lambda function:', error);
+            throw error;
+        }
+    }
 
 
 
