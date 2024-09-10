@@ -298,7 +298,38 @@
         </form>
     </div>
 
-
+    <section *ngIf="user && userRole === 'Administrator'" class="contact" id="contact1">
+        <div class="content">
+            <hr> <br>
+            <div class="title"><span>Update Movie</span></div>
+        </div>
+        <!-- Upload Film Section -->
+        <section class="upload-film">
+            <form (submit)="onUpdate()">
+                <div class="form-group">
+                    <input type="file" (change)="onFileSelected($event)" />
+                </div>
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="updatedId" placeholder="Id" name="title" />
+                </div>
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="updatedTitle" placeholder="Title" name="title" />
+                </div>
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="updatedDescription" placeholder="Description" name="description" />
+                </div>
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="updatedActors" placeholder="Actors (comma separated)" name="actors" />
+                </div>
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="updatedDirectors" placeholder="Directors (comma separated)" name="directors" />
+                </div>
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="updatedGenres" placeholder="Genres (comma separated)" name="genres" />
+                </div>
+                <button type="submit" class="upload-button">Upload</button>
+            </form>
+        </section>
 
 
 

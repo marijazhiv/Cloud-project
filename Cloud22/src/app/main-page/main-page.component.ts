@@ -431,4 +431,36 @@ export class MainPageComponent implements OnInit{
     }
   }
 
+  updatedId: string = "";
+  updatedTitle: string = "";
+  updatedDescription: string = "";
+  updatedActors: string = "";
+  updatedDirectors: string = "";
+  updatedGenres: string = "";
+
+  async onUpdate() {
+    try {
+      const parseList = (input: string) => input.split(',').map(item => item.trim()).filter(item => item.length > 0);
+
+      const params = {
+        id: this.updatedId,
+        title: this.updatedTitle,
+        description: this.updatedDescription,
+        actors: parseList(this.updatedActors),
+        directors: parseList(this.updatedDirectors),
+        genres: parseList(this.updatedGenres),
+      };
+
+      console.log(params);
+      const results = await this.lambdaService.updateContent(params);
+      const responseBody = JSON.parse(results.body);
+
+      console.log("SUCCESSFULY");
+      console.log(results);
+      console.log(responseBody);
+      this.results = responseBody;
+    } catch (error) {
+      console.error('Error searching content:', error);
+    }
+  }
 }
