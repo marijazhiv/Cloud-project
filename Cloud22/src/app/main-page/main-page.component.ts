@@ -484,16 +484,36 @@ export class MainPageComponent implements OnInit{
       return;
     }
 
-    // Osiguraj da je movieId tretiran kao string
     const movieIdString = String(movieId);
 
     try {
       const response = await this.lambdaService.downloadContent(movieIdString, username);
       console.log('URL za preuzimanje:', response.url);
-      window.open(response.url, '_blank'); // Otvori URL za preuzimanje
+
+      // Fetch the video data as a Blob
+      const fileResponse = await fetch(response.url);
+      const blob = await fileResponse.blob();
+
+      // Create a download link using the Blob object
+      const link = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      link.href = url;
+
+      // Postavi ime fajla i tip, možeš podesiti ime prema movieId-u ili nekim metapodacima
+      link.download = `${movieIdString}.mp4`;
+
+      // Simuliraj klik na link
+      document.body.appendChild(link);
+      link.click();
+
+      // Očisti link nakon preuzimanja
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(link);
     } catch (error) {
       console.error('Error downloading film:', error);
     }
+
+
 
 
 
