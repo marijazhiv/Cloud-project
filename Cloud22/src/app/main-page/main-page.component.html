@@ -129,7 +129,20 @@
             </div>
             <div class="movie-actions">
                 <button class="btn btn-download" (click)="downloadMovie(movie.id)">Download</button>
-                <button class="btn btn-rate" (click)="rateMovie1()">Rate</button>
+<!--                <button *ngIf="user && userRole === 'RegisteredUser'" class="btn btn-rate" (click)="rateMovie1()">Rate</button>-->
+                <button *ngIf="user && userRole === 'Administrator'" class="btn btn-delete" (click)="deleteMovieContent(movie.id)">Delete</button>
+                <button class="btn btn-update">Update</button>
+            </div>
+
+            <div *ngIf="user && userRole === 'RegisteredUser'" class="rate-movie-container">
+                <h2>Rate a Movie</h2>
+                <form (ngSubmit)="onRateMovieContent(movie.id)">
+
+                    <label for="ratingMovie">Rating (1-5):</label>
+                    <input id="ratingMovie" type="number" [(ngModel)]="rating" name="rating" required min="1" max="5" />
+
+                    <button type="submit">Rate</button>
+                </form>
             </div>
         </div>
 
@@ -323,3 +336,5 @@
     </div>
 </footer>
 </section>
+
+    </div></section>

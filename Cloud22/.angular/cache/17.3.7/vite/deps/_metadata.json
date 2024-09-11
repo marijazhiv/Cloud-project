@@ -1,95 +1,104 @@
 {
-  "hash": "120c4bed",
-  "configHash": "e216a99c",
+  "hash": "dbf7d61d",
+  "configHash": "d287048d",
   "lockfileHash": "684caf67",
-  "browserHash": "f873cb56",
+  "browserHash": "d2bd6396",
   "optimized": {
     "@angular/common": {
       "src": "../../../../../node_modules/@angular/common/fesm2022/common.mjs",
       "file": "@angular_common.js",
-      "fileHash": "902cf76b",
+      "fileHash": "fdeefa32",
       "needsInterop": false
     },
     "@angular/common/http": {
       "src": "../../../../../node_modules/@angular/common/fesm2022/http.mjs",
       "file": "@angular_common_http.js",
-      "fileHash": "e2994fdf",
+      "fileHash": "f73e4012",
       "needsInterop": false
     },
     "@angular/core": {
       "src": "../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "f32ccb44",
+      "fileHash": "972f081c",
       "needsInterop": false
     },
     "@angular/forms": {
       "src": "../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
       "file": "@angular_forms.js",
-      "fileHash": "d0088c89",
+      "fileHash": "14f485e6",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "6c389de5",
+      "fileHash": "d9589325",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "0155de0c",
+      "fileHash": "97a01b7c",
       "needsInterop": false
     },
     "@aws-sdk/client-dynamodb": {
       "src": "../../../../../node_modules/@aws-sdk/client-dynamodb/dist-es/index.js",
       "file": "@aws-sdk_client-dynamodb.js",
-      "fileHash": "e65089be",
+      "fileHash": "126f0344",
       "needsInterop": false
     },
     "@aws-sdk/client-lambda": {
       "src": "../../../../../node_modules/@aws-sdk/client-lambda/dist-es/index.js",
       "file": "@aws-sdk_client-lambda.js",
-      "fileHash": "8bfbc4af",
+      "fileHash": "eeafea0d",
       "needsInterop": false
     },
     "@aws-sdk/client-s3": {
       "src": "../../../../../node_modules/@aws-sdk/client-s3/dist-es/index.js",
       "file": "@aws-sdk_client-s3.js",
-      "fileHash": "d7ba3814",
+      "fileHash": "0cec9343",
       "needsInterop": false
     },
     "@aws-sdk/client-ses": {
       "src": "../../../../../node_modules/@aws-sdk/client-ses/dist-es/index.js",
       "file": "@aws-sdk_client-ses.js",
-      "fileHash": "f2daf2d6",
+      "fileHash": "0c6fdd58",
       "needsInterop": false
     },
     "@aws-sdk/client-sns": {
       "src": "../../../../../node_modules/@aws-sdk/client-sns/dist-es/index.js",
       "file": "@aws-sdk_client-sns.js",
-      "fileHash": "993d3e5a",
+      "fileHash": "8ef7a2dc",
       "needsInterop": false
     },
     "amazon-cognito-identity-js": {
       "src": "../../../../../node_modules/amazon-cognito-identity-js/es/index.js",
       "file": "amazon-cognito-identity-js.js",
-      "fileHash": "3d2edf8e",
+      "fileHash": "40b91d27",
       "needsInterop": false
     },
     "rxjs": {
       "src": "../../../../../node_modules/rxjs/dist/esm5/index.js",
       "file": "rxjs.js",
-      "fileHash": "06d2be1b",
+      "fileHash": "71fd8592",
       "needsInterop": false
     },
     "zone.js": {
       "src": "../../../../../node_modules/zone.js/fesm2015/zone.js",
       "file": "zone__js.js",
-      "fileHash": "f6c744c8",
+      "fileHash": "dfcae97a",
       "needsInterop": true
     }
   },
   "chunks": {
+    "chunk-NHXG5M2F": {
+      "file": "chunk-NHXG5M2F.js"
+    },
+    "chunk-2FE76ZDM": {
+      "file": "chunk-2FE76ZDM.js"
+    },
+    "chunk-TC2ZGZ7K": {
+      "file": "chunk-TC2ZGZ7K.js"
+    },
     "chunk-LQXYAEHA": {
       "file": "chunk-LQXYAEHA.js"
     },
@@ -104,15 +113,6 @@
     },
     "chunk-YDMFPD7G": {
       "file": "chunk-YDMFPD7G.js"
-    },
-    "chunk-NHXG5M2F": {
-      "file": "chunk-NHXG5M2F.js"
-    },
-    "chunk-2FE76ZDM": {
-      "file": "chunk-2FE76ZDM.js"
-    },
-    "chunk-TC2ZGZ7K": {
-      "file": "chunk-TC2ZGZ7K.js"
     },
     "chunk-7VQPY5UX": {
       "file": "chunk-7VQPY5UX.js"

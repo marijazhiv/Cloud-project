@@ -520,10 +520,40 @@ export class MainPageComponent implements OnInit{
 
 }
 
+  async deleteMovieContent(id: number){
+    try {
+      // Poziv metode deleteContent iz LambdaService
+      this.deleteId = String(id);
+      const result = await this.lambdaService.deleteContent(this.deleteId);
+
+      // Obrada odgovora
+      console.log('Film je uspešno obrisan:', result);
+      // Opciono: Dodaj logiku za obaveštavanje korisnika o uspešnom brisanju ili osvežavanje liste
+    } catch (error) {
+      // Obrada greške
+      console.error('Došlo je do greške pri brisanju filma:', error);
+    }
+  }
 
 
-
+  showRate: boolean = false;
   rateMovie1() {
+    this.showRate = true;
+    console.log(this.showRate);
+  }
 
+  onRateMovieContent(id: number) {
+    this.filmId = String(id);
+    this.lambdaService.rateMovie(this.filmId, this.username, this.rating)
+        .then(response => {
+          console.log('Movie rated successfully:', response);
+          this.refreshFeed();
+          alert('Movie rated successfully');
+
+        })
+        .catch(error => {
+          console.error('Error rating movie:', error);
+          alert('Error rating movie');
+        });
   }
 }

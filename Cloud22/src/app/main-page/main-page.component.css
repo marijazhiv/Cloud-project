@@ -1012,3 +1012,19 @@ video {
 .btn-rate:hover {
     background-color: red;
 }
+
+.btn-delete {
+    background-color: darkred;
+}
+
+.btn-delete:hover {
+    background-color: red;
+}
+
+.btn-update {
+    background-color: darkred;
+}
+
+.btn-update:hover {
+    background-color: red;
+}
