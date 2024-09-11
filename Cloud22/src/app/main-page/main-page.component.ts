@@ -287,8 +287,10 @@ export class MainPageComponent implements OnInit{
             directorsArray,    // Directors kao niz
             genresArray        // Genres kao niz
         );
-        console.log('Upload successful:', result);
-        await this.refreshFeed();
+        console.log('Upload successfully:', result);
+        alert('Upload successfully')
+        //await this.refreshFeed();
+        await this.loadMovies();
       } catch (error) {
         console.error('Upload failed:', error);
       }
@@ -349,10 +351,12 @@ export class MainPageComponent implements OnInit{
       try {
         const result = await this.lambdaService.updateSubscription(subscription.id, subscription.subscription_value);
         console.log('Subscription updated:', result);
+        alert('Update Subscription successfully');
         //await this.refreshFeed();
         // Dodaj logiku za updateovanje liste, prikaz poruke uspeha, itd.
       } catch (error) {
         console.error('Error updating subscription:', error);
+        alert('Update Subscription unsuccessfully');
       }
     }
 
@@ -360,10 +364,12 @@ export class MainPageComponent implements OnInit{
     try {
       const result = await this.lambdaService.deleteSubscription(subscription.id);
       console.log('Subscription deleted:', result);
+      alert('Delete Subscription successfully');
       //await this.refreshFeed();
       // Nakon uspešnog brisanja, ukloni stavku iz liste prikazanih pretplata
     } catch (error) {
       console.error('Error deleting subscription:', error);
+      alert('Delete Subscription unsuccessfully');
     }
   }
 
@@ -509,6 +515,7 @@ export class MainPageComponent implements OnInit{
       // Očisti link nakon preuzimanja
       window.URL.revokeObjectURL(url);
       document.body.removeChild(link);
+      await this.refreshFeed();
     } catch (error) {
       console.error('Error downloading film:', error);
     }
@@ -520,6 +527,7 @@ export class MainPageComponent implements OnInit{
 
 }
 
+
   async deleteMovieContent(id: number){
     try {
       // Poziv metode deleteContent iz LambdaService
@@ -528,10 +536,13 @@ export class MainPageComponent implements OnInit{
 
       // Obrada odgovora
       console.log('Film je uspešno obrisan:', result);
+      await this.loadMovies();
+      alert('Film je uspešno obrisan!');
       // Opciono: Dodaj logiku za obaveštavanje korisnika o uspešnom brisanju ili osvežavanje liste
     } catch (error) {
       // Obrada greške
       console.error('Došlo je do greške pri brisanju filma:', error);
+      alert('Film nije uspešno obrisan!');
     }
   }
 
@@ -548,12 +559,56 @@ export class MainPageComponent implements OnInit{
         .then(response => {
           console.log('Movie rated successfully:', response);
           this.refreshFeed();
-          alert('Movie rated successfully');
+          console.log(response.statusCode);
+          if (response.statusCode === 200) {
+            console.log('Movie rated successfully:', response);
+            this.refreshFeed();
+            alert('Movie rated successfully');
+          } else if (response.statusCode === 400) {
+            console.log('You have already rated this movie:', response);
+            alert('You have already rated this movie');
+          }
 
         })
         .catch(error => {
           console.error('Error rating movie:', error);
           alert('Error rating movie');
         });
+  }
+
+  selectedMovieId: number | null = null;
+
+  showUpdateForm(movieId: number) {
+    this.selectedMovieId = movieId; // Postavi ID filma koji se azurira
+  }
+
+  async onUpdateContent() {
+    try {
+      const parseList = (input: string) => input.split(',').map(item => item.trim()).filter(item => item.length > 0);
+
+      const params = {
+        id: String(this.selectedMovieId),
+        title: this.updatedTitle,
+        description: this.updatedDescription,
+        actors: parseList(this.updatedActors),
+        directors: parseList(this.updatedDirectors),
+        genres: parseList(this.updatedGenres),
+      };
+
+      console.log(params);
+      const results = await this.lambdaService.updateContent(params);
+      const responseBody = JSON.parse(results.body);
+
+      console.log("SUCCESSFULY");
+      console.log(results);
+      console.log(responseBody);
+
+      alert('Movie content successfully updated!');
+      this.results = responseBody;
+      this.loadMovies();
+    } catch (error) {
+      console.error('Error searching content:', error);
+      alert('Error updating movie content. Please try again.');
+    }
   }
 }

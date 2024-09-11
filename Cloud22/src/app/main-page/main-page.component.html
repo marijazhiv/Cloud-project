@@ -69,12 +69,13 @@
         <button class="show-button">Show</button>
     </div>
 </div>
+
 <!-- feed.component.html -->
 <section class="about" id="My Projects">
     <div class="content">
         <!-- feed.component.html -->
         <br>
-        <div *ngIf="feed.length > 0; else noFeed" class="feed-container">
+        <div *ngIf="feed.length > 0 && user && userRole === 'RegisteredUser'; else noFeed" class="feed-container">
             <h2 class="feed-title">Recommended Feed</h2>
             <hr class="feed-divider">
             <div *ngFor="let item of feed" class="film-item">
@@ -131,7 +132,7 @@
                 <button class="btn btn-download" (click)="downloadMovie(movie.id)">Download</button>
 <!--                <button *ngIf="user && userRole === 'RegisteredUser'" class="btn btn-rate" (click)="rateMovie1()">Rate</button>-->
                 <button *ngIf="user && userRole === 'Administrator'" class="btn btn-delete" (click)="deleteMovieContent(movie.id)">Delete</button>
-                <button class="btn btn-update">Update</button>
+                <button *ngIf="user && userRole === 'Administrator'" class="btn btn-update" (click)="showUpdateForm(movie.id)">Update</button>
             </div>
 
             <div *ngIf="user && userRole === 'RegisteredUser'" class="rate-movie-container">
@@ -144,6 +145,38 @@
                     <button type="submit">Rate</button>
                 </form>
             </div>
+
+            <section *ngIf="user && userRole === 'Administrator' && movie.id === selectedMovieId" class="upload-film">
+                <div class="content">
+                    <hr> <br>
+                    <div class="title"><span>Update Movie</span></div>
+                </div>
+                <!-- Upload Film Section -->
+                <form (submit)="onUpdateContent()">
+                    <div class="form-group">
+                        <input type="file" (change)="onFileSelected($event)" />
+                    </div>
+<!--                    <div class="form-group">-->
+<!--                        <input type="text" [(ngModel)]="updatedId" placeholder="Id" name="title" />-->
+<!--                    </div>-->
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="updatedTitle" placeholder="Title" name="title" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="updatedDescription" placeholder="Description" name="description" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="updatedActors" placeholder="Actors (comma separated)" name="actors" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="updatedDirectors" placeholder="Directors (comma separated)" name="directors" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="updatedGenres" placeholder="Genres (comma separated)" name="genres" />
+                    </div>
+                    <button type="submit" class="upload-button">Upload</button>
+                </form>
+            </section>
         </div>
 
 
@@ -153,12 +186,12 @@
 <br> <br>
 
 <section class="contact" id="contact">
-    <div class="content">
+    <div *ngIf="user && userRole === 'Administrator'"  class="content">
         <hr> <br>
         <div class="title"><span>Upload New Movie</span></div>
     </div>
     <!-- Upload Film Section -->
-    <section class="upload-film">
+    <section *ngIf="user && userRole === 'Administrator'"  class="upload-film">
         <form (submit)="onUpload()">
             <div class="form-group">
                 <input type="file" (change)="onFileSelected($event)" />
@@ -186,7 +219,7 @@
     <br> <hr> <br>
 
     <!-- Flex container for subscription form and list -->
-    <div class="subscription-container">
+    <div *ngIf="user && userRole === 'RegisteredUser'"  class="subscription-container">
         <!-- Subscription Form -->
         <form class="subscription-form">
             <h2>Subscribe to Film Content</h2>
@@ -240,7 +273,7 @@
 <!--            </ul>-->
 <!--        </div>-->
 
-        <div class="subscription-list">
+        <div *ngIf="user && userRole === 'RegisteredUser'"  class="subscription-list">
             <h2>Subscription List for {{username}}</h2>
             <ul>
                 <li *ngFor="let subscription of subscriptions" class="subscription-item">

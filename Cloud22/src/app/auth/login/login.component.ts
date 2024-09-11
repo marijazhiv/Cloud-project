@@ -127,8 +127,8 @@ export class LoginComponent {
         this.showErrorMessage(errorMessage);
         console.log("ERROR: ", err);
         return;
-        console.log("ERROR: ", err);
-        return;
+        //console.log("ERROR: ", err);
+        //return;
       }
 
       console.log('YEY... Registration successful!');
@@ -139,11 +139,7 @@ export class LoginComponent {
   }
 
   showErrorMessage(message: string) {
-    // Implement your logic to display the error message
-    // For example, using a simple alert:
     alert(message);
-
-    // Or you can display the message in a form control, a toast, or any other UI element.
   }
 
   signIn() {
