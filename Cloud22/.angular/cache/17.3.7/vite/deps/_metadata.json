@@ -1,91 +1,91 @@
 {
-  "hash": "9c0c9dbb",
-  "configHash": "9c0232a4",
+  "hash": "120c4bed",
+  "configHash": "e216a99c",
   "lockfileHash": "684caf67",
-  "browserHash": "e76390be",
+  "browserHash": "f873cb56",
   "optimized": {
     "@angular/common": {
       "src": "../../../../../node_modules/@angular/common/fesm2022/common.mjs",
       "file": "@angular_common.js",
-      "fileHash": "b251f4c9",
+      "fileHash": "902cf76b",
       "needsInterop": false
     },
     "@angular/common/http": {
       "src": "../../../../../node_modules/@angular/common/fesm2022/http.mjs",
       "file": "@angular_common_http.js",
-      "fileHash": "2a5438ef",
+      "fileHash": "e2994fdf",
       "needsInterop": false
     },
     "@angular/core": {
       "src": "../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "afe816a6",
+      "fileHash": "f32ccb44",
       "needsInterop": false
     },
     "@angular/forms": {
       "src": "../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
       "file": "@angular_forms.js",
-      "fileHash": "3d8cc817",
+      "fileHash": "d0088c89",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "5c69d15d",
+      "fileHash": "6c389de5",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "0b90d5eb",
+      "fileHash": "0155de0c",
       "needsInterop": false
     },
     "@aws-sdk/client-dynamodb": {
       "src": "../../../../../node_modules/@aws-sdk/client-dynamodb/dist-es/index.js",
       "file": "@aws-sdk_client-dynamodb.js",
-      "fileHash": "a64f4a6f",
+      "fileHash": "e65089be",
       "needsInterop": false
     },
     "@aws-sdk/client-lambda": {
       "src": "../../../../../node_modules/@aws-sdk/client-lambda/dist-es/index.js",
       "file": "@aws-sdk_client-lambda.js",
-      "fileHash": "a6a7e402",
+      "fileHash": "8bfbc4af",
       "needsInterop": false
     },
     "@aws-sdk/client-s3": {
       "src": "../../../../../node_modules/@aws-sdk/client-s3/dist-es/index.js",
       "file": "@aws-sdk_client-s3.js",
-      "fileHash": "ae8d6ee2",
+      "fileHash": "d7ba3814",
       "needsInterop": false
     },
     "@aws-sdk/client-ses": {
       "src": "../../../../../node_modules/@aws-sdk/client-ses/dist-es/index.js",
       "file": "@aws-sdk_client-ses.js",
-      "fileHash": "1be93cab",
+      "fileHash": "f2daf2d6",
       "needsInterop": false
     },
     "@aws-sdk/client-sns": {
       "src": "../../../../../node_modules/@aws-sdk/client-sns/dist-es/index.js",
       "file": "@aws-sdk_client-sns.js",
-      "fileHash": "b94b0ad1",
+      "fileHash": "993d3e5a",
       "needsInterop": false
     },
     "amazon-cognito-identity-js": {
       "src": "../../../../../node_modules/amazon-cognito-identity-js/es/index.js",
       "file": "amazon-cognito-identity-js.js",
-      "fileHash": "1d7f4423",
+      "fileHash": "3d2edf8e",
       "needsInterop": false
     },
     "rxjs": {
       "src": "../../../../../node_modules/rxjs/dist/esm5/index.js",
       "file": "rxjs.js",
-      "fileHash": "687a3450",
+      "fileHash": "06d2be1b",
       "needsInterop": false
     },
     "zone.js": {
       "src": "../../../../../node_modules/zone.js/fesm2015/zone.js",
       "file": "zone__js.js",
-      "fileHash": "d1e6ebc8",
+      "fileHash": "f6c744c8",
       "needsInterop": true
     }
   },

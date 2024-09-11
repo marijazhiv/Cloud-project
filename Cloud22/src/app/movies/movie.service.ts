@@ -201,6 +201,33 @@ export class LambdaService {
         }
     }
 
+// Nova metoda za dobijanje svih filmova sa prepotpisanim URL-ovima
+    async getAllMovies(): Promise<any[]> {
+        try {
+            const command = new InvokeCommand({
+                FunctionName: 'get_movie_metadata',
+                Payload: JSON.stringify({}),
+            });
+
+            const response = await this.lambdaClient.send(command);
+            const payload = new TextDecoder().decode(response.Payload);
+            const result = JSON.parse(payload);
+
+            if (result.body) {
+                // Parsirajte body koji je JSON string
+                const movies = JSON.parse(result.body);
+                console.log('Movies:', movies); // Proverite sadržaj u konzoli
+                return movies;
+            } else {
+                console.error('Response body is missing.');
+                return [];
+            }
+        } catch (error) {
+            console.error('Error invoking get_all_movies_metadata Lambda function:', error);
+            throw error;
+        }
+    }
+
 
 
 
