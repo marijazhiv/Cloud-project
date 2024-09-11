@@ -31,6 +31,7 @@ export class MainPageComponent implements OnInit{
 
   movies: any[] = [];
 
+
   #username = '';
   subscriptionType = '';
   subscriptionValue = '';
@@ -98,6 +99,7 @@ export class MainPageComponent implements OnInit{
 
     this.getSubs();
     this.loadFeed();
+    this.loadMovies();
   }
 
   logOut(){
@@ -212,21 +214,6 @@ export class MainPageComponent implements OnInit{
   //   });
   // }
 
-  async downloadFilm() {
-    const filmId = this.keyInput; // Primer ID-a filma
-    this.username1 = this.authService.getUsername(); // Primer korisničkog imena
-
-    try {
-      const response = await this.lambdaService.downloadContent(filmId, this.username1);
-      console.log('URL za preuzimanje:', this.username1);
-      await this.refreshFeed();
-
-
-      window.open(response.url, '_blank'); // Otvori URL za preuzimanje
-    } catch (error) {
-      console.error('Error downloading film:', error);
-    }
-  }
 
 
   // onFileSelected(event: any): void {
@@ -462,5 +449,61 @@ export class MainPageComponent implements OnInit{
     } catch (error) {
       console.error('Error searching content:', error);
     }
+  }
+
+  async loadMovies() {
+    try {
+      this.movies = await this.lambdaService.getAllMovies();
+      console.log('Movies:', this.movies); // Proverite sadržaj u konzoli
+    } catch (error) {
+      console.error('Error loading movies:', error);
+    }
+  }
+
+  async downloadFilm() {
+    const filmId = this.keyInput; // Primer ID-a filma
+    this.username1 = this.authService.getUsername(); // Primer korisničkog imena
+
+    try {
+      const response = await this.lambdaService.downloadContent(filmId, this.username1);
+      console.log('URL za preuzimanje:', this.username1);
+      await this.refreshFeed();
+
+
+      window.open(response.url, '_blank'); // Otvori URL za preuzimanje
+    } catch (error) {
+      console.error('Error downloading film:', error);
+    }
+  }
+
+  async downloadMovie(movieId: any) {
+    const username = this.authService.getUsername();
+
+    if (!username) {
+      console.error('Username is null or undefined');
+      return;
+    }
+
+    // Osiguraj da je movieId tretiran kao string
+    const movieIdString = String(movieId);
+
+    try {
+      const response = await this.lambdaService.downloadContent(movieIdString, username);
+      console.log('URL za preuzimanje:', response.url);
+      window.open(response.url, '_blank'); // Otvori URL za preuzimanje
+    } catch (error) {
+      console.error('Error downloading film:', error);
+    }
+
+
+
+
+}
+
+
+
+
+  rateMovie1() {
+
   }
 }

@@ -100,8 +100,36 @@
 
 
         <div class="title">
-            <span>Movies</span>
+            <span>All Movies</span>
         </div>
+
+
+        <div *ngFor="let movie of movies" class="movie-card">
+            <h2 class="movie-title">{{ movie.title }}</h2>
+            <p class="movie-description">{{ movie.description }}</p>
+            <div class="video-container">
+                <video width="600" controls>
+                    <source [src]="movie.videoUrl" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="movie-details">
+                <p class="movie-actors">Actors: {{ movie.actors.join(', ') }}</p>
+                <p class="movie-directors">Directors: {{ movie.directors.join(', ') }}</p>
+                <p class="movie-genres">Genres: {{ movie.genres.join(', ') }}</p>
+                <p class="movie-file-size">File Size: {{ movie.fileSize | number:'1.0-0' }} bytes</p>
+                <p class="movie-content-type">Content Type: {{ movie.contentType }}</p>
+                <p class="movie-upload-time">Upload Time: {{ movie.uploadTime }}</p>
+                <p class="movie-last-modified">Last Modified: {{ movie.lastModified }}</p>
+                <p class="movie-last-modified1">Video id {{ movie.id }}</p>
+            </div>
+            <div class="movie-actions">
+                <button class="btn btn-download" (click)="downloadMovie(movie.id)">Download</button>
+                <button class="btn btn-rate" (click)="rateMovie1()">Rate</button>
+            </div>
+        </div>
+
+
 
         <div class="boxes">
             <div class="box">
@@ -338,3 +366,4 @@
     <div class="footer">
     </div>
 </footer>
+</section>
