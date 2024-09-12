@@ -69,8 +69,10 @@ def get_feed(event, context):
         # Konvertuj Decimal vrednosti u int ili float
         converted_item = convert_item(user_feed)
 
-        # Filtriraj filmove i sortiraj ih prema skoru
-        film_scores = converted_item.get('Feed', {})
+        # Filtriraj filmove sa score > 0
+        film_scores = {k: v for k, v in converted_item.get('Feed', {}).items() if v > 0}
+
+        # Sortiraj filmove prema skoru u opadajućem redosledu
         sorted_films = sorted(film_scores.items(), key=lambda item: item[1], reverse=True)
 
         # Ograniči listu na top 5 filmova
@@ -124,3 +126,4 @@ def get_feed(event, context):
             "statusCode": 500,
             "body": json.dumps({"error": str(e)})
         }
+

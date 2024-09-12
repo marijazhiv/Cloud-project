@@ -5,10 +5,60 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4bdc08b8-7008-45c2-9b0a-c1d8d78564c8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/auth/login/login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/auth/login/login.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main-page/main-page.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/main-page/main-page.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main-page/main-page.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/main-page/main-page.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/Cloud22/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/Cloud22/.tsbuildinfo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_common.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_common.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_common.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_common.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_common_http.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_common_http.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_common_http.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_common_http.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_core.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_core.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_core.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_core.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_forms.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_forms.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_forms.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_forms.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_platform-browser.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_platform-browser.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_platform-browser.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_platform-browser.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_router.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_router.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_router.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@angular_router.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@aws-sdk_client-dynamodb.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@aws-sdk_client-dynamodb.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@aws-sdk_client-dynamodb.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@aws-sdk_client-dynamodb.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@aws-sdk_client-lambda.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@aws-sdk_client-lambda.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@aws-sdk_client-lambda.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@aws-sdk_client-lambda.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@aws-sdk_client-s3.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@aws-sdk_client-s3.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@aws-sdk_client-s3.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@aws-sdk_client-s3.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@aws-sdk_client-ses.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@aws-sdk_client-ses.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@aws-sdk_client-ses.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@aws-sdk_client-ses.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@aws-sdk_client-sns.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@aws-sdk_client-sns.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@aws-sdk_client-sns.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/@aws-sdk_client-sns.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/_metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/amazon-cognito-identity-js.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/amazon-cognito-identity-js.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/amazon-cognito-identity-js.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/amazon-cognito-identity-js.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-2FE76ZDM.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-2FE76ZDM.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-2FE76ZDM.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-2FE76ZDM.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-7VQPY5UX.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-7VQPY5UX.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-7VQPY5UX.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-7VQPY5UX.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-CDW57LCT.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-CDW57LCT.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-CDW57LCT.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-CDW57LCT.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-DQXRQNGX.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-DQXRQNGX.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-DQXRQNGX.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-DQXRQNGX.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-LQXYAEHA.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-LQXYAEHA.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-LQXYAEHA.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-LQXYAEHA.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-NHXG5M2F.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-NHXG5M2F.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-NHXG5M2F.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-NHXG5M2F.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-TC2ZGZ7K.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-TC2ZGZ7K.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-TC2ZGZ7K.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-TC2ZGZ7K.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-WOIL7TVO.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-WOIL7TVO.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-WOIL7TVO.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-WOIL7TVO.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-WWRL72TW.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-WWRL72TW.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-WWRL72TW.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-WWRL72TW.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-YDMFPD7G.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-YDMFPD7G.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-YDMFPD7G.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/chunk-YDMFPD7G.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/rxjs.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/rxjs.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/rxjs.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/rxjs.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/zone__js.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/zone__js.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/zone__js.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/17.3.7/vite/deps/zone__js.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../download.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tim22-dijagram_arhitekture.drawio" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../upload.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,22 +91,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/second-review&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/FAKULTET_TRECA_GODINA/Predmeti/Letnji_semestar/Racunarstvo u oblaku/Projekat/CloudComputing24/Cloud-project/Cloud22&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;D:\\FAKULTET_TRECA_GODINA\\Predmeti\\Letnji_semestar\\Racunarstvo u oblaku\\Projekat\\CloudComputing24\\Cloud-project\\Cloud22\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "dev",
+    "last_opened_file_path": "D:/FAKULTET_TRECA_GODINA/Predmeti/Letnji_semestar/Racunarstvo u oblaku/Projekat/CloudComputing24/Cloud-project/Cloud22",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "C:\\Users\\Administrator\\Desktop\\front-pokretanje\\Cloud-project\\Cloud22\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Administrator\Desktop\Cloud-project\Cloud22\src\app" />
